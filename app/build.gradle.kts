@@ -79,4 +79,5 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation)
     implementation(libs.androidx.material3.adaptive.navigation.suite)
     implementation(libs.compose.placeholder)
+    implementation(libs.androidx.core.splashscreen)
 }
