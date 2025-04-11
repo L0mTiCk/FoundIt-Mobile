@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">FoundItMobile</string>
+    <string name="app_name" translatable="false">FoundItMobile</string>
+    <string name="the_request_timed_out">Your request timed out</string>
+    <string name="youve_hit_your_rate_limit">You\'ve hit your rate limit</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="file_too_large">File too large</string>
+    <string name="server_error">Server error, try again later</string>
+    <string name="error_serialization">Serialization error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="error_disk_full">Disk space is full</string>
 </resources>

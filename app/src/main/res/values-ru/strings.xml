@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="the_request_timed_out">Время ожидания запроса превышено</string>
+    <string name="youve_hit_your_rate_limit">Вы превысили лимит запросов</string>
+    <string name="no_internet">Нет подключения к интернету</string>
+    <string name="file_too_large">Файл слишком большой</string>
+    <string name="server_error">Ошибка сервера, попробуйте позже</string>
+    <string name="error_serialization">Ошибка преобразования данных</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="error_disk_full">Недостаточно места на диске</string>
+</resources>
