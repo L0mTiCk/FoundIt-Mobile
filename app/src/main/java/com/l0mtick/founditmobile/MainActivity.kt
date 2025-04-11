@@ -4,55 +4,42 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.eygraber.compose.placeholder.PlaceholderHighlight
-import com.eygraber.compose.placeholder.placeholder
-import com.eygraber.compose.placeholder.shimmer
+import androidx.compose.runtime.collectAsState
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.start.StartRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by inject<MainActivityViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                viewModel.state.value.isLoading
+            }
+        }
         enableEdgeToEdge()
         setContent {
             FoundItMobileTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val state = viewModel.state.collectAsState()
+                when (state.value.navigationRoute) {
+                    is NavigationRoute.Main -> {
+                        Text("Main screen")
+                    }
+                    is NavigationRoute.Start -> {
+                        StartRoot(
+                            onNavigateToMain = {
+                                viewModel.navigateToMain()
+                            }
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-            .placeholder(
-                visible = true,
-                color = Color.Gray,
-                highlight = PlaceholderHighlight.shimmer(
-                    highlightColor = Color.White
-                ),
-            )
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FoundItMobileTheme {
-        Greeting("Android")
     }
 }

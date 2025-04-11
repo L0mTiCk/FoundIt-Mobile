@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.FoundItMobile" parent="android:Theme.Material.Light.NoActionBar" />
+    
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.FoundItMobile</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
+    </style>
 </resources>
