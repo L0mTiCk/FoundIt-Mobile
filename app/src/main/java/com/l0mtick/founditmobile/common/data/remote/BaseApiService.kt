@@ -31,30 +31,82 @@ abstract class BaseApiService(
         Log.w("BaseApiService", "Unauthorized access")
     }
 
+    /**
+     * Performs a GET request without authentication.
+     *
+     * @param T The expected type of the response body.
+     * @param path The endpoint path relative to the base URL.
+     * @param params Optional query parameters.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
     suspend inline fun <reified T> get(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError> = request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
 
+    /**
+     * Performs an authenticated GET request.
+     *
+     * @param T The expected type of the response body.
+     * @param path The endpoint path relative to the base URL.
+     * @param params Optional query parameters.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
     suspend inline fun <reified T> getAuth(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError> = request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
 
+    /**
+     * Performs a POST request without authentication.
+     *
+     * @param T The expected type of the response body.
+     * @param Body The type of the request body.
+     * @param path The endpoint path relative to the base URL.
+     * @param body The request body to send.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
     suspend inline fun <reified T, reified Body> post(
         path: String,
         body: Body,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError> = request(HttpMethod.Post, path, body, {}, false, onUnauthorized)
 
+    /**
+     * Performs an authenticated POST request.
+     *
+     * @param T The expected type of the response body.
+     * @param Body The type of the request body.
+     * @param path The endpoint path relative to the base URL.
+     * @param body The request body to send.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
     suspend inline fun <reified T, reified Body> postAuth(
         path: String,
         body: Body,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError> = request(HttpMethod.Post, path, body, {}, true, onUnauthorized)
 
+    /**
+     * General-purpose request method that wraps the Ktor call,
+     * applies headers, handles body and parameters, and maps known errors.
+     *
+     * @param T The expected type of the response body.
+     * @param Body The type of the request body.
+     * @param method The HTTP method to use (GET, POST, etc.).
+     * @param path The endpoint path relative to the base URL.
+     * @param body The request body to send, or null for methods like GET.
+     * @param params Optional query parameters.
+     * @param withAuth Whether to include an Authorization header.
+     * @param onUnauthorized Callback for handling 401 responses.
+     * @return A [Result] wrapping either the response data or a [DataError].
+     */
     suspend inline fun <reified T, reified Body> request(
         method: HttpMethod,
         path: String,
@@ -116,5 +168,9 @@ abstract class BaseApiService(
         get() = httpClient
 }
 
+/**
+ * Placeholder for an empty request body, used for GET requests where a body must still be passed.
+ * Do not use for other needs
+ */
 @Serializable
 data object EmptyBody

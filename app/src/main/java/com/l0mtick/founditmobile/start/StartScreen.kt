@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.start.introduction.IntroductionRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import kotlinx.coroutines.launch
 
@@ -45,9 +46,13 @@ fun StartScreen(
     Scaffold { scaffoldPadding ->
         NavHost(
             navController = localNavController,
-            startDestination = NavigationRoute.Start.Login,
+            startDestination = NavigationRoute.Start.Introduction,
             modifier = Modifier.padding(scaffoldPadding)
         ) {
+            composable<NavigationRoute.Start.Introduction> {
+                IntroductionRoot(navController = localNavController)
+            }
+
             composable<NavigationRoute.Start.Login> {
                 Column {
                     Text("Login screen")

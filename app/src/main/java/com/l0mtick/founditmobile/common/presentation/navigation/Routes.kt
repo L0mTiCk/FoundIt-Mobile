@@ -10,6 +10,9 @@ sealed interface NavigationRoute {
     sealed interface Start: NavigationRoute {
 
         @Serializable
+        data object Introduction: Start
+
+        @Serializable
         data object Login: Start
 
     }
