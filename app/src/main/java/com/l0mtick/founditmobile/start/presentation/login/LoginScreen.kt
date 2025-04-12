@@ -1,8 +1,6 @@
 package com.l0mtick.founditmobile.start.presentation.login
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -46,11 +44,17 @@ fun LoginScreen(
             )
 
             is LoginState.LoginForm -> LogInForm(
-                onAction = onAction
+                onAction = onAction,
+                loginState = loginState.loginState,
+                passwordState = loginState.passwordState
             )
 
             is LoginState.SignupForm -> SignupForm(
-                onAction = onAction
+                onAction = onAction,
+                loginState = loginState.loginState,
+                emailState = loginState.emailState,
+                passwordState = loginState.passwordState,
+                confirmPasswordState = loginState.confirmPasswordState
             )
         }
     }
