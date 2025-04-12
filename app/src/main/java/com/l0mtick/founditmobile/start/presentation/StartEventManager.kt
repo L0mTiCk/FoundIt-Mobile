@@ -1,4 +1,4 @@
-package com.l0mtick.founditmobile.start
+package com.l0mtick.founditmobile.start.presentation
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.l0mtick.founditmobile.start.introduction
+package com.l0mtick.founditmobile.start.presentation.introduction
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.snapping.SnapPosition
@@ -31,7 +31,11 @@ fun IntroductionRoot(
 ) {
     IntroductionScreen(
         onNavigateToNextScreen = {
-            navController.navigate(NavigationRoute.Start.Login)
+            navController.navigate(NavigationRoute.Start.Login) {
+                popUpTo<NavigationRoute.Start.Introduction> {
+                    inclusive = true
+                }
+            }
         },
         modifier = modifier
     )

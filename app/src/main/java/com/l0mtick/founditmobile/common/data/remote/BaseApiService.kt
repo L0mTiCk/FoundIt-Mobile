@@ -1,6 +1,7 @@
 package com.l0mtick.founditmobile.common.data.remote
 
 import android.util.Log
+import com.l0mtick.founditmobile.BuildConfig
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import io.ktor.client.HttpClient
@@ -25,7 +26,7 @@ abstract class BaseApiService(
     private val httpClient: HttpClient,
     private val localStorage: Any, //TODO: replace with real storage service
 ) {
-    val baseUrl = "https://api.yourdomain.com"
+    val baseUrl = BuildConfig.BASE_URL
 
     val defaultUnauthorizedHandler: () -> Unit = {
         Log.w("BaseApiService", "Unauthorized access")
