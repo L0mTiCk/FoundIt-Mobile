@@ -1,0 +1,15 @@
+package com.l0mtick.founditmobile.common.domain.error
+
+enum class ValidationError : Error {
+    EMAIL_EMPTY,
+    EMAIL_INVALID,
+    PASSWORD_EMPTY,
+    PASSWORD_TOO_SHORT,
+    PASSWORD_NO_UPPERCASE,
+    PASSWORD_NO_SPECIAL_CHAR,
+    PASSWORDS_DO_NOT_MATCH,
+    USERNAME_EMPTY,
+    USERNAME_TOO_SHORT,
+    USERNAME_INVALID_CHARACTERS,
+    EMPTY
+}

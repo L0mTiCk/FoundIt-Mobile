@@ -8,4 +8,19 @@
     <string name="error_serialization">Ошибка преобразования данных</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="error_disk_full">Недостаточно места на диске</string>
+
+    <!--    Validation errors-->
+    <string name="email_empty">E-mail не может быть пустым</string>
+    <string name="invalid_email">Неверный адрес электронной почты</string>
+
+    <string name="password_empty">Пароль не может быть пустым</string>
+    <string name="password_too_short">Пароль слишком короткий</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+
+    <string name="username_empty">Имя пользователя не может быть пустым</string>
+    <string name="username_too_short">Имя пользователя слишком короткое</string>
+    <string name="password_no_uppercase">Пароль должен содержать заглавный символ</string>
+    <string name="password_no_special">Пароль должен содержать спец. символ !@#$%^&amp;*()</string>
+    <string name="username_wrong_symbols">Имя пользователя может содержать только a-zA-Z, 0-9, \'_\'</string>
+    <string name="empty_field">Поле не должно быть пустым</string>
 </resources>

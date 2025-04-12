@@ -8,4 +8,19 @@
     <string name="error_serialization">Serialization error</string>
     <string name="unknown_error">Unknown error</string>
     <string name="error_disk_full">Disk space is full</string>
+
+    <!--  Validation errors  -->
+    <string name="email_empty">Email cannot be empty</string>
+    <string name="invalid_email">Invalid email address</string>
+
+    <string name="password_empty">Password cannot be empty</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="username_empty">Username cannot be empty</string>
+    <string name="username_too_short">Username is too short</string>
+    <string name="password_no_uppercase">Pasword must contain uppercase symbol</string>
+    <string name="password_no_special">Password must contain special symbol !@#$%^&amp;*()</string>
+    <string name="username_wrong_symbols">Username must contain only a-zA-Z, 0-9, \'_\'</string>
+    <string name="empty_field">Field can\'t be empy</string>
 </resources>
