@@ -39,11 +39,11 @@ fun SignupForm(
         verticalArrangement = Arrangement.Bottom,
     ) {
         OutlinedTextField(
-            label = { Text("Login") },
+            label = { Text("Username") },
             modifier = Modifier.fillMaxWidth(),
             value = loginState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.SignupFormAction.OnUsernameChanged(it))
             },
             isError = loginState.isError,
             supportingText = { Text(loginState.errors.firstOrNull()?.asUiText()?.asString() ?: "") }
@@ -53,7 +53,7 @@ fun SignupForm(
             modifier = Modifier.fillMaxWidth(),
             value = emailState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.SignupFormAction.OnEmailChanged(it))
             },
             isError = emailState.isError,
             supportingText = { Text(emailState.errors.firstOrNull()?.asUiText()?.asString() ?: "") }
@@ -63,7 +63,7 @@ fun SignupForm(
             modifier = Modifier.fillMaxWidth(),
             value = passwordState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.SignupFormAction.OnPasswordChanged(it))
             },
             isError = passwordState.isError,
             supportingText = { Text(passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "") },
@@ -74,7 +74,7 @@ fun SignupForm(
             modifier = Modifier.fillMaxWidth(),
             value = confirmPasswordState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.SignupFormAction.OnConfirmPasswordChanged(it))
             },
             isError = confirmPasswordState.isError,
             supportingText = { Text(confirmPasswordState.errors.firstOrNull()?.asUiText()?.asString() ?: "") },
@@ -82,7 +82,9 @@ fun SignupForm(
         )
         Spacer(Modifier.height(24.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                onAction(LoginAction.SignupFormAction.OnSubmit)
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Sign Up")

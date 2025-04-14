@@ -16,7 +16,7 @@ val commonModule = module {
     }
 
     viewModel {
-        LoginViewModel()
+        LoginViewModel(validator = get())
     }
 
 }

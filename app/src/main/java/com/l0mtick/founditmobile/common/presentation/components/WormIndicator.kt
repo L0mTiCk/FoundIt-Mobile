@@ -1,4 +1,4 @@
-package com.l0mtick.founditmobile.common.presentation.util
+package com.l0mtick.founditmobile.common.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

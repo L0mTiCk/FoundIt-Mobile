@@ -41,7 +41,7 @@ fun LogInForm(
             modifier = Modifier.fillMaxWidth(),
             value = loginState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.LoginFormAction.OnLoginChanged(it))
             },
             isError = loginState.isError,
             supportingText = { Text(loginState.errors.firstOrNull()?.asUiText()?.asString() ?: "") }
@@ -51,7 +51,7 @@ fun LogInForm(
             modifier = Modifier.fillMaxWidth(),
             value = passwordState.value,
             onValueChange = {
-                //TODO
+                onAction(LoginAction.LoginFormAction.OnPasswordChanged(it))
             },
             isError = passwordState.isError,
             supportingText = { Text(passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "") },
@@ -59,7 +59,9 @@ fun LogInForm(
         )
         Spacer(Modifier.height(24.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                onAction(LoginAction.LoginFormAction.OnSubmit)
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Log In")

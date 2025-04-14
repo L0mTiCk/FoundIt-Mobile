@@ -20,7 +20,7 @@
     <string name="username_empty">Username cannot be empty</string>
     <string name="username_too_short">Username is too short</string>
     <string name="password_no_uppercase">Pasword must contain uppercase symbol</string>
-    <string name="password_no_special">Password must contain special symbol !@#$%^&amp;*()</string>
+    <string name="password_no_special">Password must contain special symbol !@#$^%%&amp;*()</string>
     <string name="username_wrong_symbols">Username must contain only a-zA-Z, 0-9, \'_\'</string>
     <string name="empty_field">Field can\'t be empy</string>
 </resources>

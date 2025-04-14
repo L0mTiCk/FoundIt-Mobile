@@ -1,6 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.login
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -35,27 +36,33 @@ fun LoginScreen(
     onAction: (LoginAction) -> Unit,
 ) {
     AnimatedContent(
-        targetState = state,
-        transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(800)) }
-    ) { loginState ->
-        when (loginState) {
-            LoginState.Initial -> InitialLogin(
+        targetState = state.screenType,
+        transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(800)) using SizeTransform(clip = false) }
+    ) { screenType ->
+        when (screenType) {
+            LoginScreenType.Initial -> InitialLogin(
                 onAction = onAction
             )
 
-            is LoginState.LoginForm -> LogInForm(
-                onAction = onAction,
-                loginState = loginState.loginState,
-                passwordState = loginState.passwordState
-            )
+            LoginScreenType.Login -> {
+                val loginState = state as? LoginState.LoginForm ?: LoginState.LoginForm()
+                LogInForm(
+                    onAction = onAction,
+                    loginState = loginState.loginState,
+                    passwordState = loginState.passwordState
+                )
+            }
 
-            is LoginState.SignupForm -> SignupForm(
-                onAction = onAction,
-                loginState = loginState.loginState,
-                emailState = loginState.emailState,
-                passwordState = loginState.passwordState,
-                confirmPasswordState = loginState.confirmPasswordState
-            )
+            LoginScreenType.Signup -> {
+                val loginState = state as? LoginState.SignupForm ?: LoginState.SignupForm()
+                SignupForm(
+                    onAction = onAction,
+                    loginState = loginState.loginState,
+                    emailState = loginState.emailState,
+                    passwordState = loginState.passwordState,
+                    confirmPasswordState = loginState.confirmPasswordState
+                )
+            }
         }
     }
 }

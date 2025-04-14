@@ -21,3 +21,16 @@ sealed class LoginState {
         val errorMessage: String? = null
     ): LoginState()
 }
+
+enum class LoginScreenType {
+    Initial,
+    Login,
+    Signup
+}
+
+val LoginState.screenType: LoginScreenType
+    get() = when (this) {
+        LoginState.Initial -> LoginScreenType.Initial
+        is LoginState.LoginForm -> LoginScreenType.Login
+        is LoginState.SignupForm -> LoginScreenType.Signup
+    }

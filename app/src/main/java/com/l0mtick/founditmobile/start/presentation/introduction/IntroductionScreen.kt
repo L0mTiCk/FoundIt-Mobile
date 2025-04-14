@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
-import com.l0mtick.founditmobile.common.presentation.util.WormIndicator
+import com.l0mtick.founditmobile.common.presentation.components.WormIndicator
 import kotlinx.coroutines.launch
 
 @Composable
