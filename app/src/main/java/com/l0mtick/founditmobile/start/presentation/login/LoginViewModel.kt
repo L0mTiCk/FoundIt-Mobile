@@ -1,16 +1,24 @@
 package com.l0mtick.founditmobile.start.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
+import com.l0mtick.founditmobile.common.presentation.util.isValid
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateField
+import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
+class LoginViewModel(
+    private val validator: ValidationManager,
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -70,7 +78,10 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
                     updateState = { newState -> _state.update { newState } }
                 )
             }
-            LoginAction.LoginFormAction.OnSubmit -> { /*TODO*/ }
+
+            LoginAction.LoginFormAction.OnSubmit -> {
+                loginSubmit()
+            }
         }
     }
 
@@ -89,6 +100,7 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
                     updateState = { newState -> _state.update { newState } }
                 )
             }
+
             is LoginAction.SignupFormAction.OnEmailChanged -> {
                 updateAndValidateField<LoginState.SignupForm>(
                     getField = { it.emailState },
@@ -99,6 +111,7 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
                     updateState = { newState -> _state.update { newState } }
                 )
             }
+
             is LoginAction.SignupFormAction.OnPasswordChanged -> {
                 updateAndValidateField<LoginState.SignupForm>(
                     getField = { it.passwordState },
@@ -109,6 +122,7 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
                     updateState = { newState -> _state.update { newState } }
                 )
             }
+
             is LoginAction.SignupFormAction.OnUsernameChanged -> {
                 updateAndValidateField<LoginState.SignupForm>(
                     getField = { it.loginState },
@@ -119,9 +133,85 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
                     updateState = { newState -> _state.update { newState } }
                 )
             }
-            LoginAction.SignupFormAction.OnSubmit -> {
 
+            LoginAction.SignupFormAction.OnSubmit -> {
+                signupSubmit()
             }
+        }
+    }
+
+    private fun loginSubmit() {
+        val current = _state.value
+        if (current !is LoginState.LoginForm) return
+
+        val loginState = current.loginState
+        val passwordState = current.passwordState
+
+        val states = listOf(loginState, passwordState)
+
+        val isValid = states.all { it.isValid() }
+
+        if (isValid) {
+            viewModelScope.launch {
+                val result = authRepository.login(
+                    loginValue = loginState.value,
+                    password = passwordState.value
+                )
+                when (result) {
+                    is Result.Success -> {
+                        //TODO: navigate to next screen
+                        Log.i("auth_flow", "Logged In!!")
+                    }
+
+                    is Result.Error -> {
+                        //TODO: show snackbar with error
+                        Log.e("auth_flow", "Error: ${result.error}")
+                    }
+                }
+            }
+        } else {
+            Log.e("auth_flow", "Smth not valid")
+        }
+    }
+
+    private fun signupSubmit() {
+        val current = _state.value
+        if (current !is LoginState.SignupForm) return
+
+        val loginState = current.loginState
+        val emailState = current.emailState
+        val passwordState = current.passwordState
+        val confirmPasswordState = current.confirmPasswordState
+
+        val states = listOf(loginState, emailState, passwordState, confirmPasswordState)
+
+        val isValid =
+            states.all { it.isValid() }
+                    && passwordState.value == confirmPasswordState.value
+
+        if (isValid) {
+            viewModelScope.launch {
+                val result = authRepository.register(
+                    username = loginState.value,
+                    email = emailState.value,
+                    password = current.passwordState.value
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Log.i("auth_flow", "Signed Up!!")
+                        _state.update {
+                            LoginState.LoginForm(loginState = loginState)
+                        }
+                    }
+
+                    is Result.Error -> {
+                        //TODO: show snackbar with error
+                        Log.e("auth_flow", "Error: ${result.error}")
+                    }
+                }
+            }
+        } else {
+            Log.e("auth_flow", "Smth not valid")
         }
     }
 }

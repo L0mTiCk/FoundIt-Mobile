@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="the_request_timed_out">Время ожидания запроса превышено</string>
+    <string name="bad_request">Некорректные данные запроса</string>
+    <string name="request_conflict">Произошел конфликт при обработке запроса</string>
     <string name="youve_hit_your_rate_limit">Вы превысили лимит запросов</string>
     <string name="no_internet">Нет подключения к интернету</string>
     <string name="file_too_large">Файл слишком большой</string>

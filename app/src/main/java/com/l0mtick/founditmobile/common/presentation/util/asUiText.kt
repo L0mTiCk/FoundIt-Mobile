@@ -8,6 +8,14 @@ import com.l0mtick.founditmobile.common.domain.error.Error
 
 fun DataError.asUiText(): UiText {
     return when (this) {
+        DataError.Network.BAD_REQUEST -> UiText.StringResource(
+            R.string.bad_request
+        )
+
+        DataError.Network.CONFLICT -> UiText.StringResource(
+            R.string.request_conflict
+        )
+
         DataError.Network.REQUEST_TIMEOUT -> UiText.StringResource(
             R.string.the_request_timed_out
         )

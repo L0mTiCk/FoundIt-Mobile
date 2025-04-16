@@ -22,6 +22,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.ParametersBuilder
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import okio.IOException
@@ -66,7 +67,8 @@ abstract class BaseApiService(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError.Network> = request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
+    ): Result<T, DataError.Network> =
+        request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
 
     /**
      * Performs an authenticated GET request.
@@ -81,7 +83,8 @@ abstract class BaseApiService(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError.Network> = request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
+    ): Result<T, DataError.Network> =
+        request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
 
     /**
      * Performs a POST request without authentication.
@@ -97,7 +100,8 @@ abstract class BaseApiService(
         path: String,
         body: Body,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError.Network> = request(HttpMethod.Post, path, body, {}, false, onUnauthorized)
+    ): Result<T, DataError.Network> =
+        request(HttpMethod.Post, path, body, {}, false, onUnauthorized)
 
     /**
      * Performs an authenticated POST request.
@@ -139,7 +143,7 @@ abstract class BaseApiService(
         noinline refreshTokenHandler: suspend () -> Boolean = defaultRefreshTokenHandler
     ): Result<T, DataError.Network> {
         return try {
-            val result: T = `access$httpClient`.request("$baseUrl/$path") {
+            val result = `access$httpClient`.request("$baseUrl/$path") {
                 this.method = method
 
                 if (withAuth) {
@@ -155,9 +159,18 @@ abstract class BaseApiService(
                 url {
                     parameters.apply(params)
                 }
-            }.body()
+            }
 
-            Result.Success(result)
+            if (!result.status.isSuccess()) {
+                val error = when (result.status) {
+                    HttpStatusCode.InternalServerError -> DataError.Network.SERVER_ERROR
+                    else -> DataError.Network.UNKNOWN
+                }
+
+                return Result.Error(error)
+            }
+
+            return Result.Success(result.body<T>())
         } catch (e: RedirectResponseException) {
             Result.Error(DataError.Network.UNKNOWN)
         } catch (e: ClientRequestException) {
@@ -169,9 +182,11 @@ abstract class BaseApiService(
             }
 
             val error = when (e.response.status) {
+                HttpStatusCode.BadRequest -> DataError.Network.BAD_REQUEST
                 HttpStatusCode.RequestTimeout -> DataError.Network.REQUEST_TIMEOUT
                 HttpStatusCode.TooManyRequests -> DataError.Network.TOO_MANY_REQUESTS
                 HttpStatusCode.PayloadTooLarge -> DataError.Network.PAYLOAD_TOO_LARGE
+                HttpStatusCode.Conflict -> DataError.Network.CONFLICT
                 else -> DataError.Network.UNKNOWN
             }
 

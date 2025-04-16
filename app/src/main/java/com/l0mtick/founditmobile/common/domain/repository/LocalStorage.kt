@@ -13,5 +13,8 @@ interface LocalStorage {
     suspend fun setEmail(email: String)
     suspend fun getEmail(): String?
 
+    suspend fun setUsername(username: String)
+    suspend fun getUsername(): String?
+
     suspend fun clear()
 }

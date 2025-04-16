@@ -9,3 +9,5 @@ data class TextFieldState(
     val isError: Boolean = false,
     val errors: List<ValidationError> = emptyList()
 )
+
+fun TextFieldState.isValid(): Boolean = !this.isError && this.value.isNotBlank()

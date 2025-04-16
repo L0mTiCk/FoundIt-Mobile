@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
@@ -16,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +48,7 @@ fun SignupForm(
             onValueChange = {
                 onAction(LoginAction.SignupFormAction.OnUsernameChanged(it))
             },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             isError = loginState.isError,
             supportingText = { Text(loginState.errors.firstOrNull()?.asUiText()?.asString() ?: "") }
         )
@@ -55,6 +59,7 @@ fun SignupForm(
             onValueChange = {
                 onAction(LoginAction.SignupFormAction.OnEmailChanged(it))
             },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next, keyboardType = KeyboardType.Email),
             isError = emailState.isError,
             supportingText = { Text(emailState.errors.firstOrNull()?.asUiText()?.asString() ?: "") }
         )
@@ -66,6 +71,7 @@ fun SignupForm(
                 onAction(LoginAction.SignupFormAction.OnPasswordChanged(it))
             },
             isError = passwordState.isError,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next, keyboardType = KeyboardType.Password),
             supportingText = { Text(passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "") },
             visualTransformation = PasswordVisualTransformation()
         )
@@ -77,6 +83,7 @@ fun SignupForm(
                 onAction(LoginAction.SignupFormAction.OnConfirmPasswordChanged(it))
             },
             isError = confirmPasswordState.isError,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
             supportingText = { Text(confirmPasswordState.errors.firstOrNull()?.asUiText()?.asString() ?: "") },
             visualTransformation = PasswordVisualTransformation()
         )

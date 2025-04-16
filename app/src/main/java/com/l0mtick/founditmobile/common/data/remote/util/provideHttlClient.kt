@@ -19,6 +19,8 @@ fun provideHttpClient(): HttpClient = HttpClient(Android) {
         )
     }
 
+    expectSuccess = true
+
     defaultRequest {
         contentType(ContentType.Application.Json)
     }

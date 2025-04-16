@@ -17,11 +17,11 @@ inline fun <reified T : LoginState> ViewModel.updateAndValidateField(
     val current = getState()
     if (current !is T) return
 
-    val updatedField = getField(current).copy(value = newValue)
+    val updatedField = getField(current).copy(value = newValue.trim())
     updateState(setField(current, updatedField))
 
     viewModelScope.launch {
-        val validation = validate(newValue)
+        val validation = validate(updatedField.value)
 
         val currentValidated = getState()
         if (currentValidated !is T) return@launch

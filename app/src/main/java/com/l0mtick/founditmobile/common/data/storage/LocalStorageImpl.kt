@@ -46,6 +46,14 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.EMAIL]
     }
 
+    override suspend fun setUsername(username: String) {
+        context.dataStore.edit { it[PreferencesKeys.USERNAME] = username }
+    }
+
+    override suspend fun getUsername(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.USERNAME]
+    }
+
     override suspend fun clear() {
         context.dataStore.edit { it.clear() }
     }
