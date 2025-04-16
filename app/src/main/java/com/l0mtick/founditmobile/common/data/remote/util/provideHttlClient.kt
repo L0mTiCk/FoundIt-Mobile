@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.common.data.remote.util
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
@@ -17,6 +18,11 @@ fun provideHttpClient(): HttpClient = HttpClient(Android) {
                 prettyPrint = true
             }
         )
+    }
+
+    install(HttpTimeout) {
+        connectTimeoutMillis = 7000
+        requestTimeoutMillis = 7000
     }
 
     expectSuccess = true

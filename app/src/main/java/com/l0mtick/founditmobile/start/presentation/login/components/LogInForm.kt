@@ -1,6 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.login.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,9 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,6 +35,7 @@ fun LogInForm(
     onAction: (LoginAction) -> Unit,
     loginState: TextFieldState,
     passwordState: TextFieldState,
+    isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -69,7 +74,19 @@ fun LogInForm(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Log In")
+            Box(Modifier.fillMaxWidth()) {
+                Text(
+                    text = "Log In",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                if (isLoading){
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(24.dp).align(Alignment.CenterEnd),
+                        strokeWidth = 2.dp
+                    )
+                }
+            }
         }
         Spacer(Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -96,6 +113,7 @@ private fun LoginFormPreview() {
     LogInForm(
         onAction = {},
         loginState = TextFieldState(),
-        passwordState = TextFieldState()
+        passwordState = TextFieldState(),
+        isLoading = true
     )
 }

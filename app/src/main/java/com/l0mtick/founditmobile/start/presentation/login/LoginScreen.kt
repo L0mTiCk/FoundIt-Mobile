@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.start.presentation.login
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
@@ -8,9 +9,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.start.presentation.login.components.InitialLogin
 import com.l0mtick.founditmobile.start.presentation.login.components.LogInForm
 import com.l0mtick.founditmobile.start.presentation.login.components.SignupForm
@@ -23,6 +26,22 @@ fun LoginRoot(
     viewModel: LoginViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is LoginEvent.Error -> {
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            LoginEvent.LoginSuccess -> {
+                //TODO: navigate to screen
+            }
+        }
+    }
 
     LoginScreen(
         state = state,
@@ -49,7 +68,8 @@ fun LoginScreen(
                 LogInForm(
                     onAction = onAction,
                     loginState = loginState.loginState,
-                    passwordState = loginState.passwordState
+                    passwordState = loginState.passwordState,
+                    isLoading = loginState.isLoading
                 )
             }
 
@@ -60,7 +80,8 @@ fun LoginScreen(
                     loginState = loginState.loginState,
                     emailState = loginState.emailState,
                     passwordState = loginState.passwordState,
-                    confirmPasswordState = loginState.confirmPasswordState
+                    confirmPasswordState = loginState.confirmPasswordState,
+                    isLoading = loginState.isLoading
                 )
             }
         }

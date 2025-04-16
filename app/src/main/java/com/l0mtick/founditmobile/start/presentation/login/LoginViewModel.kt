@@ -3,14 +3,19 @@ package com.l0mtick.founditmobile.start.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
+import com.l0mtick.founditmobile.common.presentation.util.UiText
+import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.common.presentation.util.isValid
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateField
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,6 +26,9 @@ class LoginViewModel(
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
+
+    private val eventChannel = Channel<LoginEvent>()
+    val events = eventChannel.receiveAsFlow()
 
     private val _state = MutableStateFlow<LoginState>(LoginState.Initial)
     val state = _state
@@ -153,23 +161,41 @@ class LoginViewModel(
 
         if (isValid) {
             viewModelScope.launch {
+                _state.update {
+                    current.copy(
+                        isLoading = true
+                    )
+                }
                 val result = authRepository.login(
                     loginValue = loginState.value,
                     password = passwordState.value
                 )
                 when (result) {
                     is Result.Success -> {
-                        //TODO: navigate to next screen
+                        eventChannel.send(LoginEvent.LoginSuccess)
                         Log.i("auth_flow", "Logged In!!")
+                        return@launch
                     }
 
                     is Result.Error -> {
-                        //TODO: show snackbar with error
+                        eventChannel.send(LoginEvent.Error(
+                            result.error.asUiText()
+                        ))
                         Log.e("auth_flow", "Error: ${result.error}")
                     }
                 }
+                _state.update {
+                    current.copy(
+                        isLoading = false
+                    )
+                }
             }
         } else {
+            viewModelScope.launch {
+                eventChannel.send(LoginEvent.Error(
+                    UiText.StringResource(R.string.empty_field)
+                ))
+            }
             Log.e("auth_flow", "Smth not valid")
         }
     }
@@ -191,6 +217,11 @@ class LoginViewModel(
 
         if (isValid) {
             viewModelScope.launch {
+                _state.update {
+                    current.copy(
+                        isLoading = true
+                    )
+                }
                 val result = authRepository.register(
                     username = loginState.value,
                     email = emailState.value,
@@ -202,15 +233,28 @@ class LoginViewModel(
                         _state.update {
                             LoginState.LoginForm(loginState = loginState)
                         }
+                        return@launch
                     }
 
                     is Result.Error -> {
-                        //TODO: show snackbar with error
+                        eventChannel.send(LoginEvent.Error(
+                            result.error.asUiText()
+                        ))
                         Log.e("auth_flow", "Error: ${result.error}")
                     }
                 }
+                _state.update {
+                    current.copy(
+                        isLoading = false
+                    )
+                }
             }
         } else {
+            viewModelScope.launch {
+                eventChannel.send(LoginEvent.Error(
+                    UiText.StringResource(R.string.passwords_do_not_match)
+                ))
+            }
             Log.e("auth_flow", "Smth not valid")
         }
     }
