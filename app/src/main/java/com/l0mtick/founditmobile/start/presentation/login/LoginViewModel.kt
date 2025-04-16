@@ -48,33 +48,29 @@ class LoginViewModel(private val validator: ValidationManager) : ViewModel() {
     }
 
     private fun handleLoginFormAction(action: LoginAction.LoginFormAction) {
-        val current = _state.value as? LoginState.LoginForm ?: return
-
-        with(current) {
-            when (action) {
-                is LoginAction.LoginFormAction.OnLoginChanged -> {
-                    updateAndValidateField<LoginState.LoginForm>(
-                        getField = { it.loginState },
-                        setField = { state, field -> state.copy(loginState = field) },
-                        newValue = action.value,
-                        validate = validator::validateUsername,
-                        getState = { _state.value },
-                        updateState = { newState -> _state.update { newState } }
-                    )
-                }
-
-                is LoginAction.LoginFormAction.OnPasswordChanged -> {
-                    updateAndValidateField<LoginState.LoginForm>(
-                        getField = { it.passwordState },
-                        setField = { state, field -> state.copy(passwordState = field) },
-                        newValue = action.value,
-                        validate = validator::validatePassword,
-                        getState = { _state.value },
-                        updateState = { newState -> _state.update { newState } }
-                    )
-                }
-                LoginAction.LoginFormAction.OnSubmit -> { /*TODO*/ }
+        when (action) {
+            is LoginAction.LoginFormAction.OnLoginChanged -> {
+                updateAndValidateField<LoginState.LoginForm>(
+                    getField = { it.loginState },
+                    setField = { state, field -> state.copy(loginState = field) },
+                    newValue = action.value,
+                    validate = validator::validateUsername,
+                    getState = { _state.value },
+                    updateState = { newState -> _state.update { newState } }
+                )
             }
+
+            is LoginAction.LoginFormAction.OnPasswordChanged -> {
+                updateAndValidateField<LoginState.LoginForm>(
+                    getField = { it.passwordState },
+                    setField = { state, field -> state.copy(passwordState = field) },
+                    newValue = action.value,
+                    validate = validator::validatePassword,
+                    getState = { _state.value },
+                    updateState = { newState -> _state.update { newState } }
+                )
+            }
+            LoginAction.LoginFormAction.OnSubmit -> { /*TODO*/ }
         }
     }
 

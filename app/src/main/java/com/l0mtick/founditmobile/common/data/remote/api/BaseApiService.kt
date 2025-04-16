@@ -1,15 +1,19 @@
-package com.l0mtick.founditmobile.common.data.remote
+package com.l0mtick.founditmobile.common.data.remote.api
 
 import android.util.Log
 import com.l0mtick.founditmobile.BuildConfig
+import com.l0mtick.founditmobile.common.data.remote.request.RefreshTokenRequest
+import com.l0mtick.founditmobile.common.data.remote.responses.RefreshTokenResponse
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.header
+import io.ktor.client.request.post
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -24,12 +28,29 @@ import okio.IOException
 
 abstract class BaseApiService(
     private val httpClient: HttpClient,
-    private val localStorage: Any, //TODO: replace with real storage service
+    private val localStorage: LocalStorage,
 ) {
     val baseUrl = BuildConfig.BASE_URL
 
     val defaultUnauthorizedHandler: () -> Unit = {
         Log.w("BaseApiService", "Unauthorized access")
+    }
+
+    val defaultRefreshTokenHandler: suspend () -> Boolean = {
+        val token = localStorage.getRefreshToken()
+        token?.let {
+            try {
+                val response: RefreshTokenResponse = httpClient.post("/auth/refresh") {
+                    contentType(ContentType.Application.Json)
+                    setBody(RefreshTokenRequest(it))
+                }.body()
+                localStorage.setToken(response.accessToken)
+                localStorage.setRefreshToken(response.refreshToken)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        } ?: false
     }
 
     /**
@@ -39,13 +60,13 @@ abstract class BaseApiService(
      * @param path The endpoint path relative to the base URL.
      * @param params Optional query parameters.
      * @param onUnauthorized Custom handler for 401 responses.
-     * @return A [Result] containing either the decoded data or a [DataError].
+     * @return A [Result] containing either the decoded data or a [DataError.Network].
      */
     suspend inline fun <reified T> get(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError> = request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
+    ): Result<T, DataError.Network> = request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
 
     /**
      * Performs an authenticated GET request.
@@ -60,7 +81,7 @@ abstract class BaseApiService(
         path: String,
         crossinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError> = request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
+    ): Result<T, DataError.Network> = request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
 
     /**
      * Performs a POST request without authentication.
@@ -76,7 +97,7 @@ abstract class BaseApiService(
         path: String,
         body: Body,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError> = request(HttpMethod.Post, path, body, {}, false, onUnauthorized)
+    ): Result<T, DataError.Network> = request(HttpMethod.Post, path, body, {}, false, onUnauthorized)
 
     /**
      * Performs an authenticated POST request.
@@ -92,7 +113,7 @@ abstract class BaseApiService(
         path: String,
         body: Body,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError> = request(HttpMethod.Post, path, body, {}, true, onUnauthorized)
+    ): Result<T, DataError.Network> = request(HttpMethod.Post, path, body, {}, true, onUnauthorized)
 
     /**
      * General-purpose request method that wraps the Ktor call,
@@ -114,16 +135,16 @@ abstract class BaseApiService(
         body: Body? = null,
         crossinline params: ParametersBuilder.() -> Unit = {},
         withAuth: Boolean = false,
-        noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
-    ): Result<T, DataError> {
+        noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler,
+        noinline refreshTokenHandler: suspend () -> Boolean = defaultRefreshTokenHandler
+    ): Result<T, DataError.Network> {
         return try {
             val result: T = `access$httpClient`.request("$baseUrl/$path") {
                 this.method = method
 
                 if (withAuth) {
-                    //TODO: replace with real token get
-//                    val token = localStorage.getAccessToken()
-                    header(HttpHeaders.Authorization, "Bearer token")
+                    val token = `access$localStorage`.getToken()
+                    header(HttpHeaders.Authorization, "Bearer $token")
                 }
 
                 if (body != null) {
@@ -141,8 +162,10 @@ abstract class BaseApiService(
             Result.Error(DataError.Network.UNKNOWN)
         } catch (e: ClientRequestException) {
             if (e.response.status == HttpStatusCode.Unauthorized) {
-                //TODO: make refresh request and if it's failed than call onUnauthorized
-                onUnauthorized()
+                val refreshed = refreshTokenHandler()
+                if (!refreshed) {
+                    onUnauthorized()
+                }
             }
 
             val error = when (e.response.status) {
@@ -167,6 +190,10 @@ abstract class BaseApiService(
     @PublishedApi
     internal val `access$httpClient`: HttpClient
         get() = httpClient
+
+    @PublishedApi
+    internal val `access$localStorage`: LocalStorage
+        get() = localStorage
 }
 
 /**
