@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.start.presentation.login.components.InitialLogin
 import com.l0mtick.founditmobile.start.presentation.login.components.LogInForm
@@ -36,6 +37,7 @@ fun LoginRoot(
                     event.error.asString(context),
                     Toast.LENGTH_SHORT
                 ).show()
+                navController.navigate(NavigationRoute.Start.PhoneVerification(""))
             }
             LoginEvent.LoginSuccess -> {
                 //TODO: navigate to screen

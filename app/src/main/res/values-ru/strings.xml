@@ -11,7 +11,7 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="error_disk_full">Недостаточно места на диске</string>
 
-    <!--    Validation errors-->
+    <!--  Обработка ошибок-->
     <string name="email_empty">E-mail не может быть пустым</string>
     <string name="invalid_email">Неверный адрес электронной почты</string>
 
@@ -25,4 +25,14 @@
     <string name="password_no_special">Пароль должен содержать спец. символ !@#$%%^&amp;*()</string>
     <string name="username_wrong_symbols">Имя пользователя может содержать только a-zA-Z, 0-9, \'_\'</string>
     <string name="empty_field">Поле не должно быть пустым</string>
+
+    <!--  Подтверждение номера-->
+    <string name="phone_confirmation_title">Подтверждение номера</string>
+    <string name="phone_confirmation_description">Для подтверждения номера телефона вы перейдете в приложение Telegram и отправите нам свой контакт. После этого вы получите код подтверждения, который нужно ввести здесь.</string>
+    <string name="phone_confirmation_note">Убедитесь, что Telegram установлен на вашем устройстве.</string>
+    <string name="phone_confirmation_continue">Продолжить</string>
+    <string name="phone_confirmation_short">Чтобы подтвердить номер, отправьте контакт через Telegram.</string>
+    <string name="more_info">Подробнее</string>
+    <string name="enter_code_from_telegram">Введите код из Telegram</string>
+
 </resources>

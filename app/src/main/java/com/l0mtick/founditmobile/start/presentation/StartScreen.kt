@@ -1,9 +1,6 @@
 package com.l0mtick.founditmobile.start.presentation
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.start.presentation.introduction.IntroductionRoot
 import com.l0mtick.founditmobile.start.presentation.login.LoginRoot
+import com.l0mtick.founditmobile.start.presentation.phoneverify.PhoneVerificationRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import kotlinx.coroutines.launch
 
@@ -56,6 +54,10 @@ fun StartScreen(
 
             composable<NavigationRoute.Start.Login> {
                 LoginRoot(navController = localNavController)
+            }
+
+            composable<NavigationRoute.Start.PhoneVerification> {
+                PhoneVerificationRoot()
             }
         }
     }

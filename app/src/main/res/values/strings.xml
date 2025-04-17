@@ -25,4 +25,13 @@
     <string name="password_no_special">Password must contain special symbol !@#$^%%&amp;*()</string>
     <string name="username_wrong_symbols">Username must contain only a-zA-Z, 0-9, \'_\'</string>
     <string name="empty_field">Field can\'t be empy</string>
+
+    <!--  Phone confirmation-->
+    <string name="phone_confirmation_title">Phone Number Confirmation</string>
+    <string name="phone_confirmation_description">To confirm your phone number, you will be redirected to the Telegram app and asked to share your contact. After that, you will receive a confirmation code to enter here.</string>
+    <string name="phone_confirmation_note">Make sure Telegram is installed on your device.</string>
+    <string name="phone_confirmation_continue">Continue</string>
+    <string name="phone_confirmation_short">For verification send code obtained in Telegram.</string>
+    <string name="more_info">Details</string>
+    <string name="enter_code_from_telegram">Enter code from Telegram</string>
 </resources>
