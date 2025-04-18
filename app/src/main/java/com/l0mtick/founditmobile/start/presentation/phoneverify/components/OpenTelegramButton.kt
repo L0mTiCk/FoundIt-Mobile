@@ -1,6 +1,5 @@
 package com.l0mtick.founditmobile.start.presentation.phoneverify.components
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,30 +13,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.l0mtick.founditmobile.R
 
 @Composable
 fun OpenTelegramButton(
     modifier: Modifier = Modifier,
-    onFailure: (() -> Unit)? = null
+    onClick: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val telegramUrl = "https://t.me/FoundIt_Verification_Bot"
     Button(
-        onClick = {
-            val intent = Intent(Intent.ACTION_VIEW, telegramUrl.toUri())
-
-            // Проверяем, может ли система обработать интент
-            if (intent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(intent)
-            } else {
-                onFailure?.invoke()
-            }
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF24A1DE)
         ),

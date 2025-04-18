@@ -45,7 +45,7 @@ fun StartScreen(
     Scaffold { scaffoldPadding ->
         NavHost(
             navController = localNavController,
-            startDestination = NavigationRoute.Start.Introduction,
+            startDestination = NavigationRoute.Start.PhoneVerification(""),
             modifier = Modifier.padding(scaffoldPadding)
         ) {
             composable<NavigationRoute.Start.Introduction> {

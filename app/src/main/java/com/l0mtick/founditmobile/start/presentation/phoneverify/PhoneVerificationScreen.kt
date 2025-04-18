@@ -1,7 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.phoneverify
 
+import android.content.Intent
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,14 +24,16 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.OpenTelegramButton
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.OtpInputField
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.PhoneConfirmationBottomSheet
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.PhoneConfirmationText
+import com.l0mtick.founditmobile.start.presentation.phoneverify.components.PhoneTextFieldWithCountry
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -39,6 +41,22 @@ fun PhoneVerificationRoot(
     viewModel: PhoneVerificationViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val telegramUrl = "https://t.me/FoundIt_Verification_Bot"
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            PhoneVerificationEvent.OpenTelegramBot -> {
+                val intent = Intent(Intent.ACTION_VIEW, telegramUrl.toUri())
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "Telegram app not found", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
 
     PhoneVerificationScreen(
         state = state,
@@ -56,13 +74,6 @@ fun PhoneVerificationScreen(
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     var showBottomSheet by remember { mutableStateOf(false) }
-    var showTelegramButton by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        delay(2000)
-        showTelegramButton = true
-    }
 
     Column(
         modifier = Modifier
@@ -82,18 +93,25 @@ fun PhoneVerificationScreen(
         Spacer(Modifier.height(32.dp))
 
         when (state) {
-            PhoneVerificationState.PhoneEnter -> {
-                Text("phone textfield")
+            is PhoneVerificationState.PhoneEnter -> {
+                PhoneTextFieldWithCountry(
+                    phoneNumber = state.phoneNumber,
+                    phoneCode = state.phoneCode,
+                    defaultLang = state.defaultLang,
+                    isValidPhone = state.isValidPhone,
+                    onPickedCountry = { code, lang ->
+                        onAction(
+                            PhoneVerificationAction.OnCountryPicked(code, lang)
+                        )
+                    },
+                    onPhoneValueChange = {
+                        onAction(PhoneVerificationAction.OnPhoneNumberChanged(it))
+                    }
+                )
                 Spacer(Modifier.height(12.dp))
-                AnimatedVisibility(
-                    visible = showTelegramButton
-                ) {
-                    OpenTelegramButton(
-                        onFailure = {
-                            Toast.makeText(context, "Telegram app not found", Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                }
+                OpenTelegramButton(
+                    onClick = { onAction(PhoneVerificationAction.OnOpenTelegramClick) },
+                )
             }
 
             PhoneVerificationState.CodeVerify -> {
@@ -138,7 +156,7 @@ fun PhoneVerificationScreen(
 private fun Preview() {
     FoundItMobileTheme {
         PhoneVerificationScreen(
-            state = PhoneVerificationState.PhoneEnter,
+            state = PhoneVerificationState.PhoneEnter(),
             onAction = {}
         )
     }
