@@ -1,7 +1,10 @@
 package com.l0mtick.founditmobile.start.presentation.phoneverify
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import com.simon.xmaterialccp.data.utils.checkPhoneNumber
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PhoneVerificationViewModel : ViewModel() {
+class PhoneVerificationViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -38,6 +41,9 @@ class PhoneVerificationViewModel : ViewModel() {
             is PhoneVerificationAction.OnCountryPicked -> countryPicked(action.phoneCode, action.countryLang)
             is PhoneVerificationAction.OnPhoneNumberChanged -> phoneNumberChanged(action.newPhone)
             PhoneVerificationAction.OnOpenTelegramClick -> openTelegramBot()
+            is PhoneVerificationAction.OnMoveToCode -> _state.update { PhoneVerificationState.CodeVerify(action.fullPhoneNumber) }
+            PhoneVerificationAction.OnMoveToPhoneNumber -> _state.update { PhoneVerificationState.PhoneEnter() }
+            is PhoneVerificationAction.OnOtpChange -> otpChange(action.value, action.isOtpFilled)
         }
     }
 
@@ -80,7 +86,44 @@ class PhoneVerificationViewModel : ViewModel() {
 
         if (current.isValidPhone) {
             viewModelScope.launch {
-                eventChannel.send(PhoneVerificationEvent.OpenTelegramBot)
+                val fullPhoneNumber = "${current.phoneCode}${current.phoneNumber}".replace("+", "")
+                eventChannel.send(PhoneVerificationEvent.OpenTelegramBot(fullPhoneNumber))
+            }
+        }
+    }
+
+    private fun otpChange(value: String, isFilled: Boolean) {
+        var current = _state.value
+        if (current !is PhoneVerificationState.CodeVerify) return
+
+        current = current.copy(
+            otpValue = value,
+            isOtpFilled = isFilled,
+            isLoading = isFilled
+        )
+        _state.update {
+            current
+        }
+
+        if (isFilled) {
+            viewModelScope.launch {
+                val result = authRepository.verifyPhone(
+                    phone = current.fullPhoneNumber,
+                    code = current.otpValue
+                )
+                when(result) {
+                    is Result.Success<*, *> -> {
+                        Log.d("OTP", "OTP Confirmed")
+                    }
+                    is Result.Error<*, *> -> {
+                        Log.e("OTP", "OTP confirm error: ${result.error}")
+                    }
+                }
+                _state.update {
+                    current.copy(
+                        isLoading = false
+                    )
+                }
             }
         }
     }

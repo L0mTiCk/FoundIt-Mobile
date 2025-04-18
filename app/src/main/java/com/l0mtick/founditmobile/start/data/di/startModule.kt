@@ -19,6 +19,6 @@ val startModule = module {
     }
 
     viewModel {
-        PhoneVerificationViewModel()
+        PhoneVerificationViewModel(authRepository = get())
     }
 }

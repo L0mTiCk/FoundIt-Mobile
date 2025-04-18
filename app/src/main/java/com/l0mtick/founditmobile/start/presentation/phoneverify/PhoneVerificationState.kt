@@ -9,6 +9,11 @@ sealed class PhoneVerificationState {
         val isValidPhone: Boolean = false
     ) : PhoneVerificationState()
 
-    data object CodeVerify : PhoneVerificationState()
+    data class CodeVerify(
+        val fullPhoneNumber: String,
+        val otpValue: String = "",
+        val isOtpFilled: Boolean = false,
+        val isLoading: Boolean = false
+    ) : PhoneVerificationState()
 
 }

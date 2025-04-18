@@ -2,11 +2,14 @@ package com.l0mtick.founditmobile.start.presentation.phoneverify
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,18 +45,23 @@ fun PhoneVerificationRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val telegramUrl = "https://t.me/FoundIt_Verification_Bot"
+    val telegramUrl = "tg://resolve?domain=FoundIt_Verification_Bot"
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            PhoneVerificationEvent.OpenTelegramBot -> {
+            is PhoneVerificationEvent.OpenTelegramBot -> {
                 val intent = Intent(Intent.ACTION_VIEW, telegramUrl.toUri())
-                if (intent.resolveActivity(context.packageManager) != null) {
+                try {
                     context.startActivity(intent)
-                } else {
+                    viewModel.onAction(PhoneVerificationAction.OnMoveToCode(event.fullPhoneNumber))
+                } catch (e: Exception) {
                     Toast.makeText(context, "Telegram app not found", Toast.LENGTH_SHORT)
                         .show()
                 }
+            }
+
+            PhoneVerificationEvent.OnVerificationSuccess -> {
+                //TODO: navigate to next screen
             }
         }
     }
@@ -69,8 +77,6 @@ fun PhoneVerificationScreen(
     state: PhoneVerificationState,
     onAction: (PhoneVerificationAction) -> Unit,
 ) {
-    var otpValue by remember { mutableStateOf("") }
-    var isOtpFilled by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -114,10 +120,16 @@ fun PhoneVerificationScreen(
                 )
             }
 
-            PhoneVerificationState.CodeVerify -> {
+            is PhoneVerificationState.CodeVerify -> {
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
                     keyboardController?.show()
+                }
+
+                LaunchedEffect(state.isOtpFilled) {
+                    if (state.isOtpFilled) {
+                        keyboardController?.hide()
+                    }
                 }
 
                 Text(
@@ -127,17 +139,21 @@ fun PhoneVerificationScreen(
                 Spacer(Modifier.height(24.dp))
                 OtpInputField(
                     modifier = Modifier.focusRequester(focusRequester),
-                    otpText = otpValue,
+                    otpText = state.otpValue,
                     onOtpModified = { value, isFilled ->
-                        otpValue = value
-                        isOtpFilled = isFilled
-                        if (isOtpFilled) {
-                            keyboardController?.hide()
-                        }
+                        onAction(PhoneVerificationAction.OnOtpChange(
+                            value, isFilled
+                        ))
                     },
                     shouldShowCursor = true,
                     shouldCursorBlink = true
                 )
+                Spacer(Modifier.height(24.dp))
+                AnimatedVisibility(state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
         }
     }
