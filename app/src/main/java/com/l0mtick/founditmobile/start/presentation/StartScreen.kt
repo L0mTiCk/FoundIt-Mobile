@@ -1,9 +1,6 @@
-package com.l0mtick.founditmobile.start
-import androidx.compose.foundation.layout.Column
+package com.l0mtick.founditmobile.start.presentation
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -13,6 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.start.presentation.introduction.IntroductionRoot
+import com.l0mtick.founditmobile.start.presentation.login.LoginRoot
+import com.l0mtick.founditmobile.start.presentation.phoneverify.PhoneVerificationRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import kotlinx.coroutines.launch
 
@@ -48,13 +48,16 @@ fun StartScreen(
             startDestination = NavigationRoute.Start.Login,
             modifier = Modifier.padding(scaffoldPadding)
         ) {
+            composable<NavigationRoute.Start.Introduction> {
+                IntroductionRoot(navController = localNavController)
+            }
+
             composable<NavigationRoute.Start.Login> {
-                Column {
-                    Text("Login screen")
-                    Button(onClick = { StartEventManager.triggerEvent(StartEventManager.StartEvent.OnNavigateToMain) }) {
-                        Text("Navigate to main")
-                    }
-                }
+                LoginRoot(navController = localNavController)
+            }
+
+            composable<NavigationRoute.Start.PhoneVerification> {
+                PhoneVerificationRoot(navController = localNavController)
             }
         }
     }

@@ -17,6 +17,8 @@ koin = "4.0.3"
 material3-apadtive = "1.1.0"
 placeholder = "1.0.10"
 splashscreen = "1.0.1"
+datastore = "1.1.4"
+xmaterial-ccp = "v2.15"
 
 
 [libraries]
@@ -56,7 +58,10 @@ androidx-material3-adaptive-navigation = { module = "androidx.compose.material3.
 androidx-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite"}
 compose-placeholder = { module = "com.eygraber:compose-placeholder", version.ref = "placeholder" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
 
+#Jitpack
+xmaterial-ccp = { module = "com.github.TuleSimon:xMaterialccp", version.ref = "xmaterial-ccp"}
 
 
 

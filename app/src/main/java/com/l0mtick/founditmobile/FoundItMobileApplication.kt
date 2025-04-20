@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile
 
 import android.app.Application
 import com.l0mtick.founditmobile.common.data.di.commonModule
+import com.l0mtick.founditmobile.start.data.di.startModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,7 +16,8 @@ class FoundItMobileApplication: Application() {
             androidLogger(level = Level.ERROR)
             androidContext(this@FoundItMobileApplication)
             modules(
-                commonModule
+                commonModule,
+                startModule
             )
         }
     }

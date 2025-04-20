@@ -1,3 +1,37 @@
 <resources>
-    <string name="app_name">FoundItMobile</string>
+    <string name="app_name" translatable="false">FoundItMobile</string>
+    <string name="the_request_timed_out">Your request timed out</string>
+    <string name="bad_request">Request data is incorrect</string>
+    <string name="request_conflict">A conflict occurred while processing the request</string>
+    <string name="youve_hit_your_rate_limit">You\'ve hit your rate limit</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="file_too_large">File too large</string>
+    <string name="server_error">Server error, try again later</string>
+    <string name="error_serialization">Serialization error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="error_disk_full">Disk space is full</string>
+
+    <!--  Validation errors  -->
+    <string name="email_empty">Email cannot be empty</string>
+    <string name="invalid_email">Invalid email address</string>
+
+    <string name="password_empty">Password cannot be empty</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="username_empty">Username cannot be empty</string>
+    <string name="username_too_short">Username is too short</string>
+    <string name="password_no_uppercase">Pasword must contain uppercase symbol</string>
+    <string name="password_no_special">Password must contain special symbol !@#$^%%&amp;*()</string>
+    <string name="username_wrong_symbols">Username must contain only a-zA-Z, 0-9, \'_\'</string>
+    <string name="empty_field">Field can\'t be empy</string>
+
+    <!--  Phone confirmation-->
+    <string name="phone_confirmation_title">Phone Number Confirmation</string>
+    <string name="phone_confirmation_description">To confirm your phone number, you will be redirected to the Telegram app and asked to share your contact. After that, you will receive a confirmation code to enter here.</string>
+    <string name="phone_confirmation_note">Make sure Telegram is installed on your device.</string>
+    <string name="phone_confirmation_continue">Continue</string>
+    <string name="phone_confirmation_short">For verification send code obtained in Telegram.</string>
+    <string name="more_info">Details</string>
+    <string name="enter_code_from_telegram">Enter code from Telegram</string>
 </resources>

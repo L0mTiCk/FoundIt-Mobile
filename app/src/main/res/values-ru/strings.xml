@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="the_request_timed_out">Время ожидания запроса превышено</string>
+    <string name="bad_request">Некорректные данные запроса</string>
+    <string name="request_conflict">Произошел конфликт при обработке запроса</string>
+    <string name="youve_hit_your_rate_limit">Вы превысили лимит запросов</string>
+    <string name="no_internet">Нет подключения к интернету</string>
+    <string name="file_too_large">Файл слишком большой</string>
+    <string name="server_error">Ошибка сервера, попробуйте позже</string>
+    <string name="error_serialization">Ошибка преобразования данных</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="error_disk_full">Недостаточно места на диске</string>
+
+    <!--  Обработка ошибок-->
+    <string name="email_empty">E-mail не может быть пустым</string>
+    <string name="invalid_email">Неверный адрес электронной почты</string>
+
+    <string name="password_empty">Пароль не может быть пустым</string>
+    <string name="password_too_short">Пароль слишком короткий</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+
+    <string name="username_empty">Имя пользователя не может быть пустым</string>
+    <string name="username_too_short">Имя пользователя слишком короткое</string>
+    <string name="password_no_uppercase">Пароль должен содержать заглавный символ</string>
+    <string name="password_no_special">Пароль должен содержать спец. символ !@#$%%^&amp;*()</string>
+    <string name="username_wrong_symbols">Имя пользователя может содержать только a-zA-Z, 0-9, \'_\'</string>
+    <string name="empty_field">Поле не должно быть пустым</string>
+
+    <!--  Подтверждение номера-->
+    <string name="phone_confirmation_title">Подтверждение номера</string>
+    <string name="phone_confirmation_description">Для подтверждения номера телефона вы перейдете в приложение Telegram и отправите нам свой контакт. После этого вы получите код подтверждения, который нужно ввести здесь.</string>
+    <string name="phone_confirmation_note">Убедитесь, что Telegram установлен на вашем устройстве.</string>
+    <string name="phone_confirmation_continue">Продолжить</string>
+    <string name="phone_confirmation_short">Чтобы подтвердить номер, отправьте контакт через Telegram.</string>
+    <string name="more_info">Подробнее</string>
+    <string name="enter_code_from_telegram">Введите код из Telegram</string>
+
+</resources>
