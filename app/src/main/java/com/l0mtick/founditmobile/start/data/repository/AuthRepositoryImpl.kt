@@ -40,4 +40,18 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
     override suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError> {
         return authApi.verifyPhone(phone, code)
     }
+
+    override suspend fun checkAvailability(username: String, email: String): Result<Unit, DataError> {
+        val usernameCheckResult = authApi.checkUsernameAvailability(username)
+        if (usernameCheckResult is Result.Error) {
+            return Result.Error(usernameCheckResult.error)
+        }
+
+        val emailCheckResult = authApi.checkEmailAvailability(email)
+        if (emailCheckResult is Result.Error) {
+            return Result.Error(emailCheckResult.error)
+        }
+
+        return Result.Success(Unit)
+    }
 }

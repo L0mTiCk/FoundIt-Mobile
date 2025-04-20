@@ -16,7 +16,7 @@ sealed interface NavigationRoute {
         data object Login: Start
 
         @Serializable
-        data class PhoneVerification(val userData: String): Start
+        data class PhoneVerification(val login: String, val email: String, val pass: String): Start
 
     }
 

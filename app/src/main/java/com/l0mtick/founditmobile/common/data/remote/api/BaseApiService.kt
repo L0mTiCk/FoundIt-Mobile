@@ -151,7 +151,7 @@ abstract class BaseApiService(
                     header(HttpHeaders.Authorization, "Bearer $token")
                 }
 
-                if (body != null) {
+                if (body != null && body != EmptyBody) {
                     contentType(ContentType.Application.Json)
                     setBody(body)
                 }

@@ -9,4 +9,6 @@ interface AuthApi {
     suspend fun loginByLogin(login: String, password: String): Result<UserLoginResponse, DataError.Network>
     suspend fun register(username: String, email: String, password: String): Result<Unit, DataError.Network>
     suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError.Network>
+    suspend fun checkUsernameAvailability(username: String): Result<Unit, DataError.Network>
+    suspend fun checkEmailAvailability(email: String): Result<Unit, DataError.Network>
 }

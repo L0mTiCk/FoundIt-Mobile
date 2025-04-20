@@ -1,9 +1,12 @@
 package com.l0mtick.founditmobile.start.presentation.phoneverify
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import com.simon.xmaterialccp.data.utils.checkPhoneNumber
 import kotlinx.coroutines.channels.Channel
@@ -15,7 +18,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PhoneVerificationViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class PhoneVerificationViewModel(
+    private val authRepository: AuthRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    private val navArgs: NavigationRoute.Start.PhoneVerification = savedStateHandle.toRoute()
 
     private var hasLoadedInitialData = false
 
@@ -107,22 +115,46 @@ class PhoneVerificationViewModel(private val authRepository: AuthRepository) : V
 
         if (isFilled) {
             viewModelScope.launch {
-                val result = authRepository.verifyPhone(
+                val verifyResult = authRepository.verifyPhone(
                     phone = current.fullPhoneNumber,
                     code = current.otpValue
                 )
-                when(result) {
+                when(verifyResult) {
                     is Result.Success<*, *> -> {
                         Log.d("OTP", "OTP Confirmed")
+                        // Register user after successful phone verification
+                        val registerResult = authRepository.register(
+                            username = navArgs.login,
+                            email = navArgs.email,
+                            password = navArgs.pass
+                            // phone = current.fullPhoneNumber // Assuming register doesn't need phone again, or API handles it
+                        )
+                        when (registerResult) {
+                            is Result.Success<*, *> -> {
+                                Log.d("REGISTRATION", "User registered successfully")
+                                eventChannel.send(PhoneVerificationEvent.OnVerificationSuccess)
+                            }
+                            is Result.Error<*, *> -> {
+                                Log.e("REGISTRATION", "Registration error: ${registerResult.error}")
+                                // Optionally send an error event to UI
+                                _state.update {
+                                    current.copy(
+                                        isLoading = false
+                                        // Potentially add an error message state here
+                                    )
+                                }
+                            }
+                        }
                     }
                     is Result.Error<*, *> -> {
-                        Log.e("OTP", "OTP confirm error: ${result.error}")
+                        Log.e("OTP", "OTP confirm error: ${verifyResult.error}")
+                        _state.update {
+                            current.copy(
+                                isLoading = false
+                                // Potentially add an error message state here
+                            )
+                        }
                     }
-                }
-                _state.update {
-                    current.copy(
-                        isLoading = false
-                    )
                 }
             }
         }

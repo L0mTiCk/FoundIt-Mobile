@@ -19,6 +19,6 @@ val startModule = module {
     }
 
     viewModel {
-        PhoneVerificationViewModel(authRepository = get())
+        PhoneVerificationViewModel(authRepository = get(), savedStateHandle = get())
     }
 }

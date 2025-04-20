@@ -166,6 +166,7 @@ class LoginViewModel(
                         isLoading = true
                     )
                 }
+
                 val result = authRepository.login(
                     loginValue = loginState.value,
                     password = passwordState.value
@@ -178,9 +179,11 @@ class LoginViewModel(
                     }
 
                     is Result.Error -> {
-                        eventChannel.send(LoginEvent.Error(
-                            result.error.asUiText()
-                        ))
+                        eventChannel.send(
+                            LoginEvent.Error(
+                                result.error.asUiText()
+                            )
+                        )
                         Log.e("auth_flow", "Error: ${result.error}")
                     }
                 }
@@ -192,9 +195,11 @@ class LoginViewModel(
             }
         } else {
             viewModelScope.launch {
-                eventChannel.send(LoginEvent.Error(
-                    UiText.StringResource(R.string.empty_field)
-                ))
+                eventChannel.send(
+                    LoginEvent.Error(
+                        UiText.StringResource(R.string.empty_field)
+                    )
+                )
             }
             Log.e("auth_flow", "Smth not valid")
         }
@@ -211,51 +216,45 @@ class LoginViewModel(
 
         val states = listOf(loginState, emailState, passwordState, confirmPasswordState)
 
-        val isValid =
-            states.all { it.isValid() }
-                    && passwordState.value == confirmPasswordState.value
+        val isValid = states.all { it.isValid() }
 
         if (isValid) {
             viewModelScope.launch {
-                _state.update {
-                    current.copy(
-                        isLoading = true
+                if (passwordState.value != confirmPasswordState.value) {
+                    eventChannel.send(
+                        LoginEvent.Error(
+                            UiText.StringResource(R.string.passwords_do_not_match)
+                        )
                     )
+                    return@launch
                 }
-                val result = authRepository.register(
-                    username = loginState.value,
-                    email = emailState.value,
-                    password = current.passwordState.value
-                )
-                when (result) {
-                    is Result.Success -> {
-                        Log.i("auth_flow", "Signed Up!!")
-                        _state.update {
-                            LoginState.LoginForm(loginState = loginState)
-                        }
-                        return@launch
-                    }
 
-                    is Result.Error -> {
-                        eventChannel.send(LoginEvent.Error(
-                            result.error.asUiText()
-                        ))
-                        Log.e("auth_flow", "Error: ${result.error}")
+                _state.update {
+                    current.copy(isLoading = true)
+                }
+
+                val availabilityResult =
+                    authRepository.checkAvailability(loginState.value, emailState.value)
+
+                when (availabilityResult) {
+                    is Result.Success<*, *> -> {
+                        eventChannel.send(
+                            LoginEvent.NavigateToPhoneVerification(
+                                login = loginState.value,
+                                email = emailState.value,
+                                pass = passwordState.value
+                            )
+                        )
+                    }
+                    is Result.Error<*, *> -> {
+                        eventChannel.send(LoginEvent.Error(availabilityResult.error.asUiText()))
                     }
                 }
                 _state.update {
-                    current.copy(
-                        isLoading = false
-                    )
+                    current.copy(isLoading = false)
                 }
             }
-        } else {
-            viewModelScope.launch {
-                eventChannel.send(LoginEvent.Error(
-                    UiText.StringResource(R.string.passwords_do_not_match)
-                ))
-            }
-            Log.e("auth_flow", "Smth not valid")
+
         }
     }
 }

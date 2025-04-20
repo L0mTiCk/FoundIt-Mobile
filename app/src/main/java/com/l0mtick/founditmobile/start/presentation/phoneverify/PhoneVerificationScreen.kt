@@ -29,7 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.OpenTelegramButton
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.OtpInputField
@@ -41,6 +43,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PhoneVerificationRoot(
+    navController: NavController,
     viewModel: PhoneVerificationViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -61,7 +64,7 @@ fun PhoneVerificationRoot(
             }
 
             PhoneVerificationEvent.OnVerificationSuccess -> {
-                //TODO: navigate to next screen
+                navController.navigate(NavigationRoute.Start.Login)
             }
         }
     }
@@ -115,9 +118,11 @@ fun PhoneVerificationScreen(
                     }
                 )
                 Spacer(Modifier.height(12.dp))
-                OpenTelegramButton(
-                    onClick = { onAction(PhoneVerificationAction.OnOpenTelegramClick) },
-                )
+                AnimatedVisibility(visible = state.isValidPhone) {
+                    OpenTelegramButton(
+                        onClick = { onAction(PhoneVerificationAction.OnOpenTelegramClick) },
+                    )
+                }
             }
 
             is PhoneVerificationState.CodeVerify -> {

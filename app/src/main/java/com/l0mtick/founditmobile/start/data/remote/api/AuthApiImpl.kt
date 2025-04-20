@@ -55,4 +55,18 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
         )
     }
 
+    override suspend fun checkUsernameAvailability(username: String): Result<Unit, DataError.Network> {
+        return get(
+            path = "/auth/check-username",
+            params = { append("username", username) }
+        )
+    }
+
+    override suspend fun checkEmailAvailability(email: String): Result<Unit, DataError.Network> {
+        return get(
+            path = "/auth/check-email",
+            params = { append("email", email) }
+        )
+    }
+
 }
