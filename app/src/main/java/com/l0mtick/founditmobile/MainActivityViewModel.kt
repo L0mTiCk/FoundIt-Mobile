@@ -18,7 +18,7 @@ class MainActivityViewModel( /*repository for user token check*/ ): ViewModel() 
             _state.update {
                 it.copy(
                     isLoading = false,
-                    navigationRoute = NavigationRoute.Start.Login
+                    navigationRoute = NavigationRoute.Main.Home
                 )
             }
         }

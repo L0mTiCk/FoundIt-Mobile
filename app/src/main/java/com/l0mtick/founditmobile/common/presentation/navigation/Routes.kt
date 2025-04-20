@@ -24,6 +24,9 @@ sealed interface NavigationRoute {
     sealed interface Main: NavigationRoute {
 
         @Serializable
+        data object Home : Main
+
+        @Serializable
         data object Map: Main
 
     }
