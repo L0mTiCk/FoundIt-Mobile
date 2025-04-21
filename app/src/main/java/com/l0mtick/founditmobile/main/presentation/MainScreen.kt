@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -29,12 +30,13 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        containerColor = Theme.colors.background
+        containerColor = Theme.colors.background,
+        modifier = Modifier.fillMaxSize()
     ) { scaffoldPadding ->
         NavHost(
             navController = localNavController,
             startDestination = NavigationRoute.Main.Home,
-            modifier = Modifier.padding(scaffoldPadding)
+            modifier = Modifier.fillMaxSize().padding(scaffoldPadding)
         ) {
             composable<NavigationRoute.Main.Home> {
                 HomeRoot()

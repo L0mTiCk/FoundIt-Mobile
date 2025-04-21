@@ -35,4 +35,10 @@
     <string name="more_info">Подробнее</string>
     <string name="enter_code_from_telegram">Введите код из Telegram</string>
 
+    <!--  Home screen-->
+    <string name="user_greeting">Добро пожаловать</string>
+    <string name="popular_category">Популярные Категории</string>
+    <string name="user_level_with_count">Уровень %d (%d шт)</string>
+    <string name="top_level_users">Лучшие пользователи</string>
+    <string name="top_level_users_description">Помогайте другим чтобы увеличивать уровень</string>
 </resources>
