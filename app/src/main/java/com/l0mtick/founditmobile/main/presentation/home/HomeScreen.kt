@@ -1,12 +1,10 @@
 package com.l0mtick.founditmobile.main.presentation.home
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -78,31 +76,43 @@ fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
 ) {
-    Column(
+    LazyColumn (
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp)
-            .verticalScroll(rememberScrollState())
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        UserHeaderCard()
-        Spacer(Modifier.height(12.dp))
-        SectionHeader(
-            header = R.string.popular_category,
-            description = null
-        )
-        Spacer(Modifier.height(12.dp))
-        CategoryGrid(
-            tempCategories
-        )
-        Spacer(Modifier.height(12.dp))
-        SectionHeader(
-            header = R.string.top_level_users,
-            description = R.string.top_level_users_description
-        )
-        Spacer(Modifier.height(12.dp))
-        TopLevelUsersRow(
-            users = tempUsers
-        )
+        item {
+            UserHeaderCard(
+                modifier = Modifier.padding(horizontal = 24.dp).systemBarsPadding()
+            )
+        }
+        item {
+            SectionHeader(
+                header = R.string.popular_category,
+                description = null,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+        }
+        item {
+            CategoryGrid(
+                categories = tempCategories,
+                modifier = Modifier.padding(horizontal = 24.dp),
+                onCategoryClick = { /*TODO*/ }
+            )
+        }
+        item {
+            SectionHeader(
+                header = R.string.top_level_users,
+                description = R.string.top_level_users_description,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+        }
+        item {
+            TopLevelUsersRow(
+                users = tempUsers,
+                onUserCardClick = { /*TODO*/ }
+            )
+        }
     }
 }
 

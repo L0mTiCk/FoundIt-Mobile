@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.main.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -29,22 +31,26 @@ import com.l0mtick.founditmobile.ui.theme.Theme
 @Composable
 fun TopLevelUsersRow(
     users: List<User>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onUserCardClick: (Long) -> Unit
 ) {
     Row(
         modifier = modifier
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Spacer(Modifier.width(24.dp))
         users.forEach { user ->
             UserLevelCard(
                 profilePictureUrl = user.profilePictureUrl,
                 username = user.username,
                 level = user.level,
                 numberOfItemsFound = user.levelItemsCount,
-                modifier = Modifier.sizeIn(maxWidth = 170.dp, maxHeight = 300.dp)
+                modifier = Modifier.sizeIn(maxWidth = 170.dp, maxHeight = 300.dp),
+                onCardClick = { onUserCardClick(user.id) }
             )
         }
+        Spacer(Modifier.width(24.dp))
     }
 }
 
@@ -54,12 +60,15 @@ private fun UserLevelCard(
     profilePictureUrl: String? = null,
     username: String,
     level: Int,
-    numberOfItemsFound: Int
+    numberOfItemsFound: Int,
+    onCardClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .background(color = Theme.colors.surface, shape = RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .background(color = Theme.colors.surface)
             .border(1.dp, color = Theme.colors.secondary, shape = RoundedCornerShape(16.dp))
+            .clickable { onCardClick() }
             .padding(16.dp)
             .then(modifier)
     ) {

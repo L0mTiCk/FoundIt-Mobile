@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.main.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
@@ -24,9 +26,12 @@ import com.l0mtick.founditmobile.ui.theme.Theme
 @Composable
 fun CategoryGrid(
     categories: List<Category>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCategoryClick: (Long) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         categories.chunked(2).forEach { rowItems ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -37,7 +42,8 @@ fun CategoryGrid(
                         text = category.name,
                         imageUrl = category.pictureUrl,
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f),
+                        onClick = { onCategoryClick(category.id) }
                     )
                 }
                 if (rowItems.size < 2) {
@@ -57,12 +63,17 @@ fun CategoryGrid(
 fun CategoryCard(
     text: String,
     imageUrl: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .background(color = Theme.colors.surface, shape = RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .background(color = Theme.colors.surface)
             .border(1.dp, color = Theme.colors.secondary, shape = RoundedCornerShape(16.dp))
+            .clickable {
+                onClick()
+            }
             .padding(16.dp)
             .then(modifier)
     ) {

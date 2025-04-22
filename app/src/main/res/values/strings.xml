@@ -11,6 +11,13 @@
     <string name="unknown_error">Unknown error</string>
     <string name="error_disk_full">Disk space is full</string>
 
+    <!--  Navigation-->
+    <string name="navigation_home">Home</string>
+    <string name="navigation_search">Explore</string>
+    <string name="navigation_add">Add</string>
+    <string name="navigation_inbox">Inbox</string>
+    <string name="navigation_profile">Profile</string>
+
     <!--  Validation errors  -->
     <string name="email_empty">Email cannot be empty</string>
     <string name="invalid_email">Invalid email address</string>
@@ -41,4 +48,6 @@
     <string name="user_level_with_count">Level %d (%d pcs)</string>
     <string name="top_level_users">Top users</string>
     <string name="top_level_users_description">Help others to level up</string>
+
+
 </resources>

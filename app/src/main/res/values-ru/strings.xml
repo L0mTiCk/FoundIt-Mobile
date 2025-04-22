@@ -11,6 +11,13 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="error_disk_full">Недостаточно места на диске</string>
 
+    <!--  Navigation-->
+    <string name="navigation_home">Главная</string>
+    <string name="navigation_search">Объявления</string>
+    <string name="navigation_add">Добавить</string>
+    <string name="navigation_inbox">Сообщения</string>
+    <string name="navigation_profile">Профиль</string>
+
     <!--  Обработка ошибок-->
     <string name="email_empty">E-mail не может быть пустым</string>
     <string name="invalid_email">Неверный адрес электронной почты</string>

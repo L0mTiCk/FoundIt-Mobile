@@ -27,7 +27,16 @@ sealed interface NavigationRoute {
         data object Home : Main
 
         @Serializable
-        data object Map: Main
+        data object Search: Main
+
+        @Serializable
+        data object Add: Main
+
+        @Serializable
+        data object Inbox: Main
+
+        @Serializable
+        data object Profile: Main
 
     }
 
