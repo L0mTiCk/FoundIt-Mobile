@@ -17,6 +17,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.eygraber.compose.placeholder.PlaceholderHighlight
 import com.eygraber.compose.placeholder.placeholder
 import com.eygraber.compose.placeholder.shimmer
+import com.l0mtick.founditmobile.BuildConfig
 import com.l0mtick.founditmobile.R
 
 @Composable
@@ -28,8 +29,9 @@ fun PlaceholderImage(
     shape: Shape = RoundedCornerShape(8.dp),
     placeholderColor: Color = Color.LightGray,
     shimmerColor: Color = Color.White,
+    isPlaceholderVisible: Boolean = false
 ) {
-    if (imageUrl.isNullOrBlank()) {
+    if (imageUrl.isNullOrBlank() && !isPlaceholderVisible) {
         Image(
             painter = painterResource(id = R.drawable.placeholder),
             contentDescription = contentDescription,
@@ -37,21 +39,22 @@ fun PlaceholderImage(
             modifier = modifier.clip(shape)
         )
     } else {
-        val painter = rememberAsyncImagePainter(model = imageUrl)
+        val fullUrl = BuildConfig.BASE_URL + imageUrl
+        val painter = rememberAsyncImagePainter(model = fullUrl)
         val state by painter.state.collectAsState()
-        val isLoading = state is AsyncImagePainter.State.Loading
+        val isLoading = state is AsyncImagePainter.State.Loading || isPlaceholderVisible
 
         Image(
             painter = painter,
             contentDescription = contentDescription,
             contentScale = contentScale,
             modifier = modifier
+                .clip(shape)
                 .placeholder(
                     visible = isLoading,
                     color = placeholderColor,
                     highlight = PlaceholderHighlight.shimmer(highlightColor = shimmerColor),
                 )
-                .clip(shape)
         )
     }
 }

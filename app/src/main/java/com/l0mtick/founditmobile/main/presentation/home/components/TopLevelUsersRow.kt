@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
+import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
 import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.ui.theme.Theme
 
@@ -40,15 +41,24 @@ fun TopLevelUsersRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Spacer(Modifier.width(24.dp))
-        users.forEach { user ->
-            UserLevelCard(
-                profilePictureUrl = user.profilePictureUrl,
-                username = user.username,
-                level = user.level,
-                numberOfItemsFound = user.levelItemsCount,
-                modifier = Modifier.sizeIn(maxWidth = 170.dp, maxHeight = 300.dp),
-                onCardClick = { onUserCardClick(user.id) }
-            )
+        if (users.isEmpty()) {
+            repeat(3) {
+                UserLevelCard(
+                    isPlaceholderVisible = true,
+                    onCardClick = {}
+                )
+            }
+        } else {
+            users.forEach { user ->
+                UserLevelCard(
+                    profilePictureUrl = user.profilePictureUrl,
+                    username = user.username,
+                    level = user.level,
+                    numberOfItemsFound = user.levelItemsCount,
+                    modifier = Modifier.sizeIn(maxWidth = 170.dp, maxHeight = 300.dp),
+                    onCardClick = { onUserCardClick(user.id) }
+                )
+            }
         }
         Spacer(Modifier.width(24.dp))
     }
@@ -58,10 +68,11 @@ fun TopLevelUsersRow(
 private fun UserLevelCard(
     modifier: Modifier = Modifier,
     profilePictureUrl: String? = null,
-    username: String,
-    level: Int,
-    numberOfItemsFound: Int,
-    onCardClick: () -> Unit
+    username: String = "",
+    level: Int = 0,
+    numberOfItemsFound: Int = 0,
+    onCardClick: () -> Unit,
+    isPlaceholderVisible: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -76,8 +87,9 @@ private fun UserLevelCard(
             imageUrl = profilePictureUrl,
             contentDescription = "User profile picture",
             modifier = Modifier
-                .requiredSizeIn(minHeight = 100.dp)
-                .aspectRatio(1f)
+                .requiredSizeIn(minHeight = 100.dp, minWidth = 170.dp)
+                .aspectRatio(1f),
+            isPlaceholderVisible = isPlaceholderVisible
         )
         Spacer(Modifier.height(12.dp))
         Text(
@@ -85,19 +97,22 @@ private fun UserLevelCard(
             style = Theme.typography.body,
             color = Theme.colors.onSurface,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(horizontal = 2.dp)
+            modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .defaultPlaceholder(visible = isPlaceholderVisible, width = 100.dp)
         )
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
+                .defaultPlaceholder(visible = isPlaceholderVisible)
                 .background(color = Theme.colors.brand.copy(.2f))
                 .padding(horizontal = 6.dp, vertical = 4.dp)
         ) {
             Text(
                 text = stringResource(R.string.user_level_with_count, level, numberOfItemsFound),
                 style = Theme.typography.small,
-                color = Theme.colors.brand
+                color = Theme.colors.brand,
             )
         }
     }

@@ -1,6 +1,9 @@
 package com.l0mtick.founditmobile.main.presentation.home
 
+import com.l0mtick.founditmobile.main.domain.model.Category
+import com.l0mtick.founditmobile.main.domain.model.User
+
 data class HomeState(
-    val paramOne: String = "default",
-    val paramTwo: List<String> = emptyList(),
+    val categories: List<Category> = emptyList(),
+    val topLevelUsers: List<User> = emptyList(),
 )

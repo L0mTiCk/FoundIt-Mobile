@@ -31,7 +31,7 @@ abstract class BaseApiService(
     private val httpClient: HttpClient,
     private val localStorage: LocalStorage,
 ) {
-    val baseUrl = BuildConfig.BASE_URL
+    val baseUrl = BuildConfig.BASE_URL + "/api"
 
     val defaultUnauthorizedHandler: () -> Unit = {
         Log.w("BaseApiService", "Unauthorized access")
@@ -39,10 +39,12 @@ abstract class BaseApiService(
 
     val defaultRefreshTokenHandler: suspend () -> Boolean = {
         val token = localStorage.getRefreshToken()
+        Log.e("expired_token", "Expired token trying to refresh with refresh token ${token}")
         token?.let {
             try {
-                val response: RefreshTokenResponse = httpClient.post("/auth/refresh") {
+                val response: RefreshTokenResponse = httpClient.post(baseUrl + "/auth/refresh") {
                     contentType(ContentType.Application.Json)
+                    header("Authorization", "Bearer $it")
                     setBody(RefreshTokenRequest(it))
                 }.body()
                 localStorage.setToken(response.accessToken)

@@ -95,7 +95,7 @@ fun HomeScreen(
         }
         item {
             CategoryGrid(
-                categories = tempCategories,
+                categories = state.categories,
                 modifier = Modifier.padding(horizontal = 24.dp),
                 onCategoryClick = { /*TODO*/ }
             )
@@ -109,7 +109,7 @@ fun HomeScreen(
         }
         item {
             TopLevelUsersRow(
-                users = tempUsers,
+                users = state.topLevelUsers,
                 onUserCardClick = { /*TODO*/ }
             )
         }
