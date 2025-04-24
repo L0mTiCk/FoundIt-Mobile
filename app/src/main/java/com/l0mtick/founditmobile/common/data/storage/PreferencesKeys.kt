@@ -9,5 +9,7 @@ object PreferencesKeys {
     val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
     val EMAIL = stringPreferencesKey("email")
     val USERNAME = stringPreferencesKey("username")
+    val APP_LANGUAGE = stringPreferencesKey("app_language")
+
 }
 

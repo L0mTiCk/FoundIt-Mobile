@@ -2,12 +2,13 @@ package com.l0mtick.founditmobile.main.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val categoriesRepository: CategoriesRepository) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
