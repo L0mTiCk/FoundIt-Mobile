@@ -1,7 +1,9 @@
 package com.l0mtick.founditmobile.main.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -112,6 +114,9 @@ fun HomeScreen(
                 users = state.topLevelUsers,
                 onUserCardClick = { /*TODO*/ }
             )
+        }
+        item {
+            Spacer(Modifier.height(20.dp))
         }
     }
 }
