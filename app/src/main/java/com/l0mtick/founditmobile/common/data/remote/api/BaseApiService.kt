@@ -23,6 +23,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.ParametersBuilder
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
+import io.ktor.util.reflect.TypeInfo
+import io.ktor.util.reflect.typeInfo
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import okio.IOException
@@ -39,7 +41,6 @@ abstract class BaseApiService(
 
     val defaultRefreshTokenHandler: suspend () -> Boolean = {
         val token = localStorage.getRefreshToken()
-        Log.e("expired_token", "Expired token trying to refresh with refresh token ${token}")
         token?.let {
             try {
                 val response: RefreshTokenResponse = httpClient.post(baseUrl + "/auth/refresh") {
@@ -67,7 +68,7 @@ abstract class BaseApiService(
      */
     suspend inline fun <reified T> get(
         path: String,
-        crossinline params: ParametersBuilder.() -> Unit = {},
+        noinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError.Network> =
         request(HttpMethod.Get, path, EmptyBody, params, false, onUnauthorized)
@@ -83,7 +84,7 @@ abstract class BaseApiService(
      */
     suspend inline fun <reified T> getAuth(
         path: String,
-        crossinline params: ParametersBuilder.() -> Unit = {},
+        noinline params: ParametersBuilder.() -> Unit = {},
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError.Network> =
         request(HttpMethod.Get, path, EmptyBody, params, true, onUnauthorized)
@@ -139,10 +140,33 @@ abstract class BaseApiService(
         method: HttpMethod,
         path: String,
         body: Body? = null,
-        crossinline params: ParametersBuilder.() -> Unit = {},
+        noinline params: ParametersBuilder.() -> Unit = {},
         withAuth: Boolean = false,
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler,
         noinline refreshTokenHandler: suspend () -> Boolean = defaultRefreshTokenHandler
+    ): Result<T, DataError.Network> {
+        return internalRequest(
+            type = typeInfo<T>(),
+            method = method,
+            path = path,
+            body = body,
+            params = params,
+            withAuth = withAuth,
+            onUnauthorized = onUnauthorized,
+            refreshTokenHandler = refreshTokenHandler
+        )
+    }
+
+    @PublishedApi
+    internal suspend fun <T : Any, Body> internalRequest(
+        type: TypeInfo,
+        method: HttpMethod,
+        path: String,
+        body: Body? = null,
+        params: ParametersBuilder.() -> Unit = {},
+        withAuth: Boolean = false,
+        onUnauthorized: () -> Unit = defaultUnauthorizedHandler,
+        refreshTokenHandler: suspend () -> Boolean = defaultRefreshTokenHandler
     ): Result<T, DataError.Network> {
         return try {
             val result = `access$httpClient`.request("$baseUrl/$path") {
@@ -172,7 +196,7 @@ abstract class BaseApiService(
                 return Result.Error(error)
             }
 
-            return Result.Success(result.body<T>())
+            return Result.Success(result.body(type))
         } catch (e: RedirectResponseException) {
             Result.Error(DataError.Network.UNKNOWN)
         } catch (e: ClientRequestException) {
@@ -180,6 +204,17 @@ abstract class BaseApiService(
                 val refreshed = refreshTokenHandler()
                 if (!refreshed) {
                     onUnauthorized()
+                } else {
+                    return internalRequest(
+                        type = type,
+                        method = method,
+                        path = path,
+                        body = body,
+                        params = params,
+                        withAuth = withAuth,
+                        onUnauthorized = onUnauthorized,
+                        refreshTokenHandler = refreshTokenHandler,
+                    )
                 }
             }
 
@@ -211,6 +246,7 @@ abstract class BaseApiService(
     @PublishedApi
     internal val `access$localStorage`: LocalStorage
         get() = localStorage
+
 }
 
 /**
