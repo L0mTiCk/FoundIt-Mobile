@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 
 class LocalStorageImpl(
     private val context: Context
@@ -52,6 +53,17 @@ class LocalStorageImpl(
 
     override suspend fun getUsername(): String? {
         return context.dataStore.data.first()[PreferencesKeys.USERNAME]
+    }
+
+    override suspend fun setAppLanguage(languageCode: String) {
+        context.dataStore.edit {
+            it[PreferencesKeys.APP_LANGUAGE] = languageCode
+        }
+    }
+
+    override suspend fun getAppLanguage(): String {
+        val stored = context.dataStore.data.first()[PreferencesKeys.APP_LANGUAGE]
+        return stored ?: Locale.getDefault().language
     }
 
     override suspend fun clear() {

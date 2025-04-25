@@ -11,6 +11,13 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="error_disk_full">Недостаточно места на диске</string>
 
+    <!--  Navigation-->
+    <string name="navigation_home">Главная</string>
+    <string name="navigation_search">Объявления</string>
+    <string name="navigation_add">Добавить</string>
+    <string name="navigation_inbox">Сообщения</string>
+    <string name="navigation_profile">Профиль</string>
+
     <!--  Обработка ошибок-->
     <string name="email_empty">E-mail не может быть пустым</string>
     <string name="invalid_email">Неверный адрес электронной почты</string>
@@ -35,4 +42,10 @@
     <string name="more_info">Подробнее</string>
     <string name="enter_code_from_telegram">Введите код из Telegram</string>
 
+    <!--  Home screen-->
+    <string name="user_greeting">Добро пожаловать</string>
+    <string name="popular_category">Популярные Категории</string>
+    <string name="user_level_with_count">Уровень %d (%d шт)</string>
+    <string name="top_level_users">Лучшие пользователи</string>
+    <string name="top_level_users_description">Помогайте другим чтобы увеличивать уровень</string>
 </resources>
