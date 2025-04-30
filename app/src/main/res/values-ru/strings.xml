@@ -48,4 +48,11 @@
     <string name="user_level_with_count">Уровень %d (%d шт)</string>
     <string name="top_level_users">Лучшие пользователи</string>
     <string name="top_level_users_description">Помогайте другим чтобы увеличивать уровень</string>
+
+    <plurals name="items_count">
+        <item quantity="one">%d вещь</item>    <!-- 1 -->
+        <item quantity="few">%d вещи</item>    <!-- 2-4 -->
+        <item quantity="many">%d вещей</item>  <!-- 5+ -->
+        <item quantity="other">%d вещей</item> <!-- fallback -->
+    </plurals>
 </resources>

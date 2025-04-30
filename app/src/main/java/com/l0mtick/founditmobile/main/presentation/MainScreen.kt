@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.HomeRoot
+import com.l0mtick.founditmobile.main.presentation.profile.ProfileRoot
 import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
@@ -47,7 +48,6 @@ fun MainScreen(
     onNavigateToLogin: () -> Unit
 ) {
     val localNavController = rememberNavController()
-    val coroutineScope = rememberCoroutineScope()
     val state = localNavController.currentBackStackEntryAsState().value
     Log.w("routing", state?.destination?.route.toString())
     Log.w("routing", NavigationRoute.Main.Home::class.qualifiedName.toString())
@@ -89,7 +89,9 @@ fun MainScreen(
 
                 composable<NavigationRoute.Main.Inbox> {  }
 
-                composable<NavigationRoute.Main.Profile> {  }
+                composable<NavigationRoute.Main.Profile> {
+                    ProfileRoot()
+                }
             }
         }
     )
