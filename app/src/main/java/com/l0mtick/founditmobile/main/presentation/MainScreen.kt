@@ -8,7 +8,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -20,6 +19,7 @@ import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.HomeRoot
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileRoot
+import com.l0mtick.founditmobile.main.presentation.search.SearchRoot
 import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
@@ -82,7 +82,7 @@ fun MainScreen(
                 }
 
                 composable<NavigationRoute.Main.Search> {
-                    Text("Search")
+                    SearchRoot()
                 }
 
                 composable<NavigationRoute.Main.Add> {  }

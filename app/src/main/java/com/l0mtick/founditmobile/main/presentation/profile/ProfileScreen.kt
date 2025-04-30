@@ -45,6 +45,7 @@ fun ProfileScreen(
     onAction: (ProfileAction) -> Unit,
 ) {
     val context = LocalContext.current
+    val rowsModifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize()
@@ -78,32 +79,32 @@ fun ProfileScreen(
                 description = context.resources.getQuantityString(R.plurals.items_count, 3, 3),
                 trailingIcon = Icons.Default.FavoriteBorder,
                 onClick = { },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                modifier = rowsModifier
             )
             ProfileScreenRow(
                 header = "My items",
                 description = context.resources.getQuantityString(R.plurals.items_count, 0, 0),
                 trailingIcon = Icons.AutoMirrored.Filled.List,
                 onClick = { },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                modifier = rowsModifier
             )
             ProfileScreenRow(
                 header = "Settings",
                 onClick = { },
                 trailingIcon = Icons.Default.Settings,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                modifier = rowsModifier
             )
             ProfileScreenRow(
                 header = "About",
                 onClick = { },
                 trailingIcon = Icons.Default.Info,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                modifier = rowsModifier
             )
             ProfileScreenRow(
                 header = "Get help",
                 trailingIcon = Icons.Default.Call,
                 onClick = { },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+                modifier = rowsModifier
             )
         }
     }

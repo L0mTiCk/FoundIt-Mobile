@@ -54,5 +54,6 @@
         <item quantity="other">%d items</item>
     </plurals>
 
-
+    <!--  Search screen-->
+    <string name="lost_items">Lost items</string>
 </resources>

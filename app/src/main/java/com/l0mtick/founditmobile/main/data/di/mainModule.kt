@@ -6,6 +6,7 @@ import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import com.l0mtick.founditmobile.main.presentation.home.HomeViewModel
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileViewModel
+import com.l0mtick.founditmobile.main.presentation.search.SearchViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,6 +22,10 @@ val mainModule = module {
 
     viewModel {
         ProfileViewModel()
+    }
+
+    viewModel {
+        SearchViewModel()
     }
 
 }

@@ -55,4 +55,8 @@
         <item quantity="many">%d вещей</item>  <!-- 5+ -->
         <item quantity="other">%d вещей</item> <!-- fallback -->
     </plurals>
+
+    <!--  Search screen-->
+    <string name="lost_items">Потерянные вещи</string>
+
 </resources>
