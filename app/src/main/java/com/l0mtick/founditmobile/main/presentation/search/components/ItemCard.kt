@@ -32,13 +32,14 @@ fun BigItemCard(
     postedTimestamp: Long,
     distance: Int,
     modifier: Modifier = Modifier,
-    imageUrl: String? = null
+    imageUrl: String? = null,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(16.dp))
-            .clickable {}
+            .clickable { onClick() }
             .padding(vertical = 16.dp)
             .fillMaxWidth()
             .then(modifier)
@@ -115,7 +116,8 @@ private fun BigItemCardPreview() {
             title = "Black backpack",
             description = "At the bus stop at 4th and king",
             postedTimestamp = 1746034187000L,
-            distance = 100
+            distance = 100,
+            onClick = {}
         )
     }
 }

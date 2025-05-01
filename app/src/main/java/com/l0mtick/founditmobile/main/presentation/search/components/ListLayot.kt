@@ -20,6 +20,7 @@ import com.l0mtick.founditmobile.main.presentation.search.SearchState
 fun ListLayout(
     state: SearchState.ListScreen,
     onAction: (SearchAction) -> Unit,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -68,7 +69,8 @@ fun ListLayout(
                 description = "Black backpack at the cornter of local shop in London",
                 postedTimestamp = 1746034187000L,
                 distance = 121,
-                modifier = Modifier.padding(horizontal = 14.dp)
+                modifier = Modifier.padding(horizontal = 14.dp),
+                onClick = onItemClick
             )
         }
     }

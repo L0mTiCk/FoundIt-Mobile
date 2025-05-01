@@ -38,6 +38,10 @@ sealed interface NavigationRoute {
         @Serializable
         data object Profile: Main
 
+        //TODO: pass args
+        @Serializable
+        data object ItemDetails: Main
+
     }
 
 }
