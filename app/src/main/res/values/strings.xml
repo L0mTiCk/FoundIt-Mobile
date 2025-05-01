@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">FoundItMobile</string>
+    <string name="app_name" translatable="false">Found It</string>
     <string name="the_request_timed_out">Your request timed out</string>
     <string name="bad_request">Request data is incorrect</string>
     <string name="request_conflict">A conflict occurred while processing the request</string>

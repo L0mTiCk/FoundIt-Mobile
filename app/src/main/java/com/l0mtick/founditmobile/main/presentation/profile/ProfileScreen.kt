@@ -57,7 +57,7 @@ fun ProfileScreen(
                 "oliviasmith@gmail.com",
                 modifier = Modifier
                     .systemBarsPadding()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24.dp, vertical = 5.dp)
 
             )
         }

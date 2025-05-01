@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.HomeRoot
+import com.l0mtick.founditmobile.main.presentation.inbox.InboxRoot
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetailsRoot
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileRoot
 import com.l0mtick.founditmobile.main.presentation.search.SearchRoot
@@ -90,7 +91,9 @@ fun MainScreen(
 
                 composable<NavigationRoute.Main.Add> {  }
 
-                composable<NavigationRoute.Main.Inbox> {  }
+                composable<NavigationRoute.Main.Inbox> {
+                    InboxRoot()
+                }
 
                 composable<NavigationRoute.Main.Profile> {
                     ProfileRoot()

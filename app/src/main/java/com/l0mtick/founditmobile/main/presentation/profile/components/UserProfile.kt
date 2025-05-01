@@ -42,7 +42,7 @@ fun UserProfile(
                 .aspectRatio(1f)
         )
         Spacer(Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(2.5f)) {
+        Column(modifier = Modifier.weight(3f)) {
             Text(
                 text = username,
                 style = Theme.typography.headline
