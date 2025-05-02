@@ -6,7 +6,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.presentation.chat.ChatRoot
 import com.l0mtick.founditmobile.main.presentation.home.HomeRoot
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxRoot
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetailsRoot
@@ -51,14 +55,22 @@ fun MainScreen(
 ) {
     val localNavController = rememberNavController()
     val state = localNavController.currentBackStackEntryAsState().value
-    Log.w("routing", state?.destination?.route.toString())
-    Log.w("routing", NavigationRoute.Main.Home::class.qualifiedName.toString())
-
+    val adaptiveInfo = currentWindowAdaptiveInfo()
     val currentDestination = state?.destination?.route
+    Log.d("destination", currentDestination.toString())
 
+    val customNavSuiteType = with(adaptiveInfo) {
+        if (MainScreenNavigationItem.entries.any {currentDestination == it.route::class.qualifiedName}) {
+            NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
+        } else {
+            NavigationSuiteType.None
+        }
+    }
+    
     NavigationSuiteScaffold(
         containerColor = Theme.colors.background,
         modifier = Modifier.fillMaxSize(),
+        layoutType = customNavSuiteType,
         navigationSuiteItems = {
             MainScreenNavigationItem.entries.forEach { route ->
                 item(
@@ -69,7 +81,8 @@ fun MainScreen(
                         }
                     },
                     icon = { Icon(painterResource(route.icon), contentDescription = "") },
-                    selected = currentDestination?.let { route.route::class.qualifiedName == it } ?: false
+                    selected = currentDestination?.let { route.route::class.qualifiedName == it }
+                        ?: false
                 )
             }
         },
@@ -77,7 +90,7 @@ fun MainScreen(
             NavHost(
                 navController = localNavController,
                 startDestination = NavigationRoute.Main.Home,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 composable<NavigationRoute.Main.Home> {
                     HomeRoot()
@@ -89,10 +102,10 @@ fun MainScreen(
                     )
                 }
 
-                composable<NavigationRoute.Main.Add> {  }
+                composable<NavigationRoute.Main.Add> { }
 
                 composable<NavigationRoute.Main.Inbox> {
-                    InboxRoot()
+                    InboxRoot(localNavController)
                 }
 
                 composable<NavigationRoute.Main.Profile> {
@@ -101,6 +114,10 @@ fun MainScreen(
 
                 composable<NavigationRoute.Main.ItemDetails> {
                     LostItemDetailsRoot()
+                }
+
+                composable<NavigationRoute.Main.Chat> {
+                    ChatRoot()
                 }
             }
         }

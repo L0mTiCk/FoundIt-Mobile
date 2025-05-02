@@ -42,6 +42,9 @@ sealed interface NavigationRoute {
         @Serializable
         data object ItemDetails: Main
 
+        @Serializable
+        data object Chat: Main
+
     }
 
 }

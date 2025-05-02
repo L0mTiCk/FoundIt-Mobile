@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.inbox.components.ChatCard
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
@@ -19,13 +21,15 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun InboxRoot(
+    navController: NavController,
     viewModel: InboxViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     InboxScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onNavToChat = { navController.navigate(NavigationRoute.Main.Chat) }
     )
 }
 
@@ -33,6 +37,7 @@ fun InboxRoot(
 fun InboxScreen(
     state: InboxState,
     onAction: (InboxAction) -> Unit,
+    onNavToChat: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -57,7 +62,7 @@ fun InboxScreen(
                     "Black backpack at corner shop",
                     "So will you take it take it take it take it it take it it take it",
                     "15.05.2025",
-                    {},
+                    { onNavToChat() },
                     Modifier.padding(vertical = 6.dp, horizontal = 20.dp),
                 )
             }
@@ -71,7 +76,8 @@ private fun Preview() {
     FoundItMobileTheme {
         InboxScreen(
             state = InboxState(),
-            onAction = {}
+            onAction = {},
+            onNavToChat = {}
         )
     }
 }

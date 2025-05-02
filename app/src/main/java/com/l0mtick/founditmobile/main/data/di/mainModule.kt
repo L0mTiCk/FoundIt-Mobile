@@ -4,6 +4,7 @@ import com.l0mtick.founditmobile.main.data.remote.api.MainApiImpl
 import com.l0mtick.founditmobile.main.data.repository.CategoriesRepositoryImpl
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
+import com.l0mtick.founditmobile.main.presentation.chat.ChatViewModel
 import com.l0mtick.founditmobile.main.presentation.home.HomeViewModel
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxViewModel
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetailsViewModel
@@ -36,6 +37,10 @@ val mainModule = module {
 
     viewModel {
         InboxViewModel()
+    }
+
+    viewModel {
+        ChatViewModel()
     }
 
 }
