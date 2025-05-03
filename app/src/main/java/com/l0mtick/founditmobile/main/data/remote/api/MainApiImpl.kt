@@ -4,7 +4,9 @@ import com.l0mtick.founditmobile.common.data.remote.api.BaseApiService
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
+import com.l0mtick.founditmobile.main.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import io.ktor.client.HttpClient
 
@@ -20,6 +22,24 @@ class MainApiImpl(httpClient: HttpClient, localStorage: LocalStorage) : MainApi,
     override suspend fun getPopularCategories(): Result<CategoriesResponse, DataError.Network> {
         return getAuth<CategoriesResponse>(
             path = "user/categories/popular",
+        )
+    }
+
+    override suspend fun getTopLevelUsers(): Result<UsersResponse, DataError.Network> {
+        return getAuth<UsersResponse>(
+            path = "user/users/top"
+        )
+    }
+
+    override suspend fun getCurrentUserProfile(): Result<UserDTO, DataError.Network> {
+        return getAuth<UserDTO>(
+            path = "user/users/me"
+        )
+    }
+
+    override suspend fun getCurrentUserFavoriteCount(): Result<Int, DataError.Network> {
+        return getAuth<Int>(
+            path = "user/items/favorite/count"
         )
     }
 }

@@ -17,7 +17,7 @@ koin = "4.0.3"
 material3-apadtive = "1.1.0"
 placeholder = "1.0.10"
 splashscreen = "1.0.1"
-datastore = "1.1.5"
+datastore = "1.1.4"
 xmaterial-ccp = "v2.15"
 
 

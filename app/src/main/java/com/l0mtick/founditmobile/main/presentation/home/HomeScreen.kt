@@ -14,8 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.l0mtick.founditmobile.R
-import com.l0mtick.founditmobile.main.domain.model.Category
-import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.main.presentation.home.components.CategoryGrid
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.home.components.TopLevelUsersRow
@@ -34,44 +32,6 @@ fun HomeRoot(
         onAction = viewModel::onAction
     )
 }
-
-private val tempCategories = listOf(
-    Category(
-        1,
-        "First category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Second category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Third category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Fourth category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-)
-
-private val tempUsers = listOf(
-    User(
-        1
-    ),
-    User(
-        2
-    ),
-    User(
-        3
-    ),
-    User(
-        4
-    ),
-)
 
 @Composable
 fun HomeScreen(

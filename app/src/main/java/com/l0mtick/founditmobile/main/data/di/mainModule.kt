@@ -2,8 +2,10 @@ package com.l0mtick.founditmobile.main.data.di
 
 import com.l0mtick.founditmobile.main.data.remote.api.MainApiImpl
 import com.l0mtick.founditmobile.main.data.repository.CategoriesRepositoryImpl
+import com.l0mtick.founditmobile.main.data.repository.UsersRepositoryImpl
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
+import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
 import com.l0mtick.founditmobile.main.presentation.chat.ChatViewModel
 import com.l0mtick.founditmobile.main.presentation.home.HomeViewModel
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxViewModel
@@ -19,12 +21,14 @@ val mainModule = module {
 
     single<CategoriesRepository> { CategoriesRepositoryImpl(api = get(), localStorage = get()) }
 
+    single<UsersRepository> { UsersRepositoryImpl(get()) }
+
     viewModel {
-        HomeViewModel(categoriesRepository = get())
+        HomeViewModel(categoriesRepository = get(), usersRepository = get())
     }
 
     viewModel {
-        ProfileViewModel()
+        ProfileViewModel(usersRepository = get())
     }
 
     viewModel {

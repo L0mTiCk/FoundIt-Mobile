@@ -33,7 +33,7 @@ import com.l0mtick.founditmobile.ui.theme.Theme
 fun TopLevelUsersRow(
     users: List<User>,
     modifier: Modifier = Modifier,
-    onUserCardClick: (Long) -> Unit
+    onUserCardClick: (Int) -> Unit
 ) {
     Row(
         modifier = modifier

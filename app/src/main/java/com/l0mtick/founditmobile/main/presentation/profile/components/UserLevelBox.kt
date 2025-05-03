@@ -23,7 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
-fun UserLevelBox(modifier: Modifier = Modifier) {
+fun UserLevelBox(
+    level: Int,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -41,7 +44,7 @@ fun UserLevelBox(modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(3f)
             ) {
                 Text(
-                    text = "Level 1: Novice",
+                    text = "Level $level: Novice",
                     style = Theme.typography.title
                 )
                 Spacer(Modifier.height(12.dp))
