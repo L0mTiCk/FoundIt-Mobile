@@ -1,6 +1,8 @@
 package com.l0mtick.founditmobile.main.presentation.inbox
 
+import com.l0mtick.founditmobile.main.domain.model.Chat
+
 data class InboxState(
-    val paramOne: String = "default",
-    val paramTwo: List<String> = emptyList(),
+    val isLoading: Boolean = true,
+    val chats: List<Chat>? = null,
 )

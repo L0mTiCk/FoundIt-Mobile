@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -22,7 +21,6 @@ class ProfileViewModel(private val usersRepository: UsersRepository) : ViewModel
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
-                    delay(500)
                     when(val result = usersRepository.getMe()) {
                         is Result.Success -> {
                             _state.update {

@@ -1,9 +1,10 @@
 package com.l0mtick.founditmobile.main.domain.repository
 
+import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
-import com.l0mtick.founditmobile.main.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 
 interface MainApi {
@@ -15,4 +16,5 @@ interface MainApi {
 
     suspend fun getCurrentUserProfile(): Result<UserDTO, DataError.Network>
     suspend fun getCurrentUserFavoriteCount(): Result<Int, DataError.Network>
+    suspend fun getCurrentUserChats(): Result<ChatsResponse, DataError.Network>
 }

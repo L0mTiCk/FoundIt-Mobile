@@ -186,7 +186,6 @@ abstract class BaseApiService(
                     parameters.apply(params)
                 }
             }
-
             if (!result.status.isSuccess()) {
                 val error = when (result.status) {
                     HttpStatusCode.InternalServerError -> DataError.Network.SERVER_ERROR
@@ -217,6 +216,7 @@ abstract class BaseApiService(
                     )
                 }
             }
+            Log.d("base_api", e.toString())
 
             val error = when (e.response.status) {
                 HttpStatusCode.BadRequest -> DataError.Network.BAD_REQUEST
@@ -235,6 +235,7 @@ abstract class BaseApiService(
         } catch (e: IOException) {
             Result.Error(DataError.Network.NO_INTERNET)
         } catch (e: Exception) {
+            Log.d("base_api", e.toString())
             Result.Error(DataError.Network.UNKNOWN)
         }
     }

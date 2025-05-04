@@ -1,8 +1,10 @@
 package com.l0mtick.founditmobile.main.data.util
 
+import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.CategoryDTO
-import com.l0mtick.founditmobile.main.data.remote.dto.UserDTO
+import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
 import com.l0mtick.founditmobile.main.domain.model.Category
+import com.l0mtick.founditmobile.main.domain.model.Chat
 import com.l0mtick.founditmobile.main.domain.model.User
 
 fun CategoryDTO.toModel(languageCode: String = "en"): Category = Category(
@@ -22,4 +24,13 @@ fun UserDTO.toModel(): User = User(
     level = level,
     levelItemsCount = itemCount,
     createdAt = createdAt
+)
+
+fun ChatDTO.toModel(): Chat = Chat(
+    id = id,
+    interlocutor = interlocutor.toModel(),
+    ownerItemTitle = ownerItemTitle,
+    ownerItemImageUrl = ownerItemImageUrl,
+    lastMessage = lastMessage,
+    lastMessageAt = lastMessageAt
 )

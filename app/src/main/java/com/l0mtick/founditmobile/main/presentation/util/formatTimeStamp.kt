@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.util
 
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,3 +56,58 @@ fun pluralRu(number: Int, one: String, few: String, many: String): String {
         else -> "$number $many"
     }
 }
+
+fun formatRelativeTime(
+    timestampMillis: Long?,
+    locale: Locale = Locale.getDefault()
+): String {
+    if (timestampMillis == null) {
+        return ""
+    }
+
+    val now = System.currentTimeMillis()
+    val diff = now - timestampMillis
+
+    val seconds = diff / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+
+    return when {
+        seconds < 60 -> when (locale.language) {
+            "ru" -> "только что"
+            else -> "just now"
+        }
+
+        minutes < 60 -> {
+            if (locale.language == "ru") {
+                "отправлено ${pluralRu(minutes.toInt(), "минута", "минуты", "минут")} назад"
+            } else {
+                "sent $minutes ${if (minutes == 1L) "minute" else "minutes"} ago"
+            }
+        }
+
+        hours < 24 -> {
+            if (locale.language == "ru") {
+                "отправлено ${pluralRu(hours.toInt(), "час", "часа", "часов")} назад"
+            } else {
+                "sent $hours ${if (hours == 1L) "hour" else "hours"} ago"
+            }
+        }
+
+        days < 7 -> {
+            if (locale.language == "ru") {
+                "отправлено ${pluralRu(days.toInt(), "день", "дня", "дней")} назад"
+            } else {
+                "sent $days ${if (days == 1L) "day" else "days"} ago"
+            }
+        }
+
+        else -> {
+            val date = Date(timestampMillis)
+            val formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale)
+            formatter.format(date)
+        }
+    }
+}
+

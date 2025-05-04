@@ -1,13 +1,18 @@
 package com.l0mtick.founditmobile.main.presentation.inbox
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.main.domain.repository.ChatRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class InboxViewModel : ViewModel() {
+class InboxViewModel(private val chatRepository: ChatRepository) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -15,8 +20,23 @@ class InboxViewModel : ViewModel() {
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
-                /** Load initial data here **/
-                hasLoadedInitialData = true
+                viewModelScope.launch {
+                    when (val result = chatRepository.getAllCurrentUserChats()) {
+                        is Result.Success -> {
+                            _state.update {
+                                it.copy(
+                                    chats = result.data,
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is Result.Error -> {
+                            Log.e("chat_viewmodel", result.toString())
+                        }
+                    }
+                    hasLoadedInitialData = true
+                }
             }
         }
         .stateIn(

@@ -1,10 +1,10 @@
 package com.l0mtick.founditmobile.main.data.remote.responses
 
-import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
+import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UsersResponse(
-    val users: List<UserDTO>?,
+data class ChatsResponse(
+    val chats: List<ChatDTO>?,
     val updateTime: Long
 )
