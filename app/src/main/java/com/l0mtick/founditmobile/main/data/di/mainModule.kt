@@ -3,11 +3,14 @@ package com.l0mtick.founditmobile.main.data.di
 import com.l0mtick.founditmobile.main.data.remote.api.MainApiImpl
 import com.l0mtick.founditmobile.main.data.repository.CategoriesRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.ChatRepositoryImpl
+import com.l0mtick.founditmobile.main.data.repository.LocationServiceImpl
 import com.l0mtick.founditmobile.main.data.repository.UsersRepositoryImpl
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.ChatRepository
+import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
+import com.l0mtick.founditmobile.main.presentation.MainScreenViewModel
 import com.l0mtick.founditmobile.main.presentation.chat.ChatViewModel
 import com.l0mtick.founditmobile.main.presentation.home.HomeViewModel
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxViewModel
@@ -26,6 +29,12 @@ val mainModule = module {
     single<UsersRepository> { UsersRepositoryImpl(mainApi = get()) }
 
     single<ChatRepository> { ChatRepositoryImpl(mainApi = get()) }
+
+    single<LocationService> { LocationServiceImpl(application = get()) }
+
+    viewModel {
+        MainScreenViewModel(locationService = get())
+    }
 
     viewModel {
         HomeViewModel(categoriesRepository = get(), usersRepository = get())

@@ -87,6 +87,8 @@ dependencies {
     implementation(libs.compose.placeholder)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.datastore)
+    implementation(libs.play.services.location)
+    implementation(libs.coroutines.play.services)
 
     implementation(libs.xmaterial.ccp)
 

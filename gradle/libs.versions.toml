@@ -19,6 +19,8 @@ placeholder = "1.0.10"
 splashscreen = "1.0.1"
 datastore = "1.1.4"
 xmaterial-ccp = "v2.15"
+gps-location = "21.3.0"
+coroutines-gps = "1.10.2"
 
 
 [libraries]
@@ -59,6 +61,8 @@ androidx-material3-adaptive-navigation-suite = { module = "androidx.compose.mate
 compose-placeholder = { module = "com.eygraber:compose-placeholder", version.ref = "placeholder" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "gps-location"}
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-gps"}
 
 #Jitpack
 xmaterial-ccp = { module = "com.github.TuleSimon:xMaterialccp", version.ref = "xmaterial-ccp"}
