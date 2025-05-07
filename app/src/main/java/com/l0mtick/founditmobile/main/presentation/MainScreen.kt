@@ -18,6 +18,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
@@ -134,7 +136,7 @@ private enum class MainScreenNavigationItem(
 @Composable
 fun MainScreen(
     onNavigateToLogin: () -> Unit,
-    ) {
+) {
     val localNavController = rememberNavController()
     val state = localNavController.currentBackStackEntryAsState().value
     val adaptiveInfo = currentWindowAdaptiveInfo()
@@ -148,6 +150,9 @@ fun MainScreen(
             NavigationSuiteType.None
         }
     }
+    val barColors = Theme.navBarItemColor
+    val railColors = Theme.navRailItemColor
+    val drawerColor = Theme.navDrawerItemColor
 
     NavigationSuiteScaffold(
         containerColor = Theme.colors.background,
@@ -164,10 +169,22 @@ fun MainScreen(
                     },
                     icon = { Icon(painterResource(route.icon), contentDescription = "") },
                     selected = currentDestination?.let { route.route::class.qualifiedName == it }
-                        ?: false
+                        ?: false,
+                    colors = NavigationSuiteItemColors(
+                        navigationBarItemColors = barColors,
+                        navigationRailItemColors = railColors,
+                        navigationDrawerItemColors = drawerColor
+                    )
+
                 )
+
             }
         },
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = Theme.colors.surface,
+            navigationRailContainerColor = Theme.colors.surface,
+            navigationDrawerContainerColor = Theme.colors.surface,
+        ),
         content = {
             NavHost(
                 navController = localNavController,

@@ -62,6 +62,7 @@ class SearchViewModel : ViewModel() {
     fun onAction(action: SearchAction) {
         when (action) {
             is SearchAction.OnCategorySelect -> selectCategory(action.id)
+            is SearchAction.OnModeChange -> changeMode()
         }
     }
 
@@ -78,6 +79,12 @@ class SearchViewModel : ViewModel() {
             current.copy(
                 selectedCategories = updated
             )
+        }
+    }
+
+    private fun changeMode() {
+        _state.update {
+            SearchState.MapScreen
         }
     }
 

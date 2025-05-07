@@ -19,6 +19,9 @@ dependencyResolutionManagement {
         maven {
             setUrl("https://jitpack.io")
         }
+        maven {
+            setUrl("https://api.mapbox.com/downloads/v2/releases/maven")
+        }
     }
 }
 

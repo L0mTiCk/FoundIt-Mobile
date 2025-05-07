@@ -2,6 +2,10 @@ package com.l0mtick.founditmobile.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationDrawerItemColors
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -13,6 +17,7 @@ import androidx.compose.ui.unit.sp
 
 val baseLightColors = FoundItColors(
     brand = Color(0xFF397a57),
+    brandMuted = Color(0xFFD7E4DD),
     onBrand = Color.White,
     secondary = Color(0xFFBDC5BE),
     onSecondary = Color(0xFF002200),
@@ -77,6 +82,41 @@ object Theme {
     val typography: FoundItTypography
         @ReadOnlyComposable @Composable
         get() = LocalTypography.current
+
+    val navRailItemColor: NavigationRailItemColors
+        @ReadOnlyComposable @Composable
+        get() = NavigationRailItemColors(
+        selectedIconColor = colors.brand,
+        selectedTextColor = colors.onSurface,
+        selectedIndicatorColor = colors.brand.copy(alpha = .2f),
+        unselectedIconColor = colors.onSurface,
+        unselectedTextColor = colors.onSurface,
+        disabledIconColor = colors.onSurface,
+        disabledTextColor = colors.onSurface,
+    )
+
+    val navBarItemColor: NavigationBarItemColors
+        @ReadOnlyComposable @Composable
+        get() = NavigationBarItemColors(
+            selectedIconColor = colors.brand,
+            selectedTextColor = colors.onSurface,
+            selectedIndicatorColor = colors.brand.copy(alpha = .2f),
+            unselectedIconColor = colors.onSurface,
+            unselectedTextColor = colors.onSurface,
+            disabledIconColor = colors.onSurface,
+            disabledTextColor = colors.onSurface,
+        )
+
+    val navDrawerItemColor: NavigationDrawerItemColors
+       @Composable
+        get() = NavigationDrawerItemDefaults.colors(
+            selectedIconColor = colors.brand,
+            selectedTextColor = colors.onSurface,
+            selectedContainerColor = colors.brand.copy(alpha = .2f),
+            unselectedIconColor = colors.onSurface,
+            unselectedTextColor = colors.onSurface,
+            unselectedContainerColor = colors.surface
+        )
 }
 
 val LocalColors = staticCompositionLocalOf<FoundItColors> {

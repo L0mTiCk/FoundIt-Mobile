@@ -26,7 +26,9 @@ android {
         }
 
         val baseUrl = localProperties.getProperty("base_url") ?: "https://fallback.com"
+        val mapToken = localProperties.getProperty("mapbox_token")
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "MapboxAccessToken", "\"$mapToken\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,6 +91,8 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.play.services.location)
     implementation(libs.coroutines.play.services)
+    implementation(libs.mapbox)
+    implementation(libs.mapbox.compose)
 
     implementation(libs.xmaterial.ccp)
 

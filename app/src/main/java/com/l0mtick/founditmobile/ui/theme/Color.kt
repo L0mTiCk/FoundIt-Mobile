@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 data class FoundItColors (
     val brand: Color,
+    val brandMuted: Color,
     val onBrand: Color,
     val secondary: Color,
     val onSecondary: Color,

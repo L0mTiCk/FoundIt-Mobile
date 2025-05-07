@@ -4,6 +4,7 @@ import android.app.Application
 import com.l0mtick.founditmobile.common.data.di.commonModule
 import com.l0mtick.founditmobile.main.data.di.mainModule
 import com.l0mtick.founditmobile.start.data.di.startModule
+import com.mapbox.common.MapboxOptions
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -22,6 +23,7 @@ class FoundItMobileApplication: Application() {
                 mainModule
             )
         }
+        MapboxOptions.accessToken = BuildConfig.MapboxAccessToken
     }
 
 }

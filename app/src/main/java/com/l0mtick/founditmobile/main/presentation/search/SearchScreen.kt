@@ -1,11 +1,18 @@
 package com.l0mtick.founditmobile.main.presentation.search
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.presentation.components.FloatingModeSwitchButton
 import com.l0mtick.founditmobile.main.presentation.search.components.ListLayout
 import com.l0mtick.founditmobile.main.presentation.search.components.MapLayout
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
@@ -16,7 +23,7 @@ fun SearchRoot(
     navController: NavController,
     viewModel: SearchViewModel = koinViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
 
     SearchScreen(
         state = state,
@@ -33,9 +40,20 @@ fun SearchScreen(
     onNavigateToDetails: () -> Unit,
     onAction: (SearchAction) -> Unit,
 ) {
-    when (state) {
-        is SearchState.ListScreen -> ListLayout(state, onAction, onItemClick = { onNavigateToDetails() })
-        SearchState.MapScreen -> MapLayout()
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        when (state) {
+            is SearchState.ListScreen -> ListLayout(state, onAction, onItemClick = { onNavigateToDetails() })
+            SearchState.MapScreen -> MapLayout()
+        }
+        FloatingModeSwitchButton(
+            text = "Switch mode",
+            onClick = {
+                onAction(SearchAction.OnModeChange)
+            },
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
+        )
     }
 }
 

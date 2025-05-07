@@ -21,7 +21,7 @@ datastore = "1.1.4"
 xmaterial-ccp = "v2.15"
 gps-location = "21.3.0"
 coroutines-gps = "1.10.2"
-
+mapbox = "11.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +63,8 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "gps-location"}
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-gps"}
+mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox"}
+mapbox-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapbox"}
 
 #Jitpack
 xmaterial-ccp = { module = "com.github.TuleSimon:xMaterialccp", version.ref = "xmaterial-ccp"}
