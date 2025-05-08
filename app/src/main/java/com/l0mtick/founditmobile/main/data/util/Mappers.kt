@@ -3,8 +3,12 @@ package com.l0mtick.founditmobile.main.data.util
 import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.CategoryDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
+import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
+import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.domain.model.Chat
+import com.l0mtick.founditmobile.main.domain.model.LostItem
+import com.l0mtick.founditmobile.main.domain.model.PaginatedData
 import com.l0mtick.founditmobile.main.domain.model.User
 
 fun CategoryDTO.toModel(languageCode: String = "en"): Category = Category(
@@ -34,3 +38,31 @@ fun ChatDTO.toModel(): Chat = Chat(
     lastMessage = lastMessage,
     lastMessageAt = lastMessageAt
 )
+
+fun LostItemDTO.toModel(): LostItem {
+    return LostItem(
+        id = this.id,
+        userId = this.userId,
+        latitude = this.latitude,
+        longitude = this.longitude,
+        title = this.title,
+        description = this.description,
+        isFound = this.isFound,
+        createdAt = this.createdAt,
+        expiresAt = this.expiresAt,
+        photoUrls = this.photoUrls,
+        isModerated = this.isModerated,
+        status = this.status,
+        categories = this.categories.map { it.toModel() }
+    )
+}
+
+fun <T_DTO, T_Model> PaginatedResponse<T_DTO>.toModel(
+    itemMapper: (T_DTO) -> T_Model
+): PaginatedData<T_Model> {
+    return PaginatedData(
+        items = this.items.map(itemMapper),
+        hasMore = this.hasMore,
+        nextCursor = this.nextCursor
+    )
+}

@@ -4,10 +4,12 @@ import com.l0mtick.founditmobile.main.data.remote.api.MainApiImpl
 import com.l0mtick.founditmobile.main.data.repository.CategoriesRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.ChatRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.LocationServiceImpl
+import com.l0mtick.founditmobile.main.data.repository.LostItemRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.UsersRepositoryImpl
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.ChatRepository
 import com.l0mtick.founditmobile.main.domain.repository.LocationService
+import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
 import com.l0mtick.founditmobile.main.presentation.MainScreenViewModel
@@ -30,6 +32,8 @@ val mainModule = module {
 
     single<ChatRepository> { ChatRepositoryImpl(mainApi = get()) }
 
+    single<LostItemRepository> { LostItemRepositoryImpl(mainApi = get()) }
+
     single<LocationService> { LocationServiceImpl(application = get()) }
 
     viewModel {
@@ -45,7 +49,11 @@ val mainModule = module {
     }
 
     viewModel {
-        SearchViewModel()
+        SearchViewModel(
+            categoriesRepository = get(),
+            lostItemRepository = get(),
+            locationService = get()
+        )
     }
 
     viewModel {

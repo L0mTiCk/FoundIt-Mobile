@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -63,11 +64,12 @@ fun ListLayout(
             )
         }
 
-        items(3) {
+        items(state.items.items, key = { it.id }) { item ->
             BigItemCard(
-                title = "Black backpack",
-                description = "Black backpack at the cornter of local shop in London",
-                postedTimestamp = 1746034187000L,
+                title = item.title,
+                description = item.description ?: "No description",
+                postedTimestamp = item.createdAt,
+                imageUrl = item.photoUrls.firstOrNull(),
                 distance = 121,
                 modifier = Modifier.padding(horizontal = 14.dp),
                 onClick = onItemClick

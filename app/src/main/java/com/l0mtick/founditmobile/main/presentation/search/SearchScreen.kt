@@ -13,7 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.components.FloatingModeSwitchButton
+import com.l0mtick.founditmobile.main.presentation.search.components.ErrorLayout
 import com.l0mtick.founditmobile.main.presentation.search.components.ListLayout
+import com.l0mtick.founditmobile.main.presentation.search.components.LoadingLayout
 import com.l0mtick.founditmobile.main.presentation.search.components.MapLayout
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import org.koin.androidx.compose.koinViewModel
@@ -44,16 +46,24 @@ fun SearchScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         when (state) {
+            is SearchState.Loading -> {
+                LoadingLayout(state = state)
+            }
+            is SearchState.Error -> {
+                ErrorLayout(state = state)
+            }
             is SearchState.ListScreen -> ListLayout(state, onAction, onItemClick = { onNavigateToDetails() })
-            SearchState.MapScreen -> MapLayout()
+            is SearchState.MapScreen -> MapLayout(state)
         }
-        FloatingModeSwitchButton(
-            text = "Switch mode",
-            onClick = {
-                onAction(SearchAction.OnModeChange)
-            },
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
-        )
+        if (state is SearchState.MapScreen || state is SearchState.ListScreen) {
+            FloatingModeSwitchButton(
+                text = "Switch mode",
+                onClick = {
+                    onAction(SearchAction.OnModeChange)
+                },
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
+            )
+        }
     }
 }
 
