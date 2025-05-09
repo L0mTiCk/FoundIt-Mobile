@@ -29,8 +29,8 @@ fun SearchRoot(
 
     SearchScreen(
         state = state,
-        onNavigateToDetails = {
-            navController.navigate(NavigationRoute.Main.ItemDetails)
+        onNavigateToDetails = { id ->
+            navController.navigate(NavigationRoute.Main.ItemDetails(id))
         },
         onAction = viewModel::onAction
     )
@@ -39,7 +39,7 @@ fun SearchRoot(
 @Composable
 fun SearchScreen(
     state: SearchState,
-    onNavigateToDetails: () -> Unit,
+    onNavigateToDetails: (Int) -> Unit,
     onAction: (SearchAction) -> Unit,
 ) {
     Box(
@@ -49,11 +49,21 @@ fun SearchScreen(
             is SearchState.Loading -> {
                 LoadingLayout(state = state)
             }
+
             is SearchState.Error -> {
                 ErrorLayout(state = state)
             }
-            is SearchState.ListScreen -> ListLayout(state, onAction, onItemClick = { onNavigateToDetails() })
-            is SearchState.MapScreen -> MapLayout(state)
+
+            is SearchState.ListScreen -> ListLayout(
+                state = state,
+                onAction = onAction,
+                onItemClick = onNavigateToDetails
+            )
+
+            is SearchState.MapScreen -> MapLayout(
+                state = state,
+                onNavigateToDetails = onNavigateToDetails
+            )
         }
         if (state is SearchState.MapScreen || state is SearchState.ListScreen) {
             FloatingModeSwitchButton(
@@ -61,7 +71,9 @@ fun SearchScreen(
                 onClick = {
                     onAction(SearchAction.OnModeChange)
                 },
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 12.dp)
             )
         }
     }

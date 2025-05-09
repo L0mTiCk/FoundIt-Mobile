@@ -4,53 +4,37 @@ import android.graphics.Color
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import com.l0mtick.founditmobile.R
+import com.google.gson.JsonParser
 import com.l0mtick.founditmobile.main.presentation.search.SearchState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import com.mapbox.maps.extension.compose.annotation.IconImage
-import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotationGroup
-import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.extension.compose.annotation.generated.CircleAnnotation
+import com.mapbox.maps.extension.compose.annotation.generated.CircleAnnotationGroup
+import com.mapbox.maps.extension.compose.style.MapStyle
 import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.AnnotationSourceOptions
 import com.mapbox.maps.plugin.annotation.ClusterOptions
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
-import kotlinx.coroutines.launch
 
 @Composable
 fun MapLayout(
     state: SearchState.MapScreen,
+    onNavigateToDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var points by remember { mutableStateOf<List<Point>>(emptyList()) }
-    val markerImage = rememberIconImage(key = "image_icon", painter = painterResource(R.drawable.telegram_plane_brands_solid))
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(
-        state.items
-    ) {
-        coroutineScope.launch {
-            points = state.items.items.map {
-                Point.fromLngLat(
-                    it.longitude, it.latitude
-                )
-            }
-            Log.d("map_screen", points.toString())
-        }
-    }
+    var isDropDownOpened by remember { mutableStateOf(false) }
+    var dropDownItemId by remember { mutableStateOf<Int?>(null) }
     MapboxMap(
         modifier = Modifier.fillMaxSize(),
         scaleBar = { },
@@ -60,7 +44,7 @@ fun MapLayout(
                 center(Point.fromLngLat(27.567444, 53.893009))
             }
         },
-//        style = { MapStyle(style = "mapbox://styles/l0mtick/cmaf08ip400t701slcmm4bprl") },
+        style = { MapStyle(style = "mapbox://styles/l0mtick/cmaf08ip400t701slcmm4bprl") },
     ) {
         MapEffect(Unit) { mapView ->
             mapView.location.updateSettings {
@@ -71,10 +55,19 @@ fun MapLayout(
                 pulsingEnabled = true
             }
         }
-        PointAnnotationGroup(
-            annotations = points.map {
-                PointAnnotationOptions()
-                    .withPoint(it)
+        CircleAnnotation(point = Point.fromLngLat(28.567444, 53.893009)) {
+            circleRadius = 8.0
+            circleColor = androidx.compose.ui.graphics.Color.Cyan
+            circleStrokeWidth = 2.0
+            circleStrokeColor = androidx.compose.ui.graphics.Color.Yellow
+        }
+        CircleAnnotationGroup(
+            annotations = state.items.items.map {
+                CircleAnnotationOptions()
+                    .withPoint(Point.fromLngLat(it.longitude, it.latitude))
+                    .withData(
+                        JsonParser.parseString("""{"lostItemId":${it.id}}""").asJsonObject
+                    )
             },
             annotationConfig = AnnotationConfig(
                 annotationSourceOptions = AnnotationSourceOptions(
@@ -84,16 +77,41 @@ fun MapLayout(
                         circleRadiusExpression = literal(25.0),
                         colorLevels = listOf(
                             Pair(50, Color.RED),
-                            Pair(10, Color.BLUE),
+                            Pair(20, Color.CYAN),
                             Pair(5, Color.YELLOW),
-                            Pair(0, Color.GREEN)
+                            Pair(1, Color.MAGENTA),
                         )
                     )
                 )
             )
         ) {
-            iconImage = IconImage("fire-station")
-            iconSize = 10.0
+            circleRadius = 10.0
+            circleColor = androidx.compose.ui.graphics.Color.Magenta
+            circleBlur = .6
+            circleStrokeColor = androidx.compose.ui.graphics.Color.Yellow
+            circleStrokeWidth = 1.0
+            interactionsState.onClicked {
+                val originalId = it.getData()?.asJsonObject?.get("lostItemId")?.asInt
+                Log.d("map_screen", originalId.toString())
+                originalId?.let {
+                    dropDownItemId = it
+                    isDropDownOpened = true
+                }
+                true
+            }
         }
+    }
+    if (isDropDownOpened) {
+        state.items.items.firstOrNull { it.id == dropDownItemId }?.let { item ->
+            MapModalBottomSheet(
+                item = item,
+                onDismissRequest = {
+                    isDropDownOpened = false
+                },
+                onViewDetailsClick = { id ->
+                    onNavigateToDetails(id)
+                }
+            )
+        } ?: { isDropDownOpened = false }
     }
 }

@@ -21,7 +21,7 @@ import com.l0mtick.founditmobile.main.presentation.search.SearchState
 fun ListLayout(
     state: SearchState.ListScreen,
     onAction: (SearchAction) -> Unit,
-    onItemClick: () -> Unit,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -66,6 +66,7 @@ fun ListLayout(
 
         items(state.items.items, key = { it.id }) { item ->
             BigItemCard(
+                id = item.id,
                 title = item.title,
                 description = item.description ?: "No description",
                 postedTimestamp = item.createdAt,

@@ -27,19 +27,20 @@ import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
 fun BigItemCard(
+    id: Int,
     title: String,
     description: String,
     postedTimestamp: Long,
     distance: Int,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
-    onClick: () -> Unit
+    onClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { onClick() }
+            .clickable { onClick(id) }
             .padding(vertical = 16.dp)
             .fillMaxWidth()
             .then(modifier)
@@ -113,6 +114,7 @@ fun SmallItemCard(modifier: Modifier = Modifier) {
 private fun BigItemCardPreview() {
     FoundItMobileTheme {
         BigItemCard(
+            id = -1,
             title = "Black backpack",
             description = "At the bus stop at 4th and king",
             postedTimestamp = 1746034187000L,

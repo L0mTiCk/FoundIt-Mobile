@@ -40,7 +40,7 @@ sealed interface NavigationRoute {
 
         //TODO: pass args
         @Serializable
-        data object ItemDetails: Main
+        data class ItemDetails(val itemId: Int): Main
 
         @Serializable
         data object Chat: Main
