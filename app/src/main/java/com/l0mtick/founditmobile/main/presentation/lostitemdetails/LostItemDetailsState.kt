@@ -1,6 +1,9 @@
 package com.l0mtick.founditmobile.main.presentation.lostitemdetails
 
+import com.l0mtick.founditmobile.main.domain.model.LostItem
+import com.l0mtick.founditmobile.main.domain.model.User
+
 data class LostItemDetailsState(
-    val paramOne: String = "default",
-    val paramTwo: List<String> = emptyList(),
+    val lostItem: LostItem? = null,
+    val owner: User? = null,
 )

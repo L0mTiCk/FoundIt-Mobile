@@ -28,9 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastJoinToString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.l0mtick.founditmobile.R
-import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.main.presentation.components.ItemImagesPager
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.components.DetailsSectionCard
@@ -56,10 +56,6 @@ fun LostItemDetailsScreen(
     state: LostItemDetailsState,
     onAction: (LostItemDetailsAction) -> Unit,
 ) {
-    val user = User(
-        1,
-        username = "ammmmm_v"
-    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,29 +82,30 @@ fun LostItemDetailsScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        Spacer(Modifier.height(36.dp))
         ItemImagesPager(
-            listOf("", ""),
+            imageUrls = state.lostItem?.photoUrls ?: listOf(""),
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = "Skateboard found in the park",
+            text = state.lostItem?.title ?: "",
             style = Theme.typography.headline,
             modifier = Modifier.padding(horizontal = 20.dp)
         )
         Spacer(Modifier.height(12.dp))
         Text(
-            text = "This skateboard was found in the park, it's been here for a few days.",
+            text = state.lostItem?.description ?: "",
             style = Theme.typography.body,
             modifier = Modifier.padding(horizontal = 20.dp),
             lineHeight = 22.sp
         )
         Spacer(Modifier.height(16.dp))
-        ItemAuthorCard(
-            user = user,
-            modifier = Modifier.padding(horizontal = 20.dp)
-        )
-        Spacer(Modifier.height(16.dp))
+        state.owner?.let { user ->
+            ItemAuthorCard(
+                user = user ,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+            Spacer(Modifier.height(16.dp))
+        }
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
         ) {
@@ -143,7 +140,7 @@ fun LostItemDetailsScreen(
         Spacer(Modifier.height(12.dp))
         DetailsSectionCard(
             header = "Category",
-            description = "Sports",
+            description = state.lostItem?.categories?.map { it.name }?.fastJoinToString() ?: "Empty",
             icon = Icons.Default.Search,
             modifier = Modifier.padding(horizontal = 20.dp)
         )

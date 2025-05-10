@@ -5,10 +5,11 @@ import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.main.data.util.toModel
 import com.l0mtick.founditmobile.main.domain.model.LostItem
 import com.l0mtick.founditmobile.main.domain.model.PaginatedData
+import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 
-class LostItemRepositoryImpl(private val mainApi: MainApi): LostItemRepository {
+class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository {
 
     override suspend fun searchLostItems(
         searchQuery: String?,
@@ -31,12 +32,30 @@ class LostItemRepositoryImpl(private val mainApi: MainApi): LostItemRepository {
 
         return when (resultDTO) {
             is Result.Success -> {
-                val domainData = resultDTO.data.toModel({it.toModel()})
+                val domainData = resultDTO.data.toModel({ it.toModel() })
                 Result.Success(domainData)
             }
+
             is Result.Error -> {
                 Result.Error(resultDTO.error)
             }
+        }
+    }
+
+    override suspend fun getDetailedLostItem(itemId: Int): Result<Pair<LostItem, User>, DataError.Network> {
+        val resultDTO = mainApi.getDetailedLostItem(itemId = itemId)
+
+        return when (resultDTO) {
+            is Result.Success -> {
+                Result.Success(
+                    data = Pair<LostItem, User>(
+                        resultDTO.data.item.toModel(),
+                        resultDTO.data.owner.toModel()
+                    )
+                )
+            }
+
+            is Result.Error -> Result.Error(resultDTO.error)
         }
     }
 

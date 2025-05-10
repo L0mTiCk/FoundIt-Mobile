@@ -6,6 +6,7 @@ import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 
@@ -29,5 +30,6 @@ interface MainApi {
         afterId: Int?,
         limit: Int?
     ): Result<PaginatedResponse<LostItemDTO>, DataError.Network>
+    suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network>
 
 }

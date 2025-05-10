@@ -57,7 +57,10 @@ val mainModule = module {
     }
 
     viewModel {
-        LostItemDetailsViewModel()
+        LostItemDetailsViewModel(
+            itemRepository = get(),
+            savedStateHandle = get()
+        )
     }
 
     viewModel {

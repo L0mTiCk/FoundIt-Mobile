@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
@@ -60,7 +61,9 @@ fun BigItemCard(
         Text(
             text = description,
             style = Theme.typography.body,
-            color = Theme.colors.onSurfaceVariant
+            color = Theme.colors.onSurfaceVariant,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(Modifier.height(6.dp))
         Row(

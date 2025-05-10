@@ -8,6 +8,7 @@ import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
@@ -74,6 +75,15 @@ class MainApiImpl(httpClient: HttpClient, localStorage: LocalStorage) : MainApi,
                 radiusKm?.let { append("radiusKm", it.toString()) }
                 afterId?.let { append("afterId", it.toString()) }
                 limit?.let { append("limit", it.toString()) }
+            }
+        )
+    }
+
+    override suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network> {
+        return getAuth(
+            path = "user/item",
+            params = {
+                append("id", itemId.toString())
             }
         )
     }
