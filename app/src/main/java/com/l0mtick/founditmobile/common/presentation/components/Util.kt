@@ -14,15 +14,22 @@ fun Modifier.defaultPlaceholder(
     width: Dp? = null,
     height: Dp? = null,
     placeholderColor: Color = Color.LightGray,
-    shimmerColor: Color = Color.White
+    shimmerColor: Color = Color.White,
+    placeholderModifier: Modifier = Modifier
 ): Modifier = this.then(
-    Modifier.placeholder(
-        visible = visible,
-        color = placeholderColor,
-        highlight = PlaceholderHighlight.shimmer(highlightColor = shimmerColor)
-    )
-        .then(if (width != null && visible) Modifier.width(width) else Modifier)
-        .then(if (height != null && visible) Modifier.height(height) else Modifier)
+    if (visible) {
+        Modifier
+            .then(placeholderModifier)
+            .placeholder(
+                visible = true,
+                color = placeholderColor,
+                highlight = PlaceholderHighlight.shimmer(highlightColor = shimmerColor)
+            )
+            .then(if (width != null) Modifier.width(width) else Modifier)
+            .then(if (height != null) Modifier.height(height) else Modifier)
+    } else {
+        Modifier
+    }
 )
 
 

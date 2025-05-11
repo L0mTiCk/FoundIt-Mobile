@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.error.LocationError
 import com.l0mtick.founditmobile.common.domain.error.Result
-import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -22,38 +23,11 @@ class SearchViewModel(
     private val locationService: LocationService
 ) : ViewModel() {
 
-    private val categories = listOf(
-        Category(
-            1,
-            "Wallets",
-            ""
-        ),
-        Category(
-            2,
-            "Clothes",
-            ""
-        ),
-        Category(
-            3,
-            "Electronics",
-            ""
-        ),
-        Category(
-            4,
-            "Jewelry",
-            ""
-        ),
-        Category(
-            5,
-            "Interpollationalism",
-            ""
-        ),
-    )
-
-    private var hasLoadedInitialData = false
-
     private val _state = MutableStateFlow<SearchState>(SearchState.ListScreen())
     val state: StateFlow<SearchState> = _state.asStateFlow()
+
+    private val eventChannel = Channel<SearchEvent>()
+    val events = eventChannel.receiveAsFlow()
 
     init {
         init()
@@ -77,9 +51,11 @@ class SearchViewModel(
 
             when (locationResult) {
                 is Result.Error -> {
-                    _state.value = SearchState.Error("Failed to get location: ${locationResult.error}")
+                    _state.value =
+                        SearchState.Error("Failed to get location: ${locationResult.error}")
                     return@launch
                 }
+
                 is Result.Success -> {
                     val location = locationResult.data
 
@@ -88,9 +64,11 @@ class SearchViewModel(
 
                     when (categoriesResult) {
                         is Result.Error -> {
-                            _state.value = SearchState.Error("Failed to fetch categories: ${categoriesResult.error}")
+                            _state.value =
+                                SearchState.Error("Failed to fetch categories: ${categoriesResult.error}")
                             return@launch
                         }
+
                         is Result.Success -> {
                             val categories = categoriesResult.data
 
@@ -106,8 +84,10 @@ class SearchViewModel(
 
                             when (itemsResult) {
                                 is Result.Error -> {
-                                    _state.value = SearchState.Error("Failed to fetch items: ${itemsResult.error}")
+                                    _state.value =
+                                        SearchState.Error("Failed to fetch items: ${itemsResult.error}")
                                 }
+
                                 is Result.Success -> {
                                     Log.d("search_viewmodel", itemsResult.toString())
                                     _state.value = SearchState.ListScreen(
@@ -127,6 +107,7 @@ class SearchViewModel(
         when (action) {
             is SearchAction.OnCategorySelect -> selectCategory(action.id)
             is SearchAction.OnModeChange -> changeMode()
+            SearchAction.OnCenterOnUser -> centerOnUserLocation()
         }
     }
 
@@ -149,19 +130,35 @@ class SearchViewModel(
     private fun changeMode() {
         val current = _state.value
         _state.update {
-            when(current) {
+            when (current) {
                 is SearchState.ListScreen -> {
                     SearchState.MapScreen(
                         items = current.items
                     )
                 }
+
                 is SearchState.MapScreen -> {
                     SearchState.ListScreen(
                         items = current.items
                     )
                 }
+
                 else -> {
                     SearchState.ListScreen()
+                }
+            }
+        }
+    }
+
+    private fun centerOnUserLocation() {
+        val current = _state.value
+        if (current !is SearchState.MapScreen) return
+
+        viewModelScope.launch {
+            if (locationService.locationAvailabilityState.value.isLocationAvailable) {
+                val location = locationService.getCurrentLocation()
+                if (location is Result.Success) {
+                    eventChannel.send(SearchEvent.MapLayoutEvent.CenterOnUserLocation(location.data))
                 }
             }
         }

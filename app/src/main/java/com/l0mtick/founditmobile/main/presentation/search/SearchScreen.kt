@@ -18,6 +18,8 @@ import com.l0mtick.founditmobile.main.presentation.search.components.ListLayout
 import com.l0mtick.founditmobile.main.presentation.search.components.LoadingLayout
 import com.l0mtick.founditmobile.main.presentation.search.components.MapLayout
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,9 +28,11 @@ fun SearchRoot(
     viewModel: SearchViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val events = viewModel.events
 
     SearchScreen(
         state = state,
+        events = events,
         onNavigateToDetails = { id ->
             navController.navigate(NavigationRoute.Main.ItemDetails(id))
         },
@@ -41,6 +45,7 @@ fun SearchScreen(
     state: SearchState,
     onNavigateToDetails: (Int) -> Unit,
     onAction: (SearchAction) -> Unit,
+    events: Flow<SearchEvent>,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -62,7 +67,9 @@ fun SearchScreen(
 
             is SearchState.MapScreen -> MapLayout(
                 state = state,
-                onNavigateToDetails = onNavigateToDetails
+                events = events,
+                onNavigateToDetails = onNavigateToDetails,
+                onAction = onAction
             )
         }
         if (state is SearchState.MapScreen || state is SearchState.ListScreen) {
@@ -86,7 +93,8 @@ private fun Preview() {
         SearchScreen(
             state = SearchState.ListScreen(),
             onAction = {},
-            onNavigateToDetails = {}
+            onNavigateToDetails = {},
+            events = flowOf()
         )
     }
 }

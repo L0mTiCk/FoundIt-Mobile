@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -27,6 +28,7 @@ class LostItemDetailsViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
+                    delay(5000)
                     val item = itemRepository.getDetailedLostItem(itemId = route.itemId)
                     when(item) {
                         is Result.Success -> {

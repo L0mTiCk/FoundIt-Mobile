@@ -111,3 +111,8 @@ fun formatRelativeTime(
     }
 }
 
+fun formatTimestampToShortDate(millis: Long, locale: Locale = Locale.getDefault()): String {
+    val date = Date(millis)
+    val format = SimpleDateFormat("MMM dd, yyyy", locale)
+    return format.format(date)
+}
