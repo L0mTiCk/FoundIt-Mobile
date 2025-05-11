@@ -3,6 +3,7 @@ package com.l0mtick.founditmobile.main.presentation.lostitemdetails
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,8 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastJoinToString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.components.ItemImagesPager
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.components.DetailsSectionCard
@@ -59,6 +62,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LostItemDetailsRoot(
+    navController: NavController,
     viewModel: LostItemDetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -66,7 +70,12 @@ fun LostItemDetailsRoot(
     LostItemDetailsScreen(
         state = state,
         onAction = viewModel::onAction,
-        onNavBack = { }
+        onNavBack = {
+            navController.navigateUp()
+        },
+        onNavigateToSearch = { ids ->
+            navController.navigate(NavigationRoute.Main.Search(ids.toList()))
+        }
     )
 }
 
@@ -75,7 +84,8 @@ fun LostItemDetailsRoot(
 fun LostItemDetailsScreen(
     state: LostItemDetailsState,
     onAction: (LostItemDetailsAction) -> Unit,
-    onNavBack: () -> Unit
+    onNavBack: () -> Unit,
+    onNavigateToSearch: (Set<Long>) -> Unit
 ) {
     val isPlaceholderVisible = state.lostItem == null
     val mapViewportState = rememberMapViewportState {
@@ -214,6 +224,11 @@ fun LostItemDetailsScreen(
                     visible = isPlaceholderVisible,
                     placeholderModifier = Modifier.clip(RoundedCornerShape(8.dp))
                 )
+                .clickable {
+                    onNavigateToSearch(
+                        state.lostItem?.categories?.map { it.id }?.toSet() ?: emptySet()
+                    )
+                }
         )
         Spacer(Modifier.height(12.dp))
         DetailsSectionCard(
@@ -285,7 +300,8 @@ private fun Preview() {
         LostItemDetailsScreen(
             state = LostItemDetailsState(),
             onAction = {},
-            onNavBack = {}
+            onNavBack = {},
+            onNavigateToSearch = {}
         )
     }
 }

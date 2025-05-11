@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.components.CategoryGrid
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.home.components.TopLevelUsersRow
@@ -23,13 +25,17 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeRoot(
+    navController: NavController,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onCategoryClick = { id ->
+            navController.navigate(NavigationRoute.Main.Search(listOf(id)))
+        }
     )
 }
 
@@ -37,6 +43,7 @@ fun HomeRoot(
 fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
+    onCategoryClick: (Long) -> Unit
 ) {
     LazyColumn (
         modifier = Modifier
@@ -59,7 +66,7 @@ fun HomeScreen(
             CategoryGrid(
                 categories = state.categories,
                 modifier = Modifier.padding(horizontal = 24.dp),
-                onCategoryClick = { /*TODO*/ }
+                onCategoryClick = onCategoryClick
             )
         }
         item {
@@ -87,7 +94,8 @@ private fun Preview() {
     FoundItMobileTheme {
         HomeScreen(
             state = HomeState(),
-            onAction = {}
+            onAction = {},
+            onCategoryClick = {}
         )
     }
 }

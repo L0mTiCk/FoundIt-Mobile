@@ -10,12 +10,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.search.SearchAction
 import com.l0mtick.founditmobile.main.presentation.search.SearchState
+import com.l0mtick.founditmobile.main.presentation.util.calculateDistanceBetweenPoints
 
 @Composable
 fun ListLayout(
@@ -24,6 +30,7 @@ fun ListLayout(
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val currentLocation = state.userLocation
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -65,13 +72,23 @@ fun ListLayout(
         }
 
         items(state.items.items, key = { it.id }) { item ->
+            var distanceInMeters by remember(item.id) { mutableStateOf<Float?>(null) }
+
+            LaunchedEffect(currentLocation, item.id) {
+                distanceInMeters = calculateDistanceBetweenPoints(
+                    userLocation = currentLocation,
+                    itemLat = item.latitude,
+                    itemLon = item.longitude
+                )
+            }
+
             BigItemCard(
                 id = item.id,
                 title = item.title,
                 description = item.description ?: "No description",
                 postedTimestamp = item.createdAt,
                 imageUrl = item.photoUrls.firstOrNull(),
-                distance = 121,
+                distance = distanceInMeters,
                 modifier = Modifier.padding(horizontal = 14.dp),
                 onClick = onItemClick
             )

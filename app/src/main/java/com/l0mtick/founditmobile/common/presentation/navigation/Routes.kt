@@ -27,7 +27,7 @@ sealed interface NavigationRoute {
         data object Home : Main
 
         @Serializable
-        data object Search: Main
+        data class Search(val categoryIds: List<Long>? = null): Main
 
         @Serializable
         data object Add: Main

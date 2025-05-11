@@ -127,7 +127,7 @@ private enum class MainScreenNavigationItem(
     val route: NavigationRoute.Main
 ) {
     HOME(R.string.navigation_home, R.drawable.home, NavigationRoute.Main.Home),
-    SEARCH(R.string.navigation_search, R.drawable.search, NavigationRoute.Main.Search),
+    SEARCH(R.string.navigation_search, R.drawable.search, NavigationRoute.Main.Search()),
     ADD(R.string.navigation_add, R.drawable.add, NavigationRoute.Main.Add),
     INBOX(R.string.navigation_inbox, R.drawable.inbox, NavigationRoute.Main.Inbox),
     PROFILE(R.string.navigation_profile, R.drawable.profile, NavigationRoute.Main.Profile),
@@ -144,7 +144,7 @@ fun MainScreen(
     Log.d("destination", currentDestination.toString())
 
     val customNavSuiteType = with(adaptiveInfo) {
-        if (MainScreenNavigationItem.entries.any { currentDestination == it.route::class.qualifiedName }) {
+        if (MainScreenNavigationItem.entries.any { currentDestination?.startsWith(it.route::class.qualifiedName ?: "null") ?: false} ) {
             NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
         } else {
             NavigationSuiteType.None
@@ -168,7 +168,7 @@ fun MainScreen(
                         }
                     },
                     icon = { Icon(painterResource(route.icon), contentDescription = "") },
-                    selected = currentDestination?.let { route.route::class.qualifiedName == it }
+                    selected = currentDestination?.startsWith(route.route::class.qualifiedName ?: "null")
                         ?: false,
                     colors = NavigationSuiteItemColors(
                         navigationBarItemColors = barColors,
@@ -192,7 +192,9 @@ fun MainScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 composable<NavigationRoute.Main.Home> {
-                    HomeRoot()
+                    HomeRoot(
+                        navController = localNavController
+                    )
                 }
 
                 composable<NavigationRoute.Main.Search> {
@@ -212,7 +214,9 @@ fun MainScreen(
                 }
 
                 composable<NavigationRoute.Main.ItemDetails> {
-                    LostItemDetailsRoot()
+                    LostItemDetailsRoot(
+                        navController = localNavController
+                    )
                 }
 
                 composable<NavigationRoute.Main.Chat> {

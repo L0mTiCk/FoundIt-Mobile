@@ -25,6 +25,7 @@ import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
 import com.l0mtick.founditmobile.main.presentation.util.formatTimeAgo
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
+import kotlin.math.roundToInt
 
 @Composable
 fun BigItemCard(
@@ -32,7 +33,7 @@ fun BigItemCard(
     title: String,
     description: String,
     postedTimestamp: Long,
-    distance: Int,
+    distance: Float?,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
     onClick: (Int) -> Unit
@@ -80,7 +81,7 @@ fun BigItemCard(
                 FilterChip(
                     onClick = {},
                     label = {
-                        Text("$distance m")
+                        Text("${distance?.roundToInt() ?: "..."} m")
                     },
                     selected = true,
                     colors = FilterChipDefaults.filterChipColors(
@@ -121,7 +122,7 @@ private fun BigItemCardPreview() {
             title = "Black backpack",
             description = "At the bus stop at 4th and king",
             postedTimestamp = 1746034187000L,
-            distance = 100,
+            distance = 100F,
             onClick = {}
         )
     }

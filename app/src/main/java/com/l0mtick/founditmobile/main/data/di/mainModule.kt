@@ -52,7 +52,8 @@ val mainModule = module {
         SearchViewModel(
             categoriesRepository = get(),
             lostItemRepository = get(),
-            locationService = get()
+            locationService = get(),
+            savedStateHandle = get()
         )
     }
 

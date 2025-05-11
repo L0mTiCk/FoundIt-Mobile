@@ -1,10 +1,13 @@
 package com.l0mtick.founditmobile.main.presentation.search
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.common.domain.error.LocationError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
@@ -20,8 +23,11 @@ import kotlinx.coroutines.launch
 class SearchViewModel(
     private val categoriesRepository: CategoriesRepository,
     private val lostItemRepository: LostItemRepository,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    val route = savedStateHandle.toRoute<NavigationRoute.Main.Search>()
 
     private val _state = MutableStateFlow<SearchState>(SearchState.ListScreen())
     val state: StateFlow<SearchState> = _state.asStateFlow()
@@ -89,10 +95,13 @@ class SearchViewModel(
                                 }
 
                                 is Result.Success -> {
+                                    val selectedCategories = route.categoryIds ?: emptySet()
                                     Log.d("search_viewmodel", itemsResult.toString())
                                     _state.value = SearchState.ListScreen(
+                                        userLocation = location,
                                         categories = categories,
-                                        items = itemsResult.data
+                                        items = itemsResult.data,
+                                        selectedCategories = selectedCategories.toSet()
                                     )
                                 }
                             }
