@@ -8,4 +8,5 @@ interface AuthRepository {
     suspend fun register(username: String, email: String, password: String): Result<Unit, DataError>
     suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError>
     suspend fun checkAvailability(username: String, email: String): Result<Unit, DataError>
+    suspend fun checkToken(): Result<Unit, DataError.Network>
 }

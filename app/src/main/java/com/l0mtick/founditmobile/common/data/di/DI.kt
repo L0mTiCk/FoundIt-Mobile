@@ -19,7 +19,7 @@ val commonModule = module {
     single<LocalStorage> { LocalStorageImpl(context = get()) }
 
     viewModel {
-        MainActivityViewModel()
+        MainActivityViewModel(authRepository = get())
     }
 
 }

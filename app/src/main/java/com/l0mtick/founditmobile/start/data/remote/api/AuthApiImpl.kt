@@ -69,4 +69,10 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
         )
     }
 
+    override suspend fun checkToken(): Result<Unit, DataError.Network> {
+        return getAuth(
+            path = "auth/verify-token",
+        )
+    }
+
 }

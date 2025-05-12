@@ -2,25 +2,41 @@ package com.l0mtick.founditmobile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel( /*repository for user token check*/ ): ViewModel() {
+class MainActivityViewModel(private val authRepository: AuthRepository): ViewModel() {
 
     private val _state = MutableStateFlow(MainActivityState())
     val state = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    navigationRoute = NavigationRoute.Start.Introduction
-                )
+            val result = authRepository.checkToken()
+            when(result) {
+                is Result.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            navigationRoute = NavigationRoute.Main.Home
+                        )
+                    }
+                }
+                is Result.Error<*, *> -> {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            navigationRoute = NavigationRoute.Start.Login
+                        )
+                    }
+                }
             }
+
         }
     }
 
@@ -28,7 +44,6 @@ class MainActivityViewModel( /*repository for user token check*/ ): ViewModel() 
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    //TODO: change to real screen
                     navigationRoute = NavigationRoute.Main.Home
                 )
             }

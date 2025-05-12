@@ -54,4 +54,8 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
 
         return Result.Success(Unit)
     }
+
+    override suspend fun checkToken(): Result<Unit, DataError.Network> {
+        return authApi.checkToken()
+    }
 }
