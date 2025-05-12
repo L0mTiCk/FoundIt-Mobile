@@ -6,6 +6,7 @@ import com.l0mtick.founditmobile.common.data.remote.request.RefreshTokenRequest
 import com.l0mtick.founditmobile.common.data.remote.responses.RefreshTokenResponse
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,6 +26,7 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.util.reflect.TypeInfo
 import io.ktor.util.reflect.typeInfo
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import okio.IOException
@@ -32,6 +34,7 @@ import okio.IOException
 abstract class BaseApiService(
     private val httpClient: HttpClient,
     private val localStorage: LocalStorage,
+    private val connectivityObserver: ConnectivityObserver
 ) {
     val baseUrl = BuildConfig.BASE_URL + "/api"
 
@@ -55,6 +58,10 @@ abstract class BaseApiService(
                 false
             }
         } ?: false
+    }
+
+    private suspend fun isConnected(): Boolean {
+        return connectivityObserver.isConnected.first()
     }
 
     /**
@@ -169,6 +176,9 @@ abstract class BaseApiService(
         refreshTokenHandler: suspend () -> Boolean = defaultRefreshTokenHandler
     ): Result<T, DataError.Network> {
         return try {
+            if (!isConnected()) {
+                return Result.Error(DataError.Network.NO_INTERNET)
+            }
             val result = `access$httpClient`.request("$baseUrl/$path") {
                 this.method = method
 

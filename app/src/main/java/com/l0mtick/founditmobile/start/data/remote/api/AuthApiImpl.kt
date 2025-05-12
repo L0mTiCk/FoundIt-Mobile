@@ -7,12 +7,17 @@ import com.l0mtick.founditmobile.start.data.remote.request.UserRegisterRequest
 import com.l0mtick.founditmobile.start.data.remote.response.UserLoginResponse
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.start.domain.repository.AuthApi
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import io.ktor.client.HttpClient
 
-class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
-    BaseApiService(httpClient, localStorage), AuthApi {
+class AuthApiImpl(
+    httpClient: HttpClient,
+    localStorage: LocalStorage,
+    connectivityObserver: ConnectivityObserver
+) :
+    BaseApiService(httpClient, localStorage, connectivityObserver), AuthApi {
     override suspend fun loginByEmail(
         email: String,
         password: String

@@ -24,7 +24,13 @@ import org.koin.dsl.module
 
 val mainModule = module {
 
-    single<MainApi> { MainApiImpl(httpClient = get(), localStorage = get()) }
+    single<MainApi> {
+        MainApiImpl(
+            httpClient = get(),
+            localStorage = get(),
+            connectivityObserver = get()
+        )
+    }
 
     single<CategoriesRepository> { CategoriesRepositoryImpl(api = get(), localStorage = get()) }
 

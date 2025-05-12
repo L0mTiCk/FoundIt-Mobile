@@ -56,4 +56,7 @@
 
     <!--  Search screen-->
     <string name="lost_items">Lost items</string>
+
+    <string name="no_internet_header">Whooops!</string>
+    <string name="no_internet_description">No Internet connection found\nCheck your connection to continue</string>
 </resources>
