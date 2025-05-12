@@ -19,7 +19,7 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
     ): Result<UserLoginResponse, DataError.Network> {
         val request = UserLoginRequest(email, password)
         return post(
-            path = "/auth/login/user", //TODO: replace with routes for different login types
+            path = "auth/login/user", //TODO: replace with routes for different login types
             body = request
         )
     }
@@ -30,7 +30,7 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
     ): Result<UserLoginResponse, DataError.Network> {
         val request = UserLoginRequest(login, password)
         return post(
-            path = "/auth/login/user",
+            path = "auth/login/user",
             body = request
         )
     }
@@ -42,7 +42,7 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
     ): Result<Unit, DataError.Network> {
         val request = UserRegisterRequest(username, password, email)
         return post(
-            path = "/auth/register/user",
+            path = "auth/register/user",
             body = request
         )
     }
@@ -50,21 +50,21 @@ class AuthApiImpl(httpClient: HttpClient, localStorage: LocalStorage) :
     override suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError.Network> {
         val request = PhoneVerifyRequest(phone, code)
         return post(
-            path = "/auth/verify/phone",
+            path = "auth/verify/phone",
             body = request
         )
     }
 
     override suspend fun checkUsernameAvailability(username: String): Result<Unit, DataError.Network> {
         return get(
-            path = "/auth/check-username",
+            path = "auth/check-username",
             params = { append("username", username) }
         )
     }
 
     override suspend fun checkEmailAvailability(email: String): Result<Unit, DataError.Network> {
         return get(
-            path = "/auth/check-email",
+            path = "auth/check-email",
             params = { append("email", email) }
         )
     }

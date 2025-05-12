@@ -117,6 +117,7 @@ class SearchViewModel(
             is SearchAction.OnCategorySelect -> selectCategory(action.id)
             is SearchAction.OnModeChange -> changeMode()
             SearchAction.OnCenterOnUser -> centerOnUserLocation()
+            is SearchAction.OnListSearchValueChange -> updateListScreenSearch(action.value)
         }
     }
 
@@ -173,4 +174,15 @@ class SearchViewModel(
         }
     }
 
+    private fun updateListScreenSearch(value: String) {
+        val current = state.value
+        if (current !is SearchState.ListScreen) return
+
+        _state.update {
+            current.copy(
+                searchValue = value
+            )
+        }
+
+    }
 }

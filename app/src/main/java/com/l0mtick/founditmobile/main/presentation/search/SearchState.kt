@@ -12,6 +12,7 @@ sealed class SearchState {
     data class Error(val message: String) : SearchState()
 
     data class ListScreen(
+        val searchValue: String = "",
         val userLocation: Location = Location(""),
         val categories: List<Category> = emptyList(),
         val selectedCategories: Set<Long> = emptySet(),

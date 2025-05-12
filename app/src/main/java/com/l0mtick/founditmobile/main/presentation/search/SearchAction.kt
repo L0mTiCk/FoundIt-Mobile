@@ -4,4 +4,5 @@ sealed interface SearchAction {
     data class OnCategorySelect(val id: Long) : SearchAction
     data object OnModeChange : SearchAction
     data object OnCenterOnUser : SearchAction
+    data class OnListSearchValueChange(val value: String) : SearchAction
 }

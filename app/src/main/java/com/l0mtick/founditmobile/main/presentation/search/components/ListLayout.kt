@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.search.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
@@ -39,7 +44,10 @@ fun ListLayout(
         item {
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().systemBarsPadding().padding(bottom = 12.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .systemBarsPadding()
+                    .padding(bottom = 12.dp)
             ) {
                 SectionHeader(
                     header = R.string.lost_items,
@@ -50,13 +58,22 @@ fun ListLayout(
 
         item {
             OutlinedTextField(
-                value = "",
+                value = state.searchValue,
                 onValueChange = {
-
+                    onAction(SearchAction.OnListSearchValueChange(it))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
+                    .onFocusChanged { focusState ->
+                        if (!focusState.hasFocus) {
+                            Log.d("search_screen", "Focus lost, performing search")
+                        }
+                    },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    Log.d("search_screen", "On Ime.Done call")
+                })
             )
         }
 

@@ -11,6 +11,7 @@ import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.common.presentation.util.isValid
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateField
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
+import com.l0mtick.founditmobile.start.presentation.StartEventManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -173,8 +174,8 @@ class LoginViewModel(
                 )
                 when (result) {
                     is Result.Success -> {
-                        eventChannel.send(LoginEvent.LoginSuccess)
                         Log.i("auth_flow", "Logged In!!")
+                        StartEventManager.triggerEvent(StartEventManager.StartEvent.OnNavigateToMain)
                         return@launch
                     }
 

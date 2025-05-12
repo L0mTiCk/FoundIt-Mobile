@@ -94,7 +94,7 @@ fun BigItemCard(
             }
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = {},
+                onClick = { onClick(id) },
                 colors = ButtonDefaults.buttonColors(containerColor = Theme.colors.brand),
                 modifier = Modifier.padding(bottom = 4.dp)
             ) {

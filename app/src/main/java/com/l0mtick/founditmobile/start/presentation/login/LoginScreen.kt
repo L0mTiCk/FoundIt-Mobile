@@ -38,9 +38,6 @@ fun LoginRoot(
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            LoginEvent.LoginSuccess -> {
-                //TODO: navigate to screen
-            }
 
             is LoginEvent.NavigateToPhoneVerification -> {
                 navController.navigate(NavigationRoute.Start.PhoneVerification(event.login, event.email, event.pass))
