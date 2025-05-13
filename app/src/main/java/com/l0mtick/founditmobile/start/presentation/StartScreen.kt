@@ -14,6 +14,7 @@ import com.l0mtick.founditmobile.start.presentation.introduction.IntroductionRoo
 import com.l0mtick.founditmobile.start.presentation.login.LoginRoot
 import com.l0mtick.founditmobile.start.presentation.phoneverify.PhoneVerificationRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
+import com.l0mtick.founditmobile.ui.theme.Theme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,7 +43,9 @@ fun StartScreen(
         }
     }
 
-    Scaffold { scaffoldPadding ->
+    Scaffold(
+        containerColor = Theme.colors.background,
+    ) { scaffoldPadding ->
         NavHost(
             navController = localNavController,
             startDestination = NavigationRoute.Start.Login,

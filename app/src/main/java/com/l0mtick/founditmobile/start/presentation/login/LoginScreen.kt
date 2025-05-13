@@ -58,7 +58,11 @@ fun LoginScreen(
 ) {
     AnimatedContent(
         targetState = state.screenType,
-        transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(800)) using SizeTransform(clip = false) }
+        transitionSpec = {
+            fadeIn(tween(400)) togetherWith fadeOut(tween(800)) using SizeTransform(
+                clip = false
+            )
+        }
     ) { screenType ->
         when (screenType) {
             LoginScreenType.Initial -> InitialLogin(

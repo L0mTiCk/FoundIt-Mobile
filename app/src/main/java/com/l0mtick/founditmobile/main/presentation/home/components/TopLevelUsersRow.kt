@@ -78,7 +78,7 @@ private fun UserLevelCard(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .background(color = Theme.colors.surface)
-            .border(1.dp, color = Theme.colors.secondary, shape = RoundedCornerShape(16.dp))
+            .border(1.dp, color = Theme.colors.brandMuted, shape = RoundedCornerShape(16.dp))
             .clickable { onCardClick() }
             .padding(16.dp)
             .then(modifier)

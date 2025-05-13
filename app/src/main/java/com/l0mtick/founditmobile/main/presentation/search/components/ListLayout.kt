@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +22,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.search.SearchAction
 import com.l0mtick.founditmobile.main.presentation.search.SearchState
@@ -57,7 +57,7 @@ fun ListLayout(
         }
 
         item {
-            OutlinedTextField(
+            OutlinedAppTextField(
                 value = state.searchValue,
                 onValueChange = {
                     onAction(SearchAction.OnListSearchValueChange(it))

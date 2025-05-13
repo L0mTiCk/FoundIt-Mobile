@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
@@ -22,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
+import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.main.presentation.util.formatTimeAgo
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
@@ -81,7 +80,10 @@ fun BigItemCard(
                 FilterChip(
                     onClick = {},
                     label = {
-                        Text("${distance?.roundToInt() ?: "..."} m")
+                        Text(
+                            text = "${distance?.roundToInt() ?: "..."} m",
+                            style = Theme.typography.description
+                        )
                     },
                     selected = true,
                     colors = FilterChipDefaults.filterChipColors(
@@ -93,24 +95,13 @@ fun BigItemCard(
                 )
             }
             Spacer(Modifier.weight(1f))
-            Button(
+            PrimaryButton(
+                text = "Details",
                 onClick = { onClick(id) },
-                colors = ButtonDefaults.buttonColors(containerColor = Theme.colors.brand),
                 modifier = Modifier.padding(bottom = 4.dp)
-            ) {
-                Text(
-                    text = "Details",
-                    style = Theme.typography.body,
-                    color = Theme.colors.onBrand
-                )
-            }
+            )
         }
     }
-}
-
-@Composable
-fun SmallItemCard(modifier: Modifier = Modifier) {
-
 }
 
 @Preview(showBackground = true)

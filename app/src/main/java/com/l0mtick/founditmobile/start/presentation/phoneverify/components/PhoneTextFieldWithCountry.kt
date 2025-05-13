@@ -123,7 +123,7 @@ private fun PhoneTextFieldWithCountryPreview() {
  * Copied version of lib country picker to remove text transformation
  *
  * @param countrytextstyle the textstyle to be used for the country in the lazy column in dialog
- *@param dialogcountrycodetextstyle the textstyle to be used for the country code in the lazy column in dialog
+ * @param dialogcountrycodetextstyle the textstyle to be used for the country code in the lazy column in dialog
  * @param showCountryCodeInDIalog whether to show the country code in the lazy column dialog or not
  * @param countrycodetextstyle the textstyle to be used for the country code in the original textfield
  * @param showDropDownAfterFlag whether to show the drop down before or after the flag, if true then the dropdown will show after flag, if false before flag
