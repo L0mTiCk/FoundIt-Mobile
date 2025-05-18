@@ -9,5 +9,6 @@ interface UsersRepository {
     suspend fun getTopLevelUsers(): Result<List<User>?, DataError.Network>
     suspend fun getMe(): Result<User, DataError.Network>
     suspend fun getMyFavoriteCount(): Result<Int, DataError.Network>
+    suspend fun getLocalMe(): Result<User, DataError>
 
 }

@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.error.Result
-import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -27,6 +25,20 @@ class HomeViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
+                    launch {
+                        when(val result = usersRepository.getLocalMe()) {
+                            is Result.Success-> {
+                                _state.update {
+                                    it.copy(
+                                        localUser = result.data
+                                    )
+                                }
+                            }
+                            is Result.Error -> {
+                                Log.e("home_viewmodel", "No local user")
+                            }
+                        }
+                    }
                     launch {
                         when (val result = categoriesRepository.getPopularCategories()) {
                             is Result.Success -> {

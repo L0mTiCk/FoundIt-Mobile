@@ -63,6 +63,16 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.USERNAME]
     }
 
+    override suspend fun setProfilePictureUrl(url: String?) {
+        url?.let {
+            context.dataStore.edit { it[PreferencesKeys.PROFILE_PICTURE_URL] = url }
+        }
+    }
+
+    override suspend fun getProfilePictureUrl(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.PROFILE_PICTURE_URL]
+    }
+
     override suspend fun setAppLanguage(languageCode: String) {
         context.dataStore.edit {
             it[PreferencesKeys.APP_LANGUAGE] = languageCode

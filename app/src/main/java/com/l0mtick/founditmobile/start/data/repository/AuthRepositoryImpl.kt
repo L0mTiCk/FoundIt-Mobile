@@ -26,6 +26,7 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
                 localStorage.setRefreshToken(result.data.refreshToken)
                 localStorage.setEmail(result.data.email)
                 localStorage.setUsername(result.data.username)
+                localStorage.setProfilePictureUrl(result.data.logoUrl)
                 localStorage.setIsLoggedIn(true)
                 CoroutineScope(Dispatchers.IO).launch {
                     localStorage.getPushToken()?.let {

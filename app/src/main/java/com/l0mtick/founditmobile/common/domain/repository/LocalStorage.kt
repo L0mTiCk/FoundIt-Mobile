@@ -19,6 +19,9 @@ interface LocalStorage {
     suspend fun setUsername(username: String)
     suspend fun getUsername(): String?
 
+    suspend fun setProfilePictureUrl(url: String?)
+    suspend fun getProfilePictureUrl(): String?
+
     suspend fun setAppLanguage(languageCode: String)
     suspend fun getAppLanguage(): String
 

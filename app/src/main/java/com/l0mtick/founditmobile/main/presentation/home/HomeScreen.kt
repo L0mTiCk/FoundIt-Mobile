@@ -52,6 +52,8 @@ fun HomeScreen(
     ) {
         item {
             UserHeaderCard(
+                username = state.localUser.username,
+                profilePictureUrl = state.localUser.profilePictureUrl,
                 modifier = Modifier.padding(horizontal = 24.dp).systemBarsPadding()
             )
         }

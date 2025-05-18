@@ -34,7 +34,7 @@ val mainModule = module {
 
     single<CategoriesRepository> { CategoriesRepositoryImpl(api = get(), localStorage = get()) }
 
-    single<UsersRepository> { UsersRepositoryImpl(mainApi = get()) }
+    single<UsersRepository> { UsersRepositoryImpl(mainApi = get(), localStorage = get()) }
 
     single<ChatRepository> { ChatRepositoryImpl(mainApi = get()) }
 
