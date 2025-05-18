@@ -34,12 +34,12 @@ fun InitialLogin(
         verticalArrangement = Arrangement.Bottom,
     ) {
         Text(
-            text = "Found It app",
+            text = "Found It",
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "Очень краткое описание приложения после Introduction",
+            text = "Приложение для облегчения поиска потерянных вещей по всему миру",
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(Modifier.height(24.dp))

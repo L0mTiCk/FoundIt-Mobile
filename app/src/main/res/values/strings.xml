@@ -59,4 +59,10 @@
 
     <string name="no_internet_header">Whooops!</string>
     <string name="no_internet_description">No Internet connection found\nCheck your connection to continue</string>
+
+
+    <!--  Notifications-->
+    <string name="new_message_notification_title">%1$s for %2$s</string>
+    <string name="new_message_fallback_title">New message</string>
+    <string name="chat_notification_channel" translatable="false">chat_channel</string>
 </resources>

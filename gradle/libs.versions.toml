@@ -73,6 +73,7 @@ firebase-bom= { module = "com.google.firebase:firebase-bom", version.ref = "fire
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-performance = { module = "com.google.firebase:firebase-perf" }
+firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 #Jitpack
 xmaterial-ccp = { module = "com.github.TuleSimon:xMaterialccp", version.ref = "xmaterial-ccp"}

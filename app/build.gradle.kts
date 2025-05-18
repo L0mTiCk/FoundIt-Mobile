@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.performance)
+    implementation(libs.firebase.cloud.messaging)
 
     implementation(libs.xmaterial.ccp)
 
