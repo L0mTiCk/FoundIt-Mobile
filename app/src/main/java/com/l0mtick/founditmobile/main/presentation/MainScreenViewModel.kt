@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.error.LocationError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +23,15 @@ sealed interface LocationUiEvent {
 }
 
 class MainScreenViewModel(
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val userSessionManager: UserSessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainScreenState())
     val uiState: StateFlow<MainScreenState> = _uiState.asStateFlow()
+    
+    // Состояние гостевого режима
+    val isGuestUser = userSessionManager.isGuestUser
 
     // Channel for one-off events like triggering launchers
     private val _eventChannel = Channel<LocationUiEvent>()

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import com.l0mtick.founditmobile.common.presentation.util.UiText
 import com.l0mtick.founditmobile.common.presentation.util.asUiText
@@ -23,7 +24,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val validator: ValidationManager,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userSessionManager: UserSessionManager
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -58,6 +60,8 @@ class LoginViewModel(
                     LoginState.SignupForm()
                 }
             }
+            
+            LoginAction.OnGuestLogin -> loginAsGuest()
 
             is LoginAction.LoginFormAction -> handleLoginFormAction(action)
             is LoginAction.SignupFormAction -> handleSignupFormAction(action)
@@ -71,7 +75,7 @@ class LoginViewModel(
                     getField = { it.loginState },
                     setField = { state, field -> state.copy(loginState = field) },
                     newValue = action.value,
-                    validate = validator::validateUsername,
+                    validate = validator::validateUsernameOrEmail,
                     getState = { _state.value },
                     updateState = { newState -> _state.update { newState } }
                 )
@@ -256,6 +260,20 @@ class LoginViewModel(
                 }
             }
 
+        }
+    }
+
+    private fun loginAsGuest() {
+        viewModelScope.launch {
+            when(val result = authRepository.loginAsGuest()) {
+                is Result.Success -> {
+                    userSessionManager.setGuestMode(true)
+                    StartEventManager.triggerEvent(StartEventManager.StartEvent.OnNavigateToMainAsGuest)
+                }
+                is Result.Error -> {
+
+                }
+            }
         }
     }
 }

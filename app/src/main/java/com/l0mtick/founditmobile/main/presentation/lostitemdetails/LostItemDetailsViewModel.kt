@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import kotlinx.coroutines.delay
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class LostItemDetailsViewModel(
     private val itemRepository: LostItemRepository,
+    private val userSessionManager: UserSessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val route = savedStateHandle.toRoute<NavigationRoute.Main.ItemDetails>()
@@ -28,7 +30,10 @@ class LostItemDetailsViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
-                    delay(5000)
+                    _state.update {
+                        it.copy(isGuest = userSessionManager.isGuestUser.value)
+                    }
+                    delay(1000)
                     val item = itemRepository.getDetailedLostItem(itemId = route.itemId)
                     when(item) {
                         is Result.Success -> {

@@ -21,7 +21,7 @@ val startModule = module {
     single<AuthRepository> { AuthRepositoryImpl(localStorage = get(), authApi = get()) }
 
     viewModel {
-        LoginViewModel(validator = get(), authRepository = get())
+        LoginViewModel(validator = get(), authRepository = get(), userSessionManager = get())
     }
 
     viewModel {

@@ -175,38 +175,39 @@ fun LostItemDetailsScreen(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                 )
-                Spacer(Modifier.height(16.dp))
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        ) {
-            Button(
-                onClick = {},
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Theme.colors.brand,
-                    contentColor = Theme.colors.onBrand
-                )
-            ) {
-                Text("Chat")
-            }
-            Spacer(modifier = Modifier.requiredSize(width = 16.dp, height = 1.dp))
-            Button(
-                onClick = {},
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Theme.colors.onSurfaceVariant.copy(alpha = .2f),
-                    contentColor = Theme.colors.onSurfaceVariant
-                )
-            ) {
-                Text("Favorite")
             }
         }
         Spacer(Modifier.height(16.dp))
+        if (!state.isGuest) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Button(
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Theme.colors.brand,
+                        contentColor = Theme.colors.onBrand
+                    )
+                ) {
+                    Text("Chat")
+                }
+                Spacer(modifier = Modifier.requiredSize(width = 16.dp, height = 1.dp))
+                Button(
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Theme.colors.onSurfaceVariant.copy(alpha = .2f),
+                        contentColor = Theme.colors.onSurfaceVariant
+                    )
+                ) {
+                    Text("Favorite")
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+        }
         Text(
             text = "Details",
             style = Theme.typography.headline,

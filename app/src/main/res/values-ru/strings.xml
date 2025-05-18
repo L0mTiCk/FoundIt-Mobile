@@ -15,6 +15,9 @@
     <string name="later">Позже</string>
     <string name="ok">Ок</string>
     <string name="next">Далее</string>
+    <string name="proceed">Продолжить</string>
+    <string name="cancel">Отмена</string>
+    <string name="login_as_guest">Войти как Гость</string>
 
     <!--  Navigation-->
     <string name="navigation_home">Главная</string>
@@ -66,6 +69,9 @@
 
     <string name="no_internet_header">Упс!</string>
     <string name="no_internet_description">Интернет-соединение не найдено\nПроверьте подключение, чтобы продолжить</string>
+
+    <string name="guest_login_title">Гостевой доступ</string>
+    <string name="guest_login_description">Вы собираетесь продолжить как Гость. Функции приложения будут ограничены</string>
 
     <!--  Notifications-->
     <string name="new_message_notification_title">%1$s для %2$s</string>

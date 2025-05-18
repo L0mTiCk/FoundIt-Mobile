@@ -3,6 +3,7 @@ package com.l0mtick.founditmobile.start.presentation.login
 sealed interface LoginAction {
     data object OnMoveToLogin : LoginAction
     data object OnMoveToSignup : LoginAction
+    data object OnGuestLogin : LoginAction
 
     sealed interface LoginFormAction : LoginAction {
         data class OnLoginChanged(val value: String) : LoginFormAction

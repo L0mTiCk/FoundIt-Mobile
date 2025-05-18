@@ -9,6 +9,7 @@ import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.start.data.remote.request.PhoneVerifyRequest
 import com.l0mtick.founditmobile.start.data.remote.request.UserLoginRequest
 import com.l0mtick.founditmobile.start.data.remote.request.UserRegisterRequest
+import com.l0mtick.founditmobile.start.data.remote.response.GuestTokenResponse
 import com.l0mtick.founditmobile.start.data.remote.response.UserLoginResponse
 import com.l0mtick.founditmobile.start.domain.repository.AuthApi
 import io.ktor.client.HttpClient
@@ -25,7 +26,7 @@ class AuthApiImpl(
     ): Result<UserLoginResponse, DataError.Network> {
         val request = UserLoginRequest(email, password)
         return post(
-            path = "auth/login/user", //TODO: replace with routes for different login types
+            path = "auth/login/email",
             body = request
         )
     }
@@ -36,9 +37,13 @@ class AuthApiImpl(
     ): Result<UserLoginResponse, DataError.Network> {
         val request = UserLoginRequest(login, password)
         return post(
-            path = "auth/login/user",
+            path = "auth/login/username",
             body = request
         )
+    }
+
+    override suspend fun loginAsGuest(): Result<GuestTokenResponse, DataError.Network> {
+        return get("auth/login/guest")
     }
 
     override suspend fun register(

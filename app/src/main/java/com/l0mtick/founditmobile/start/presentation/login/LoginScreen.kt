@@ -42,7 +42,7 @@ fun LoginRoot(
             is LoginEvent.NavigateToPhoneVerification -> {
                 navController.navigate(NavigationRoute.Start.PhoneVerification(event.login, event.email, event.pass))
             }
-        }
+                    }
     }
 
     LoginScreen(

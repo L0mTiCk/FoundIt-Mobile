@@ -38,6 +38,7 @@ fun StartScreen(
             StartEventManager.eventsFlow.collect{ event ->
                 when(event) {
                     StartEventManager.StartEvent.OnNavigateToMain -> onNavigateToMain()
+                    StartEventManager.StartEvent.OnNavigateToMainAsGuest -> onNavigateToMain()
                 }
             }
         }

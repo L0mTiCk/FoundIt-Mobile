@@ -43,7 +43,7 @@ val mainModule = module {
     single<LocationService> { LocationServiceImpl(application = get()) }
 
     viewModel {
-        MainScreenViewModel(locationService = get())
+        MainScreenViewModel(locationService = get(), userSessionManager = get())
     }
 
     viewModel {
@@ -66,6 +66,7 @@ val mainModule = module {
     viewModel {
         LostItemDetailsViewModel(
             itemRepository = get(),
+            userSessionManager = get(),
             savedStateHandle = get()
         )
     }

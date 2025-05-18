@@ -9,6 +9,7 @@ import com.l0mtick.founditmobile.common.data.storage.LocalStorageImpl
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.common.domain.repository.NotificationRepository
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import io.ktor.client.HttpClient
 import org.koin.core.module.dsl.viewModel
@@ -25,6 +26,8 @@ val commonModule = module {
     single<ConnectivityObserver> { ConnectivityObserverImpl(context = get()) }
 
     single<NotificationRepository> { NotificationRepositoryImpl(mainApi = get(), localStorage = get()) }
+
+    single { UserSessionManager() }
 
     viewModel {
         MainActivityViewModel(authRepository = get(), connectivityObserver = get())

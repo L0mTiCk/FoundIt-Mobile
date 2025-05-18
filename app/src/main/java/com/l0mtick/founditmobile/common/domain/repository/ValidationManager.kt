@@ -7,4 +7,5 @@ interface ValidationManager {
     fun validateUsername(input: String): ValidationResult
     fun validatePassword(input: String): ValidationResult
     fun validateFieldEmptiness(input: String): ValidationResult
+    fun validateUsernameOrEmail(input: String): ValidationResult
 }

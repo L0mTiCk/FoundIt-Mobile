@@ -143,6 +143,15 @@ fun MainScreen(
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val currentDestination = state?.destination?.route
     Log.d("destination", currentDestination.toString())
+    
+    val viewModel: MainScreenViewModel = koinViewModel()
+    val isGuestUser = viewModel.isGuestUser.collectAsState().value
+    
+    val navigationItems = if (isGuestUser) {
+        listOf(MainScreenNavigationItem.HOME, MainScreenNavigationItem.SEARCH)
+    } else {
+        MainScreenNavigationItem.entries.toList()
+    }
 
     val customNavSuiteType = with(adaptiveInfo) {
         if (MainScreenNavigationItem.entries.any { currentDestination?.startsWith(it.route::class.qualifiedName ?: "null") ?: false} ) {
@@ -160,7 +169,7 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         layoutType = customNavSuiteType,
         navigationSuiteItems = {
-            MainScreenNavigationItem.entries.forEach { route ->
+            navigationItems.forEach { route ->
                 item(
                     label = { Text(stringResource(route.label), style = Theme.typography.small) },
                     onClick = {

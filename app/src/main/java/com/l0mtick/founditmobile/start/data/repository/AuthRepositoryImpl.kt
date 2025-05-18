@@ -39,6 +39,19 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
         }
     }
 
+    override suspend fun loginAsGuest(): Result<Unit, DataError> {
+        val result = authApi.loginAsGuest()
+        when(result){
+            is Result.Success -> {
+                localStorage.setToken(result.data.token)
+                return Result.Success(Unit)
+            }
+            is Result.Error -> {
+                return Result.Error(result.error)
+            }
+        }
+    }
+
     override suspend fun register(
         username: String,
         email: String,

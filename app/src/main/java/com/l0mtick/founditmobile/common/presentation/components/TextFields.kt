@@ -11,7 +11,6 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.VisualTransformation
 import com.l0mtick.founditmobile.ui.theme.Theme
-import io.ktor.websocket.Frame
 
 @Composable
 fun OutlinedAppTextField(
@@ -39,7 +38,7 @@ fun OutlinedAppTextField(
         isError = isError,
         supportingText = {
             if (isError && !errorText.isNullOrBlank()) {
-                Frame.Text(errorText)
+                Text(errorText)
             }
         },
         keyboardOptions = keyboardOptions,

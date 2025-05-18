@@ -21,5 +21,6 @@ object StartEventManager {
      */
     sealed interface StartEvent {
         data object OnNavigateToMain: StartEvent
+        data object OnNavigateToMainAsGuest: StartEvent
     }
 }
