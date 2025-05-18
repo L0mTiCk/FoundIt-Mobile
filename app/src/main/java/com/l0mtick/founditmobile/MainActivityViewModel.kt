@@ -25,6 +25,24 @@ class MainActivityViewModel(
         observeConnectivity()
         checkAuth()
     }
+    
+    fun checkNotificationPermission(hasPermission: Boolean) {
+        _state.update {
+            it.copy(hasNotificationPermission = hasPermission)
+        }
+    }
+    
+    fun showNotificationPermissionDialog() {
+        _state.update {
+            it.copy(shouldShowNotificationPermissionDialog = true)
+        }
+    }
+    
+    fun hideNotificationPermissionDialog() {
+        _state.update {
+            it.copy(shouldShowNotificationPermissionDialog = false)
+        }
+    }
 
     private fun checkAuth() {
         viewModelScope.launch {
@@ -98,5 +116,7 @@ data class MainActivityState(
     val isLoading: Boolean = true,
     val navigationRoute: NavigationRoute = NavigationRoute.Start.Login,
     val isInternetConnected: Boolean = true,
+    val shouldShowNotificationPermissionDialog: Boolean = false,
+    val hasNotificationPermission: Boolean = false,
     val isTryingToLogIn: Boolean = false
 )

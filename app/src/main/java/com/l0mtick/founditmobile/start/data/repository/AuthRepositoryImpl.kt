@@ -1,10 +1,14 @@
 package com.l0mtick.founditmobile.start.data.repository
 
+import android.util.Log
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.start.domain.repository.AuthApi
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AuthRepositoryImpl(private val localStorage: LocalStorage, private val authApi: AuthApi): AuthRepository {
 
@@ -23,6 +27,11 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
                 localStorage.setEmail(result.data.email)
                 localStorage.setUsername(result.data.username)
                 localStorage.setIsLoggedIn(true)
+                CoroutineScope(Dispatchers.IO).launch {
+                    localStorage.getPushToken()?.let {
+                        authApi.sendUserPushToken(it)
+                    } ?: Log.e("push_service", "Error while sending push token after login")
+                }
                 return Result.Success(Unit)
             }
             is Result.Error -> return Result.Error(result.error)

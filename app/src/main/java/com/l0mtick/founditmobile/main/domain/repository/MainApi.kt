@@ -32,4 +32,6 @@ interface MainApi {
     ): Result<PaginatedResponse<LostItemDTO>, DataError.Network>
     suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network>
 
+    suspend fun sendUserPushToken(token: String): Result<Unit, DataError.Network>
+
 }

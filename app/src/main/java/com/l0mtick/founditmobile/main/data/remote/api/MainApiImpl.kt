@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.main.data.remote.api
 
 import com.l0mtick.founditmobile.common.data.remote.api.BaseApiService
 import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
+import com.l0mtick.founditmobile.common.data.remote.request.PushTokenRequest
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
@@ -90,6 +91,14 @@ class MainApiImpl(
             params = {
                 append("id", itemId.toString())
             }
+        )
+    }
+
+    override suspend fun sendUserPushToken(token: String): Result<Unit, DataError.Network> {
+        val request = PushTokenRequest(token)
+        return postAuth(
+            path = "user/push-token",
+            body = request
         )
     }
 }

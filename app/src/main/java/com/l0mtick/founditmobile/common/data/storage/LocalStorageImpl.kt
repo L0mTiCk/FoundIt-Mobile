@@ -31,6 +31,14 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.REFRESH_TOKEN]
     }
 
+    override suspend fun setPushToken(token: String) {
+        context.dataStore.edit { it[PreferencesKeys.PUSH_TOKEN] = token }
+    }
+
+    override suspend fun getPushToken(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.PUSH_TOKEN]
+    }
+
     override suspend fun setIsLoggedIn(isLoggedIn: Boolean) {
         context.dataStore.edit { it[PreferencesKeys.IS_LOGGED_IN] = isLoggedIn }
     }

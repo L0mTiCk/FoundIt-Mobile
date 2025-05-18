@@ -48,6 +48,10 @@ fun DataError.asUiText(): UiText {
             R.string.error_disk_full
         )
 
+        DataError.Network.UNAUTHORIZED -> UiText.DynamicString(
+            "Unauthorized"
+        )
+
     }
 }
 

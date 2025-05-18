@@ -7,6 +7,9 @@ interface LocalStorage {
     suspend fun setRefreshToken(token: String)
     suspend fun getRefreshToken(): String?
 
+    suspend fun setPushToken(token: String)
+    suspend fun getPushToken(): String?
+
     suspend fun setIsLoggedIn(isLoggedIn: Boolean)
     suspend fun isLoggedIn(): Boolean
 

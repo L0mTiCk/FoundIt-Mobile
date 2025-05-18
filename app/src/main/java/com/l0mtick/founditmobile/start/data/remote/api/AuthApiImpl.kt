@@ -1,15 +1,16 @@
 package com.l0mtick.founditmobile.start.data.remote.api
 
 import com.l0mtick.founditmobile.common.data.remote.api.BaseApiService
+import com.l0mtick.founditmobile.common.data.remote.request.PushTokenRequest
+import com.l0mtick.founditmobile.common.domain.error.DataError
+import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
+import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.start.data.remote.request.PhoneVerifyRequest
 import com.l0mtick.founditmobile.start.data.remote.request.UserLoginRequest
 import com.l0mtick.founditmobile.start.data.remote.request.UserRegisterRequest
 import com.l0mtick.founditmobile.start.data.remote.response.UserLoginResponse
-import com.l0mtick.founditmobile.common.domain.error.DataError
-import com.l0mtick.founditmobile.common.domain.error.Result
-import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.start.domain.repository.AuthApi
-import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import io.ktor.client.HttpClient
 
 class AuthApiImpl(
@@ -77,6 +78,14 @@ class AuthApiImpl(
     override suspend fun checkToken(): Result<Unit, DataError.Network> {
         return getAuth(
             path = "auth/verify-token",
+        )
+    }
+
+    override suspend fun sendUserPushToken(token: String): Result<Unit, DataError.Network> {
+        val request = PushTokenRequest(token)
+        return postAuth(
+            path = "user/push-token",
+            body = request
         )
     }
 

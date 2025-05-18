@@ -11,6 +11,11 @@
     <string name="unknown_error">Unknown error</string>
     <string name="error_disk_full">Disk space is full</string>
 
+    <string name="allow">Allow</string>
+    <string name="later">Later</string>
+    <string name="ok">OK</string>
+    <string name="next">Next</string>
+
     <!--  Navigation-->
     <string name="navigation_home">Home</string>
     <string name="navigation_search">Explore</string>
@@ -65,4 +70,6 @@
     <string name="new_message_notification_title">%1$s for %2$s</string>
     <string name="new_message_fallback_title">New message</string>
     <string name="chat_notification_channel" translatable="false">chat_channel</string>
+    <string name="permission_dialog_title">Allow notifications</string>
+    <string name="permission_dialog_description">To receive updates about items and messages from other users, please allow notifications</string>
 </resources>
