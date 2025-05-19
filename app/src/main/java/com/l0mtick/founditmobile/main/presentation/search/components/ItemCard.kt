@@ -37,6 +37,13 @@ fun BigItemCard(
     imageUrl: String? = null,
     onClick: (Int) -> Unit
 ) {
+    val distanceText = distance?.let {
+        if (distance < 1000) {
+            "${distance.roundToInt()} m"
+        } else {
+            "${(distance / 1000).roundToInt()} km"
+        }
+    } ?: "..."
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
@@ -81,7 +88,7 @@ fun BigItemCard(
                     onClick = {},
                     label = {
                         Text(
-                            text = "${distance?.roundToInt() ?: "..."} m",
+                            text = distanceText,
                             style = Theme.typography.description
                         )
                     },
