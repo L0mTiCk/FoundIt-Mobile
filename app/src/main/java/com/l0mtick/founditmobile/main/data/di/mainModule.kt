@@ -13,6 +13,7 @@ import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import com.l0mtick.founditmobile.main.domain.repository.UsersRepository
 import com.l0mtick.founditmobile.main.presentation.MainScreenViewModel
+import com.l0mtick.founditmobile.main.presentation.additem.AddItemViewModel
 import com.l0mtick.founditmobile.main.presentation.chat.ChatViewModel
 import com.l0mtick.founditmobile.main.presentation.home.HomeViewModel
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxViewModel
@@ -82,6 +83,10 @@ val mainModule = module {
 
     viewModel {
         SettingsViewModel(userPreferencesRepository = get())
+    }
+
+    viewModel {
+        AddItemViewModel()
     }
 
 }

@@ -42,6 +42,7 @@ import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.main.domain.model.LocationAvailabilityState
+import com.l0mtick.founditmobile.main.presentation.additem.AddItemRoot
 import com.l0mtick.founditmobile.main.presentation.chat.ChatRoot
 import com.l0mtick.founditmobile.main.presentation.home.HomeRoot
 import com.l0mtick.founditmobile.main.presentation.inbox.InboxRoot
@@ -240,6 +241,12 @@ fun MainScreen(
                     SettingsRoot(
                         navController = localNavController,
                         onSignOut = onNavigateToLogin
+                    )
+                }
+
+                composable<NavigationRoute.Main.Add> {
+                    AddItemRoot(
+                        onNavBack = {}
                     )
                 }
             }

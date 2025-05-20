@@ -7,46 +7,46 @@ import kotlinx.serialization.Serializable
 sealed interface NavigationRoute {
 
     @Serializable
-    sealed interface Start: NavigationRoute {
+    sealed interface Start : NavigationRoute {
 
         @Serializable
-        data object Introduction: Start
+        data object Introduction : Start
 
         @Serializable
-        data object Login: Start
+        data object Login : Start
 
         @Serializable
-        data class PhoneVerification(val login: String, val email: String, val pass: String): Start
+        data class PhoneVerification(val login: String, val email: String, val pass: String) : Start
 
     }
 
     @Serializable
-    sealed interface Main: NavigationRoute {
+    sealed interface Main : NavigationRoute {
 
         @Serializable
         data object Home : Main
 
         @Serializable
-        data class Search(val categoryIds: List<Long>? = null): Main
+        data class Search(val categoryIds: List<Long>? = null) : Main
 
         @Serializable
-        data object Add: Main
+        data object Add : Main
 
         @Serializable
-        data object Inbox: Main
+        data object Inbox : Main
 
         @Serializable
-        data object Profile: Main
+        data object Profile : Main
 
         @Serializable
-        data object Settings: Main
+        data object Settings : Main
 
         //TODO: pass args
         @Serializable
-        data class ItemDetails(val itemId: Int): Main
+        data class ItemDetails(val itemId: Int) : Main
 
         @Serializable
-        data object Chat: Main
+        data object Chat : Main
 
     }
 
