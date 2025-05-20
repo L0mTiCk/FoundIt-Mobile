@@ -8,13 +8,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +27,7 @@ import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.presentation.profile.components.AboutDialog
 import com.l0mtick.founditmobile.main.presentation.profile.components.ProfileScreenRow
 import com.l0mtick.founditmobile.main.presentation.profile.components.UserLevelBox
 import com.l0mtick.founditmobile.main.presentation.profile.components.UserProfile
@@ -56,6 +59,9 @@ fun ProfileScreen(
 ) {
     val context = LocalContext.current
     val rowsModifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+
+    var isAboutShown by remember { mutableStateOf(false) }
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize()
@@ -117,17 +123,18 @@ fun ProfileScreen(
             )
             ProfileScreenRow(
                 header = "About",
-                onClick = { },
+                onClick = {
+                    isAboutShown = true
+                },
                 trailingIcon = Icons.Default.Info,
                 modifier = rowsModifier
             )
-            ProfileScreenRow(
-                header = "Get help",
-                trailingIcon = Icons.Default.Call,
-                onClick = { },
-                modifier = rowsModifier
-            )
         }
+    }
+    if (isAboutShown) {
+        AboutDialog(
+            onDismiss = { isAboutShown = false}
+        )
     }
 }
 

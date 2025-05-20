@@ -92,4 +92,7 @@
     <string name="new_message_fallback_title">Новое сообщение</string>
     <string name="permission_dialog_title">Разрешите уведомлений</string>
     <string name="permission_dialog_description">Чтобы получать уведомления об изменениях статуса меток, сообщениях от других пользователей и других событиях, разрешите отправку уведомлений</string>
+
+    <string name="about_dialog_title">Про Found It</string>
+    <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>
 </resources>

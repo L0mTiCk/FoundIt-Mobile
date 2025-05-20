@@ -91,4 +91,7 @@
     <string name="chat_notification_channel" translatable="false">chat_channel</string>
     <string name="permission_dialog_title">Allow notifications</string>
     <string name="permission_dialog_description">To receive updates about items and messages from other users, please allow notifications</string>
+
+    <string name="about_dialog_title">About Found It</string>
+    <string name="about_dialog_description">Found It helps people reconnect with lost belongings.\n\nYou can add lost items on map so others can find them easily.\n\nTogether, we make it easier to return what\'s been lost.</string>
 </resources>
