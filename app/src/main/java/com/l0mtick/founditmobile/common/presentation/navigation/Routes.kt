@@ -38,6 +38,9 @@ sealed interface NavigationRoute {
         @Serializable
         data object Profile: Main
 
+        @Serializable
+        data object Settings: Main
+
         //TODO: pass args
         @Serializable
         data class ItemDetails(val itemId: Int): Main

@@ -25,5 +25,11 @@ interface LocalStorage {
     suspend fun setAppLanguage(languageCode: String)
     suspend fun getAppLanguage(): String
 
+    suspend fun setIsDarkTheme(isDarkTheme: Boolean)
+    suspend fun isDarkTheme(): Boolean
+
+    suspend fun setAreNotificationsEnabled(areEnabled: Boolean)
+    suspend fun areNotificationsEnabled(): Boolean
+
     suspend fun clear()
 }

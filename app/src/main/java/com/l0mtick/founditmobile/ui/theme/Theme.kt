@@ -30,7 +30,9 @@ val baseLightColors = FoundItColors(
 )
 
 //TODO: replace with actual dark theme
-val baseDarkColors = baseLightColors
+val baseDarkColors = baseLightColors.copy(
+    background = Color(0xFF171A1F),
+)
 
 val baseTypography = FoundItTypography(
     headline = TextStyle(
@@ -55,7 +57,6 @@ val baseTypography = FoundItTypography(
 @Composable
 fun FoundItMobileTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     content: @Composable () -> Unit
 ) {
 

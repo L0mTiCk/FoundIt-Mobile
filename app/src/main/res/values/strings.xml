@@ -17,6 +17,7 @@
     <string name="next">Next</string>
     <string name="proceed">Proceed</string>
     <string name="cancel">Cancel</string>
+    <string name="exit">Exit</string>
     <string name="login_as_guest">Login as Guest</string>
 
 
@@ -39,7 +40,7 @@
     <string name="username_too_short">Username is too short</string>
     <string name="password_no_uppercase">Pasword must contain uppercase symbol</string>
     <string name="password_no_special">Password must contain special symbol !@#$^%%&amp;*()</string>
-    <string name="username_wrong_symbols">Username must contain only a-zA-Z, 0-9, \'_\'</string>
+    <string name="username_wrong_symbols">Username must contain only a–zA–Z, 0–9, \'_\'</string>
     <string name="empty_field">Field can\'t be empy</string>
 
     <!--  Phone confirmation-->
@@ -72,6 +73,17 @@
     <string name="guest_login_title">Guest access</string>
     <string name="guest_login_description">You are about to continue as a guest. Some features may be limited</string>
 
+    <!-- Settings-->
+    <string name="settings_title">Settings</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_dark_theme_header">Dark Theme</string>
+    <string name="settings_dark_theme_description">Switch between light and dark theme</string>
+    <string name="settings_notifications_header">Notifications</string>
+    <string name="settings_notifications_description">Enable push notifications</string>
+    <string name="settings_sign_out_header">Sign Out</string>
+    <string name="settings_sign_out_description">Sign Out from your account</string>
+    <string name="settings_sign_out_confirmation">Are you sure you want to sign out?</string>
 
     <!--  Notifications-->
     <string name="new_message_notification_title">%1$s for %2$s</string>

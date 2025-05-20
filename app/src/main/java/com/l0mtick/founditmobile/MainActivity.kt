@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,10 +22,12 @@ import com.l0mtick.founditmobile.common.data.notification.NotificationHelper
 import com.l0mtick.founditmobile.common.presentation.components.NoWifiBottomSheet
 import com.l0mtick.founditmobile.common.presentation.components.NotificationPermissionDialog
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.presentation.MainEventManager
 import com.l0mtick.founditmobile.main.presentation.MainRoot
 import com.l0mtick.founditmobile.start.presentation.StartRoot
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -57,11 +60,27 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            FoundItMobileTheme {
+            val state = viewModel.state.collectAsState()
+            val coroutineScope = rememberCoroutineScope()
+
+            LaunchedEffect(MainEventManager) {
+                coroutineScope.launch {
+                    MainEventManager.eventsFlow.collect { event ->
+                        when (event) {
+                            is MainEventManager.MainEvent.OnDarkThemeChanged -> {
+                                viewModel.updateDarkTheme()
+                            }
+                        }
+                    }
+                }
+            }
+
+            FoundItMobileTheme(
+                darkTheme = state.value.isDarkTheme
+            ) {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    val state = viewModel.state.collectAsState()
                     when (state.value.navigationRoute) {
                         is NavigationRoute.Main -> {
                             MainRoot(

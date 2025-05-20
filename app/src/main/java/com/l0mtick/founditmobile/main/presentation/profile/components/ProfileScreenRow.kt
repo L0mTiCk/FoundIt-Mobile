@@ -29,13 +29,14 @@ fun ProfileScreenRow(
     @DrawableRes trailingResIcon: Int? = null,
     trailingIcon: ImageVector? = null,
     iconSize: Dp = 24.dp,
+    isClickable: Boolean = true,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable { onClick() }
+            .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
             .fillMaxWidth()
             .sizeIn(minHeight = 56.dp)
             .then(modifier)

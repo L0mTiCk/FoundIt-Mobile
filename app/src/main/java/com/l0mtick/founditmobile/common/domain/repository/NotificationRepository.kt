@@ -12,4 +12,5 @@ interface NotificationRepository {
      */
     suspend fun sendPushToken(token: String): Result<Unit, DataError.Network>
     suspend fun saveLocalToken(token: String)
+    suspend fun areNotificationsEnabled(): Boolean
 }

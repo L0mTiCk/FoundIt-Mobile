@@ -21,8 +21,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.profile.components.ProfileScreenRow
 import com.l0mtick.founditmobile.main.presentation.profile.components.UserLevelBox
 import com.l0mtick.founditmobile.main.presentation.profile.components.UserProfile
@@ -32,13 +34,17 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileRoot(
+    navController: NavController,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ProfileScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = viewModel::onAction,
+        onNavigateToSettings = {
+            navController.navigate(NavigationRoute.Main.Settings)
+        }
     )
 }
 
@@ -46,6 +52,7 @@ fun ProfileRoot(
 fun ProfileScreen(
     state: ProfileState,
     onAction: (ProfileAction) -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
     val context = LocalContext.current
     val rowsModifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
@@ -104,7 +111,7 @@ fun ProfileScreen(
             )
             ProfileScreenRow(
                 header = "Settings",
-                onClick = { },
+                onClick = onNavigateToSettings,
                 trailingIcon = Icons.Default.Settings,
                 modifier = rowsModifier
             )
@@ -130,7 +137,8 @@ private fun Preview() {
     FoundItMobileTheme {
         ProfileScreen(
             state = ProfileState(),
-            onAction = {}
+            onAction = {},
+            onNavigateToSettings = {}
         )
     }
 }

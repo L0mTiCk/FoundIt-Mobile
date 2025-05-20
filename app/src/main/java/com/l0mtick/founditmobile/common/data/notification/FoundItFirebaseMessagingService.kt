@@ -18,6 +18,7 @@ import com.l0mtick.founditmobile.common.domain.repository.NotificationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.android.inject
 
@@ -26,6 +27,12 @@ class FoundItFirebaseMessagingService: FirebaseMessagingService()  {
     private val notificationRepository: NotificationRepository by inject()
 
     override fun onMessageReceived(message: RemoteMessage) {
+        val areNotificationsEnabled = runBlocking {
+            notificationRepository.areNotificationsEnabled()
+        }
+        if (!checkNotificationPermission() && !areNotificationsEnabled)  {
+            return
+        }
         val data = message.data
 
         val chatId = data["chat_id"]?.toIntOrNull() ?: return
@@ -60,7 +67,6 @@ class FoundItFirebaseMessagingService: FirebaseMessagingService()  {
             try {
                 notificationManager.notify(chatId, notification)
             } catch (e: SecurityException) {
-                // Обработка исключения, если разрешения были отозваны
             }
         }
     }

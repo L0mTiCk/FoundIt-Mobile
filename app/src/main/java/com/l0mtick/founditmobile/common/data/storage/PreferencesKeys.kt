@@ -12,6 +12,9 @@ object PreferencesKeys {
     val USERNAME = stringPreferencesKey("username")
     val PROFILE_PICTURE_URL = stringPreferencesKey("profile_url")
     val APP_LANGUAGE = stringPreferencesKey("app_language")
-
+    
+    // Пользовательские настройки
+    val DARK_THEME_ENABLED = booleanPreferencesKey("dark_theme_enabled")
+    val NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
 }
 

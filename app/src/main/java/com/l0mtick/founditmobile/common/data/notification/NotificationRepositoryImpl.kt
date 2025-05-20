@@ -24,4 +24,8 @@ class NotificationRepositoryImpl(
     override suspend fun saveLocalToken(token: String) {
         localStorage.setPushToken(token)
     }
+
+    override suspend fun areNotificationsEnabled(): Boolean {
+        return localStorage.areNotificationsEnabled()
+    }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
+import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val authRepository: AuthRepository,
+    private val localStorage: LocalStorage,
     private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
@@ -24,6 +26,7 @@ class MainActivityViewModel(
     init {
         observeConnectivity()
         checkAuth()
+        checkDarkTheme()
     }
     
     fun checkNotificationPermission(hasPermission: Boolean) {
@@ -42,6 +45,10 @@ class MainActivityViewModel(
         _state.update {
             it.copy(shouldShowNotificationPermissionDialog = false)
         }
+    }
+
+    fun updateDarkTheme() {
+        checkDarkTheme()
     }
 
     private fun checkAuth() {
@@ -110,9 +117,20 @@ class MainActivityViewModel(
             }
         }
     }
+
+    private fun checkDarkTheme() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isDarkTheme = localStorage.isDarkTheme()
+                )
+            }
+        }
+    }
 }
 
 data class MainActivityState(
+    val isDarkTheme: Boolean = false,
     val isLoading: Boolean = true,
     val navigationRoute: NavigationRoute = NavigationRoute.Start.Login,
     val isInternetConnected: Boolean = true,

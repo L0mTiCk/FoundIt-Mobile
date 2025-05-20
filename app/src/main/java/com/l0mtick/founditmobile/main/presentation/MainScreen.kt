@@ -48,6 +48,7 @@ import com.l0mtick.founditmobile.main.presentation.inbox.InboxRoot
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetailsRoot
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileRoot
 import com.l0mtick.founditmobile.main.presentation.search.SearchRoot
+import com.l0mtick.founditmobile.main.presentation.settings.SettingsRoot
 import com.l0mtick.founditmobile.ui.theme.Theme
 import org.koin.androidx.compose.koinViewModel
 
@@ -220,7 +221,9 @@ fun MainScreen(
                 }
 
                 composable<NavigationRoute.Main.Profile> {
-                    ProfileRoot()
+                    ProfileRoot(
+                        navController = localNavController
+                    )
                 }
 
                 composable<NavigationRoute.Main.ItemDetails> {
@@ -231,6 +234,13 @@ fun MainScreen(
 
                 composable<NavigationRoute.Main.Chat> {
                     ChatRoot()
+                }
+                
+                composable<NavigationRoute.Main.Settings> {
+                    SettingsRoot(
+                        navController = localNavController,
+                        onSignOut = onNavigateToLogin
+                    )
                 }
             }
         }

@@ -19,6 +19,7 @@ import com.l0mtick.founditmobile.main.presentation.inbox.InboxViewModel
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetailsViewModel
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileViewModel
 import com.l0mtick.founditmobile.main.presentation.search.SearchViewModel
+import com.l0mtick.founditmobile.main.presentation.settings.SettingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -77,6 +78,10 @@ val mainModule = module {
 
     viewModel {
         ChatViewModel()
+    }
+
+    viewModel {
+        SettingsViewModel(userPreferencesRepository = get())
     }
 
 }

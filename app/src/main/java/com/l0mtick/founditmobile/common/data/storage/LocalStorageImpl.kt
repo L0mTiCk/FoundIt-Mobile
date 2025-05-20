@@ -84,6 +84,22 @@ class LocalStorageImpl(
         return stored ?: Locale.getDefault().language
     }
 
+    override suspend fun setIsDarkTheme(isDarkTheme: Boolean) {
+        context.dataStore.edit { it[PreferencesKeys.DARK_THEME_ENABLED] = isDarkTheme }
+    }
+
+    override suspend fun isDarkTheme(): Boolean {
+        return context.dataStore.data.first()[PreferencesKeys.DARK_THEME_ENABLED]?: false
+    }
+
+    override suspend fun setAreNotificationsEnabled(areEnabled: Boolean) {
+        context.dataStore.edit { it[PreferencesKeys.NOTIFICATIONS_ENABLED] = areEnabled }
+    }
+
+    override suspend fun areNotificationsEnabled(): Boolean {
+        return context.dataStore.data.first()[PreferencesKeys.NOTIFICATIONS_ENABLED]?: true
+    }
+
     override suspend fun clear() {
         context.dataStore.edit { it.clear() }
     }
