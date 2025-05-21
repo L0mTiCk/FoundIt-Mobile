@@ -8,4 +8,6 @@ interface ValidationManager {
     fun validatePassword(input: String): ValidationResult
     fun validateFieldEmptiness(input: String): ValidationResult
     fun validateUsernameOrEmail(input: String): ValidationResult
+    fun validateItemTitle(input: String): ValidationResult
+    fun validateItemDescription(input: String): ValidationResult
 }

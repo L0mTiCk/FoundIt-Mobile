@@ -10,7 +10,7 @@ import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import com.l0mtick.founditmobile.common.presentation.util.UiText
 import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.common.presentation.util.isValid
-import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateField
+import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateLoginField
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import com.l0mtick.founditmobile.start.presentation.StartEventManager
 import kotlinx.coroutines.channels.Channel
@@ -71,7 +71,7 @@ class LoginViewModel(
     private fun handleLoginFormAction(action: LoginAction.LoginFormAction) {
         when (action) {
             is LoginAction.LoginFormAction.OnLoginChanged -> {
-                updateAndValidateField<LoginState.LoginForm>(
+                updateAndValidateLoginField<LoginState.LoginForm>(
                     getField = { it.loginState },
                     setField = { state, field -> state.copy(loginState = field) },
                     newValue = action.value,
@@ -82,7 +82,7 @@ class LoginViewModel(
             }
 
             is LoginAction.LoginFormAction.OnPasswordChanged -> {
-                updateAndValidateField<LoginState.LoginForm>(
+                updateAndValidateLoginField<LoginState.LoginForm>(
                     getField = { it.passwordState },
                     setField = { state, field -> state.copy(passwordState = field) },
                     newValue = action.value,
@@ -104,7 +104,7 @@ class LoginViewModel(
 
         when (action) {
             is LoginAction.SignupFormAction.OnConfirmPasswordChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.confirmPasswordState },
                     setField = { state, field -> state.copy(confirmPasswordState = field) },
                     newValue = action.value,
@@ -115,7 +115,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnEmailChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.emailState },
                     setField = { state, field -> state.copy(emailState = field) },
                     newValue = action.value,
@@ -126,7 +126,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnPasswordChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.passwordState },
                     setField = { state, field -> state.copy(passwordState = field) },
                     newValue = action.value,
@@ -137,7 +137,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnUsernameChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.loginState },
                     setField = { state, field -> state.copy(loginState = field) },
                     newValue = action.value,

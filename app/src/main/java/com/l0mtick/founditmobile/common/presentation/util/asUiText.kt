@@ -68,6 +68,8 @@ fun ValidationError.asUiText(): UiText {
         ValidationError.USERNAME_INVALID_CHARACTERS -> UiText.StringResource(R.string.username_wrong_symbols)
         ValidationError.USERNAME_TOO_SHORT -> UiText.StringResource(R.string.username_too_short)
         ValidationError.EMPTY -> UiText.StringResource(R.string.empty_field)
+        ValidationError.TOO_MUCH_SYMBOLS -> UiText.StringResource(R.string.error_too_much_symbols)
+        ValidationError.INVALID_CHARACTERS -> UiText.StringResource(R.string.error_invalid_characters)
     }
 }
 

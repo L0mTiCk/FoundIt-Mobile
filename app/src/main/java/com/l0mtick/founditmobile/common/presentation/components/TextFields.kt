@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.common.presentation.components
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -49,7 +50,11 @@ fun OutlinedAppTextField(
             focusedTextColor = Theme.colors.onSurface,
             focusedBorderColor = Theme.colors.brand,
             focusedLabelColor = Theme.colors.brand,
-            cursorColor = Theme.colors.brand
+            cursorColor = Theme.colors.brand,
+            selectionColors = TextSelectionColors(
+                handleColor = Theme.colors.brand,
+                backgroundColor = Theme.colors.brandMuted
+            )
         )
     )
 }

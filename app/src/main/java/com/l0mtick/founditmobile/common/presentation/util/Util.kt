@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.common.domain.model.ValidationResult
 import com.l0mtick.founditmobile.start.presentation.login.LoginState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-inline fun <reified T : LoginState> ViewModel.updateAndValidateField(
+inline fun <reified T : LoginState> ViewModel.updateAndValidateLoginField(
     crossinline getField: (T) -> TextFieldState,
     crossinline setField: (T, TextFieldState) -> T,
     newValue: String,
@@ -31,5 +33,28 @@ inline fun <reified T : LoginState> ViewModel.updateAndValidateField(
             errors = validation.errorTypes
         )
         updateState(setField(currentValidated, validatedField))
+    }
+}
+
+inline fun <reified S> ViewModel.updateAndValidateTextFieldInState(
+    stateFlow: MutableStateFlow<S>,
+    crossinline getField: (S) -> TextFieldState,
+    crossinline setField: (S, TextFieldState) -> S,
+    newValue: String,
+    noinline validate: suspend (String) -> ValidationResult
+) {
+    val current = stateFlow.value
+
+    val updatedField = getField(current).copy(value = newValue.trim())
+    stateFlow.update { setField(it, updatedField) }
+
+    viewModelScope.launch {
+        val result = validate(updatedField.value)
+
+        val validatedField = getField(stateFlow.value).copy(
+            isError = !result.isValid,
+            errors = result.errorTypes
+        )
+        stateFlow.update { setField(it, validatedField) }
     }
 }

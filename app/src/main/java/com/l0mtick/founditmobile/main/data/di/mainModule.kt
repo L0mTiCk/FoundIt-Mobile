@@ -86,7 +86,7 @@ val mainModule = module {
     }
 
     viewModel {
-        AddItemViewModel()
+        AddItemViewModel(validator = get())
     }
 
 }

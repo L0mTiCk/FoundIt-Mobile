@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.additem
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,19 +26,23 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.components.FadeVisibility
 import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
 import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
+import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.presentation.additem.components.EditableImagesPager
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
@@ -70,6 +76,7 @@ fun AddItemRoot(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AddItemScreen(
     state: AddItemState,
@@ -93,7 +100,7 @@ fun AddItemScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Назад",
+                    contentDescription = "Navigate back",
                     tint = Theme.colors.onSurface
                 )
             }
@@ -107,7 +114,7 @@ fun AddItemScreen(
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = "Фотографии",
+            text = stringResource(R.string.photos),
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
@@ -128,7 +135,7 @@ fun AddItemScreen(
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = "Информация",
+            text = stringResource(R.string.information),
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
@@ -136,24 +143,50 @@ fun AddItemScreen(
         Spacer(Modifier.height(16.dp))
 
         OutlinedAppTextField(
-            value = state.title,
+            value = state.title.value,
             onValueChange = { onAction(AddItemAction.UpdateTitle(it)) },
-            label = "Название",
+            label = stringResource(R.string.title),
+            isError = state.title.isError,
+            errorText = state.title.errors.firstOrNull()?.asUiText()?.asString(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
         )
 
         OutlinedTextField(
-            value = state.description,
+            value = state.description.value,
             onValueChange = { onAction(AddItemAction.UpdateDescription(it)) },
-            label = { Text("Описание") },
+            label = { Text(stringResource(R.string.description)) },
+            isError = state.description.isError,
+            supportingText = {
+                Row {
+                    Text(
+                        text = state.description.errors.firstOrNull()?.asUiText()?.asString() ?: ""
+                    )
+                    Spacer(Modifier.weight(1f))
+                    FadeVisibility(state.description.value.length >= 200) {
+                        Text(
+                            text = "${state.description.value.length}/255"
+                        )
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .animateContentSize(),
             singleLine = false,
-            maxLines = 5
+            maxLines = 5,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Theme.colors.onSurface,
+                focusedBorderColor = Theme.colors.brand,
+                focusedLabelColor = Theme.colors.brand,
+                cursorColor = Theme.colors.brand,
+                selectionColors = TextSelectionColors(
+                    handleColor = Theme.colors.brand,
+                    backgroundColor = Theme.colors.brandMuted
+                )
+            )
         )
 
 
@@ -178,26 +211,26 @@ fun AddItemScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = state.selectedCategory?.name ?: "Выберите категорию",
+                    text = state.selectedCategory?.name ?: stringResource(R.string.select_category),
                     style = Theme.typography.body,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Открыть список категорий"
+                    contentDescription = ""
                 )
             }
 
             DropdownMenu(
                 expanded = state.isCategoryDropdownExpanded,
-                onDismissRequest = { /* Здесь будет закрытие выпадающего списка */ },
+                onDismissRequest = { },
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 state.categories.forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category.name) },
-                        onClick = { /* Здесь будет выбор категории */ }
+                        onClick = { }
                     )
                 }
             }
@@ -205,9 +238,8 @@ fun AddItemScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // Карта для отображения местоположения
         Text(
-            text = "Местоположение",
+            text = stringResource(R.string.location),
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
@@ -267,7 +299,7 @@ fun AddItemScreen(
 
         // Кнопка добавления метки
         PrimaryButton(
-            text = "Добавить метку",
+            text = stringResource(R.string.submit_item),
             onClick = { /* Здесь будет добавление метки */ },
             modifier = Modifier
                 .fillMaxWidth()

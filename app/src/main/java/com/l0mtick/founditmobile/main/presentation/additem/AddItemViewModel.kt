@@ -3,13 +3,17 @@ package com.l0mtick.founditmobile.main.presentation.additem
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
+import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateTextFieldInState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class AddItemViewModel : ViewModel() {
+class AddItemViewModel(
+    private val validator: ValidationManager
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
@@ -57,18 +61,22 @@ class AddItemViewModel : ViewModel() {
     }
 
     private fun updateDescription(value: String) {
-        _state.update {
-            it.copy(
-                description = value
-            )
-        }
+        updateAndValidateTextFieldInState<AddItemState>(
+            stateFlow = _state,
+            getField = { it.description },
+            setField = { state, field -> state.copy(description = field) },
+            newValue = value,
+            validate = validator::validateItemDescription,
+        )
     }
 
     private fun updateTitle(value: String) {
-        _state.update {
-            it.copy(
-                title = value
-            )
-        }
+        updateAndValidateTextFieldInState<AddItemState>(
+            stateFlow = _state,
+            getField = { it.title },
+            setField = { state, field -> state.copy(title = field) },
+            newValue = value,
+            validate = validator::validateItemTitle,
+        )
     }
 }
