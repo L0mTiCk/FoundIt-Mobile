@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Found It</string>
+    <string name="app_description">An application to simplify the search for lost items around the world</string>
     <string name="the_request_timed_out">Your request timed out</string>
     <string name="bad_request">Request data is incorrect</string>
     <string name="request_conflict">A conflict occurred while processing the request</string>
@@ -94,6 +95,10 @@
 
     <!-- Add item-->
     <string name="add_item_title">Add Item</string>
+    <string name="images">Images</string>
+    <string name="no_images_added">No images added</string>
+    <string name="add_image">Add</string>
+    <string name="remove_image">Remove image</string>
 
 
     <string name="about_dialog_title">About Found It</string>

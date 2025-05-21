@@ -1,9 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.additem
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,19 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -37,26 +30,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
 import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.main.domain.model.Category
+import com.l0mtick.founditmobile.main.presentation.additem.components.EditableImagesPager
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
-import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotationGroup
+import com.mapbox.maps.extension.compose.rememberMapState
 import com.mapbox.maps.extension.compose.style.MapStyle
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.PuckBearing
+import com.mapbox.maps.plugin.gestures.generated.GesturesSettings
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
+import com.mapbox.maps.plugin.locationcomponent.location
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -106,62 +103,62 @@ fun AddItemScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        
+
         Spacer(Modifier.height(24.dp))
-        
-        // Секция фотографий
+
         Text(
             text = "Фотографии",
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        
+
         Spacer(Modifier.height(16.dp))
-        
-        // Компонент для отображения и добавления фотографий
-        ItemImagesSelector(
-            selectedPhotos = state.selectedPhotos,
-            onPhotoSelected = { /* Здесь будет обработка выбора фото */ },
+
+        EditableImagesPager(
+            imagesUri = state.selectedPhotos,
+            onImageAdd = {
+                onAction(AddItemAction.AddPhoto(it))
+            },
+            onImageRemove = {
+                onAction(AddItemAction.RemovePhoto(it))
+            },
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        
+
         Spacer(Modifier.height(24.dp))
-        
-        // Поле для названия
+
         Text(
             text = "Информация",
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        
+
         Spacer(Modifier.height(16.dp))
-        
+
         OutlinedAppTextField(
             value = state.title,
-            onValueChange = { /* Здесь будет обновление названия */ },
+            onValueChange = { onAction(AddItemAction.UpdateTitle(it)) },
             label = "Название",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
         )
-        
-        Spacer(Modifier.height(16.dp))
-        
-        // Поле для описания
+
         OutlinedTextField(
             value = state.description,
-            onValueChange = { /* Здесь будет обновление описания */ },
+            onValueChange = { onAction(AddItemAction.UpdateDescription(it)) },
             label = { Text("Описание") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .animateContentSize(),
             singleLine = false,
             maxLines = 5
         )
-        
+
+
         Spacer(Modifier.height(16.dp))
-        
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -191,7 +188,7 @@ fun AddItemScreen(
                     contentDescription = "Открыть список категорий"
                 )
             }
-            
+
             DropdownMenu(
                 expanded = state.isCategoryDropdownExpanded,
                 onDismissRequest = { /* Здесь будет закрытие выпадающего списка */ },
@@ -205,61 +202,69 @@ fun AddItemScreen(
                 }
             }
         }
-        
+
         Spacer(Modifier.height(24.dp))
-        
+
         // Карта для отображения местоположения
         Text(
             text = "Местоположение",
             style = Theme.typography.title,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        
+
         Spacer(Modifier.height(16.dp))
-        
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .padding(horizontal = 24.dp)
+                .clip(RoundedCornerShape(12.dp))
         ) {
             val mapViewportState = rememberMapViewportState {
                 setCameraOptions {
-                    zoom(14.0)
-                    center(Point.fromLngLat(state.userLongitude, state.userLatitude))
+                    zoom(11.0)
                 }
             }
-            
+
             MapboxMap(
                 modifier = Modifier.fillMaxSize(),
                 mapViewportState = mapViewportState,
+                mapState = rememberMapState {
+                    gesturesSettings = GesturesSettings {
+                        scrollEnabled = false
+                        quickZoomEnabled = false
+                        doubleTapToZoomInEnabled = false
+                        doubleTouchToZoomOutEnabled = false
+                        pitchEnabled = false
+                        pitchEnabled = false
+                        rotateEnabled = false
+                    }
+                },
                 scaleBar = {},
                 style = { MapStyle(style = "mapbox://styles/l0mtick/cmaf08ip400t701slcmm4bprl") },
             ) {
-                // Маркер на карте
-                PointAnnotationGroup(
-                    annotations = listOf(
-                        PointAnnotationOptions()
-                            .withPoint(Point.fromLngLat(state.userLongitude, state.userLatitude))
-                    )
-                )
-            }
-            
-            // Кнопка для центрирования на пользователе
-            FloatingActionButton(
-                onClick = { /* Здесь будет центрирование на пользователе */ },
-                containerColor = Theme.colors.brand,
-                contentColor = Theme.colors.onBrand,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(8.dp)
-            ) {
-                Icon(Icons.Default.LocationOn, "Моё местоположение")
+                MapEffect(Unit) { mapView ->
+
+                    val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
+                        mapViewportState.flyTo(CameraOptions.Builder().center(it).build())
+                        mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
+                    }
+
+                    mapView.location.apply {
+                        locationPuck = createDefault2DPuck(withBearing = true)
+                        enabled = true
+                        puckBearing = PuckBearing.COURSE
+                        puckBearingEnabled = true
+                        pulsingEnabled = true
+                        addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+                    }
+                }
             }
         }
-        
+
         Spacer(Modifier.height(24.dp))
-        
+
         // Кнопка добавления метки
         PrimaryButton(
             text = "Добавить метку",
@@ -268,76 +273,8 @@ fun AddItemScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
         )
-        
-        Spacer(Modifier.height(48.dp))
-    }
-}
 
-@Composable
-fun ItemImagesSelector(
-    selectedPhotos: List<Uri>,
-    onPhotoSelected: (Uri) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val photoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { onPhotoSelected(it) }
-    }
-    
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // Кнопка добавления фото
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Theme.colors.brandMuted)
-                .clickable { photoPickerLauncher.launch("image/*") },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Добавить фото",
-                tint = Theme.colors.onSurfaceVariant,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        
-        selectedPhotos.take(4).forEach { uri ->
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                AsyncImage(
-                    model = uri,
-                    contentDescription = "Выбранное фото",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-        
-        // Индикатор дополнительных фотографий
-        if (selectedPhotos.size > 4) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Theme.colors.brandMuted),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "+${selectedPhotos.size - 4}",
-                    style = Theme.typography.body,
-                    color = Theme.colors.onSurfaceVariant
-                )
-            }
-        }
+        Spacer(Modifier.height(48.dp))
     }
 }
 

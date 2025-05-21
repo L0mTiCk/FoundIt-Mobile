@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.ui.theme.Theme
 
@@ -37,6 +38,8 @@ fun PrimaryButton(
         Text(
             text = text,
             style = textStyle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -66,7 +69,9 @@ fun LoadingPrimaryButton(
             Text(
                 text = text,
                 style = textStyle,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             FadeVisibility(
                 visible = isLoading,
@@ -105,6 +110,8 @@ fun SecondaryButton(
         Text(
             text = text,
             style = textStyle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -134,7 +141,9 @@ fun LoadingSecondaryButton(
             Text(
                 text = text,
                 style = textStyle,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             FadeVisibility(
                 visible = isLoading,

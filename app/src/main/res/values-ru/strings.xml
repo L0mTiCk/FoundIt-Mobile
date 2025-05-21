@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_description">Приложение для облегчения поиска потерянных вещей по всему миру</string>
     <string name="the_request_timed_out">Время ожидания запроса превышено</string>
     <string name="bad_request">Некорректные данные запроса</string>
     <string name="request_conflict">Произошел конфликт при обработке запроса</string>
@@ -95,6 +96,10 @@
 
     <!-- Add Item-->
     <string name="add_item_title">Добавить Метку</string>
+    <string name="no_images_added">Нет добавленных фото</string>
+    <string name="images">Фотографии</string>
+    <string name="add_image">Добавить</string>
+    <string name="remove_image">Удалить текущее</string>
 
     <string name="about_dialog_title">Про Found It</string>
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>

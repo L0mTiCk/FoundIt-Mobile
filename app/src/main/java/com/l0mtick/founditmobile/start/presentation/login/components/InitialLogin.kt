@@ -55,7 +55,7 @@ fun InitialLogin(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "Приложение для облегчения поиска потерянных вещей по всему миру",
+            text = stringResource(R.string.app_description),
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(Modifier.height(24.dp))
@@ -165,7 +165,7 @@ private fun GuestLoginDialog(
                             onProceed()
                         },
                         text = stringResource(R.string.proceed),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1.2f)
                     )
                 }
             }

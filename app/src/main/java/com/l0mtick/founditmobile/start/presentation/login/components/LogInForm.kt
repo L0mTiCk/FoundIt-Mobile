@@ -14,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,7 +46,11 @@ fun LogInForm(
     ) {
         OutlinedAppTextField(
             label = "Login or Email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    contentType = ContentType.Username + ContentType.EmailAddress
+                },
             value = loginState.value,
             onValueChange = {
                 onAction(LoginAction.LoginFormAction.OnLoginChanged(it))
@@ -54,7 +61,11 @@ fun LogInForm(
         )
         OutlinedAppTextField(
             label = "Password",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    contentType = ContentType.Password
+                },
             value = passwordState.value,
             onValueChange = {
                 onAction(LoginAction.LoginFormAction.OnPasswordChanged(it))
