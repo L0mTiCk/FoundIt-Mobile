@@ -3,20 +3,26 @@ package com.l0mtick.founditmobile.main.presentation.additem.components
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateBounds
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -52,71 +58,107 @@ fun EditableImagesPager(
     Column(
         modifier = modifier
     ) {
-        LookaheadScope {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateBounds(this)
             ) {
-                if (imagesUri.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.no_images_added),
-                        style = Theme.typography.body,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(vertical = 12.dp)
-                    )
-                } else {
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier
-                            .heightIn(min = 150.dp, max = 200.dp)
-                            .fillMaxWidth(),
-                        pageSpacing = 8.dp
-                    ) { page ->
-                        AsyncImage(
-                            model = imagesUri[page],
-                            contentDescription = "Item image",
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                AnimatedContent(
+                    targetState = imagesUri.isEmpty(),
+                    transitionSpec = {
+                        fadeIn() togetherWith fadeOut()
+                    }
+                ) { isListEmpty ->
+                    if (isListEmpty) {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .height(200.dp)
+                                .fillMaxWidth()
+                                .border(
+                                    1.dp,
+                                    Theme.colors.onSurfaceVariant,
+                                    RoundedCornerShape(8.dp)
+                                ),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_images_added),
+                                style = Theme.typography.title
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = stringResource(R.string.no_images_added_description),
+                                style = Theme.typography.body,
+                                color = Theme.colors.onSurfaceVariant
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            PrimaryButton(
+                                text = stringResource(R.string.add_image),
+                                onClick = {
+                                    photoPickerLauncher.launch("image/*")
+                                },
+                                buttonColors = ButtonDefaults.buttonColors(
+                                    containerColor = Theme.colors.brandMuted,
+                                    contentColor = Theme.colors.onSurface
+                                )
+                            )
+                        }
+                    } else {
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier
+                                .height(200.dp)
+                                .fillMaxWidth(),
+                            pageSpacing = 8.dp
+                        ) { page ->
+                            AsyncImage(
+                                model = imagesUri[page],
+                                contentDescription = "Item image",
+                                contentScale = ContentScale.FillBounds,
+                                modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                            )
+                        }
+                        Text(
+                            text = "${pagerState.currentPage + 1}/${imagesUri.size}",
+                            style = Theme.typography.body,
+                            color = Theme.colors.surface,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .background(
+                                    Theme.colors.onSurface.copy(alpha = .4f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .align(Alignment.TopEnd)
                         )
                     }
-                    Text(
-                        text = "${pagerState.currentPage + 1}/${imagesUri.size}",
-                        style = Theme.typography.body,
-                        color = Theme.colors.surface,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .background(
-                                Theme.colors.onSurface.copy(alpha = .4f),
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                            .align(Alignment.TopEnd)
-                    )
                 }
             }
-        }
         Spacer(Modifier.height(12.dp))
-        Row(
-            Modifier.fillMaxWidth()
-        ) {
-            PrimaryButton(
-                text = stringResource(R.string.add_image),
-                onClick = {
-                    photoPickerLauncher.launch("image/*")
-                }
-            )
-            Spacer(Modifier.weight(1f))
+
+        LookaheadScope {
             FadeVisibility(
-                imagesUri.isNotEmpty()
+                imagesUri.isNotEmpty(),
+                modifier = Modifier.animateBounds(this)
             ) {
-                SecondaryButton(
-                    text = stringResource(R.string.remove_image),
-                    onClick = {
-                        onImageRemove(imagesUri[pagerState.currentPage])
-                    },
-                )
+                Row(
+                    Modifier.fillMaxWidth()
+                ) {
+                    PrimaryButton(
+                        text = stringResource(R.string.add_image),
+                        onClick = {
+                            photoPickerLauncher.launch("image/*")
+                        }
+                    )
+                    Spacer(Modifier.weight(1f))
+                    SecondaryButton(
+                        text = stringResource(R.string.remove_image),
+                        onClick = {
+                            onImageRemove(imagesUri[pagerState.currentPage])
+                        },
+                    )
+                }
             }
         }
     }

@@ -98,9 +98,10 @@
 
     <!-- Add Item-->
     <string name="add_item_title">Добавить Метку</string>
-    <string name="no_images_added">Нет добавленных фото</string>
+    <string name="no_images_added">Загрузите Фото</string>
+    <string name="no_images_added_description">Добавьте фото вещи что ее было легче опознать</string>
     <string name="images">Фотографии</string>
-    <string name="add_image">Добавить</string>
+    <string name="add_image">Загрузить</string>
     <string name="remove_image">Удалить текущее</string>
     <string name="information">Информация</string>
     <string name="photos">Фотографии</string>
@@ -110,6 +111,10 @@
     <string name="select_category">Выберите категорию</string>
     <string name="location">Местоположение</string>
     <string name="submit_item">Добавить метку</string>
+    <string name="publication_duration">Срок Публикации</string>
+    <string name="days">Дней</string>
+    <string name="publication_duration_info_title">Как рассчитывается лимит</string>
+    <string name="publication_duration_info_text">Максимальный срок размещения зависит от вашего уровня. Формула: уровень × 3.\nНапример, на 1 уровне можно выбрать до 3 дней, на 2 — до 6, и так далее.</string>
 
     <string name="about_dialog_title">Про Found It</string>
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>

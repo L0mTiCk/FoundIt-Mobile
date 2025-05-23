@@ -98,8 +98,9 @@
     <!-- Add item-->
     <string name="add_item_title">Add Item</string>
     <string name="images">Images</string>
-    <string name="no_images_added">No images added</string>
-    <string name="add_image">Add</string>
+    <string name="no_images_added">Upload Photo</string>
+    <string name="no_images_added_description">Add photo of item to help identify it</string>
+    <string name="add_image">Upload</string>
     <string name="remove_image">Remove image</string>
     <string name="information">Information</string>
     <string name="photos">Photos</string>
@@ -109,6 +110,10 @@
     <string name="select_category">Select category</string>
     <string name="location">Location</string>
     <string name="submit_item">Submit item</string>
+    <string name="publication_duration">Publication Duration</string>
+    <string name="days">Days</string>
+    <string name="publication_duration_info_title">How the limit is calculated</string>
+    <string name="publication_duration_info_text">Your maximum publication time is based on your level. The formula is: level × 3.\nFor example, level 1 allows up to 3 days, level 2 allows up to 6 days, and so on.</string>
 
 
     <string name="about_dialog_title">About Found It</string>

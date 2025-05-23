@@ -8,7 +8,7 @@ data class AddItemState(
     val title: TextFieldState = TextFieldState(),
     val description: TextFieldState = TextFieldState(),
     val selectedCategory: Category? = null,
+    val publishTime: Float = 1f,
     val categories: List<Category> = emptyList(),
     val selectedPhotos: List<Uri> = emptyList(),
-    val isCategoryDropdownExpanded: Boolean = false
 )

@@ -1,6 +1,5 @@
 package com.l0mtick.founditmobile.main.presentation.additem
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,11 +24,15 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,11 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.FadeVisibility
+import com.l0mtick.founditmobile.common.presentation.components.LoadingPrimaryButton
 import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
-import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.common.presentation.util.asUiText
-import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.presentation.additem.components.EditableImagesPager
+import com.l0mtick.founditmobile.main.presentation.additem.components.PublishingTimeSlider
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
@@ -76,19 +79,20 @@ fun AddItemRoot(
     )
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AddItemScreen(
     state: AddItemState,
     onAction: (AddItemAction) -> Unit,
     onNavBack: () -> Unit
 ) {
+
+    var isCategoryDropdownOpen by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        // Заголовок
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -190,7 +194,7 @@ fun AddItemScreen(
         )
 
 
-        Spacer(Modifier.height(16.dp))
+//        Spacer(Modifier.height(16.dp))
 
         Box(
             modifier = Modifier
@@ -205,7 +209,7 @@ fun AddItemScreen(
                         color = Theme.colors.onSurfaceVariant,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .clickable { /* Здесь будет открытие/закрытие выпадающего списка */ }
+                    .clickable { isCategoryDropdownOpen = true }
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -223,19 +227,42 @@ fun AddItemScreen(
             }
 
             DropdownMenu(
-                expanded = state.isCategoryDropdownExpanded,
-                onDismissRequest = { },
+                expanded = isCategoryDropdownOpen,
+                onDismissRequest = {
+                    isCategoryDropdownOpen = false
+                },
+                containerColor = Theme.colors.surface,
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 state.categories.forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category.name) },
-                        onClick = { }
+                        onClick = {
+                            onAction(AddItemAction.SelectCategory(category))
+                            isCategoryDropdownOpen = false
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = Theme.colors.onSurface
+                        )
                     )
                 }
             }
         }
-
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.publication_duration),
+            style = Theme.typography.title,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+        Spacer(Modifier.height(16.dp))
+        PublishingTimeSlider(
+            value = state.publishTime,
+            onValueChange = {
+                onAction(AddItemAction.UpdatePublishTime(it))
+            },
+            userLimit = 30f,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
         Spacer(Modifier.height(24.dp))
 
         Text(
@@ -255,7 +282,7 @@ fun AddItemScreen(
         ) {
             val mapViewportState = rememberMapViewportState {
                 setCameraOptions {
-                    zoom(11.0)
+                    zoom(12.0)
                 }
             }
 
@@ -297,10 +324,10 @@ fun AddItemScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // Кнопка добавления метки
-        PrimaryButton(
+        LoadingPrimaryButton(
             text = stringResource(R.string.submit_item),
             onClick = { /* Здесь будет добавление метки */ },
+            isLoading = false,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -316,11 +343,7 @@ private fun Preview() {
     FoundItMobileTheme {
         AddItemScreen(
             state = AddItemState(
-                categories = listOf(
-                    Category(1, "Электроника", ""),
-                    Category(2, "Документы", ""),
-                    Category(3, "Одежда", "")
-                )
+                categories = emptyList()
             ),
             onAction = {},
             onNavBack = {}

@@ -9,7 +9,7 @@ sealed interface AddItemAction {
     data class SelectCategory(val category: Category) : AddItemAction
     data class AddPhoto(val uri: Uri) : AddItemAction
     data class RemovePhoto(val uri: Uri) : AddItemAction
-    data object ToggleCategoryDropdown : AddItemAction
+    data class UpdatePublishTime(val value: Float) : AddItemAction
     data object CenterOnUserLocation : AddItemAction
     data object SubmitItem : AddItemAction
 }

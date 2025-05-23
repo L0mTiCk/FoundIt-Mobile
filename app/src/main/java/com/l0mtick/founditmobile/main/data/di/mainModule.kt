@@ -86,7 +86,7 @@ val mainModule = module {
     }
 
     viewModel {
-        AddItemViewModel(validator = get())
+        AddItemViewModel(validator = get(), categoriesRepository = get())
     }
 
 }
