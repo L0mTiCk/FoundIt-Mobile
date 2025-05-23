@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.l0mtick.founditmobile.common.data.notification.NotificationHelper
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
+import com.l0mtick.founditmobile.common.presentation.components.CustomSnackbar
 import com.l0mtick.founditmobile.common.presentation.components.NoWifiBottomSheet
 import com.l0mtick.founditmobile.common.presentation.components.NotificationPermissionDialog
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
@@ -33,6 +35,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : ComponentActivity() {
 
     private val viewModel by inject<MainActivityViewModel>()
+    private val snackbarManager by inject<SnackbarManager>()
     private lateinit var notificationHelper: NotificationHelper
     
     private val requestPermissionLauncher = registerForActivityResult(
@@ -127,6 +130,12 @@ class MainActivity : ComponentActivity() {
                             checkNotificationPermission()
                         }
                     }
+                    
+                    // Глобальный snackbar поверх всего контента
+                    CustomSnackbar(
+                        snackbarManager = snackbarManager,
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    )
                 }
             }
         }

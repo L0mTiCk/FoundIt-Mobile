@@ -10,6 +10,5 @@ sealed interface AddItemAction {
     data class AddPhoto(val uri: Uri) : AddItemAction
     data class RemovePhoto(val uri: Uri) : AddItemAction
     data class UpdatePublishTime(val value: Float) : AddItemAction
-    data object CenterOnUserLocation : AddItemAction
     data object SubmitItem : AddItemAction
 }

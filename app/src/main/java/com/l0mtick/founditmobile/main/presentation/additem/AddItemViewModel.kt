@@ -4,12 +4,14 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateTextFieldInState
 import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.domain.repository.AddItemRepository
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -20,7 +22,8 @@ import kotlinx.coroutines.launch
 class AddItemViewModel(
     private val validator: ValidationManager,
     private val categoriesRepository: CategoriesRepository,
-    private val addItemRepository: AddItemRepository
+    private val addItemRepository: AddItemRepository,
+    private val snackbarManager: SnackbarManager
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -62,7 +65,6 @@ class AddItemViewModel(
     fun onAction(action: AddItemAction) {
         when (action) {
             is AddItemAction.AddPhoto -> addPhoto(action.uri)
-            AddItemAction.CenterOnUserLocation -> TODO()
             is AddItemAction.RemovePhoto -> removePhoto(action.uri)
             is AddItemAction.SelectCategory -> selectCategory(action.category)
             AddItemAction.SubmitItem -> submit()
@@ -129,6 +131,15 @@ class AddItemViewModel(
             it.copy(
                 isSubmitting = true
             )
+        }
+        
+        viewModelScope.launch {
+            delay(1000)
+            _state.update {
+                it.copy(
+                    isSubmitting = false
+                )
+            }
         }
     }
 }

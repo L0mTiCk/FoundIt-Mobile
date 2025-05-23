@@ -6,6 +6,7 @@ import com.l0mtick.founditmobile.common.data.remote.util.provideHttpClient
 import com.l0mtick.founditmobile.common.data.repository.ConnectivityObserverImpl
 import com.l0mtick.founditmobile.common.data.repository.UserPreferencesRepositoryImpl
 import com.l0mtick.founditmobile.common.data.repository.ValidationManagerImpl
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
 import com.l0mtick.founditmobile.common.data.storage.LocalStorageImpl
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
@@ -32,6 +33,8 @@ val commonModule = module {
     single<UserPreferencesRepository> { UserPreferencesRepositoryImpl(localStorage = get()) }
 
     single { UserSessionManager() }
+
+    single { SnackbarManager.getInstance() }
 
     viewModel {
         MainActivityViewModel(authRepository = get(), connectivityObserver = get(), localStorage = get())

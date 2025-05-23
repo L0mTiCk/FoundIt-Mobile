@@ -93,7 +93,8 @@ val mainModule = module {
         AddItemViewModel(
             validator = get(),
             categoriesRepository = get(),
-            addItemRepository = get()
+            addItemRepository = get(),
+            snackbarManager = get()
         )
     }
 
