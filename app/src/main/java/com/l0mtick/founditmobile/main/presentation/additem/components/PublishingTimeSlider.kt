@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -76,8 +77,9 @@ fun PublishingTimeSlider(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val days = value.roundToInt()
             Text(
-                text = "${value.roundToInt()} " + stringResource(R.string.days),
+                text = pluralStringResource(R.plurals.days_count, days, days),
                 style = Theme.typography.body
             )
             Spacer(Modifier.weight(1f))

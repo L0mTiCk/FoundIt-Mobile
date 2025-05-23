@@ -115,6 +115,12 @@
     <string name="days">Дней</string>
     <string name="publication_duration_info_title">Как рассчитывается лимит</string>
     <string name="publication_duration_info_text">Максимальный срок размещения зависит от вашего уровня. Формула: уровень × 3.\nНапример, на 1 уровне можно выбрать до 3 дней, на 2 — до 6, и так далее.</string>
+    <plurals name="days_count">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="other">%d дня</item>
+    </plurals>
 
     <string name="about_dialog_title">Про Found It</string>
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>

@@ -22,6 +22,9 @@ interface LocalStorage {
     suspend fun setProfilePictureUrl(url: String?)
     suspend fun getProfilePictureUrl(): String?
 
+    suspend fun setLevel(level: Int)
+    suspend fun getLevel(): Int?
+
     suspend fun setAppLanguage(languageCode: String)
     suspend fun getAppLanguage(): String
 

@@ -9,4 +9,6 @@ interface UserPreferencesRepository {
     suspend fun areNotificationsEnabled(): Boolean
     
     suspend fun setNotificationsEnabled(enabled: Boolean)
+
+    suspend fun logOut()
 }

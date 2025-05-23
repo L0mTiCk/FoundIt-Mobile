@@ -54,7 +54,7 @@ class SettingsViewModel(
             }
             SettingsAction.SignOut -> {
                 viewModelScope.launch {
-                    // Navigation would be handled by the caller
+                    userPreferencesRepository.logOut()
                 }
             }
         }

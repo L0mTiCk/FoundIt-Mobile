@@ -22,4 +22,8 @@ class UserPreferencesRepositoryImpl(
     override suspend fun setNotificationsEnabled(enabled: Boolean) {
         localStorage.setAreNotificationsEnabled(enabled)
     }
+
+    override suspend fun logOut() {
+        localStorage.clear()
+    }
 }

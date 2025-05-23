@@ -73,6 +73,14 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.PROFILE_PICTURE_URL]
     }
 
+    override suspend fun setLevel(level: Int) {
+        context.dataStore.edit { it[PreferencesKeys.LEVEL] = level }
+    }
+
+    override suspend fun getLevel(): Int? {
+        return context.dataStore.data.first()[PreferencesKeys.LEVEL]
+    }
+
     override suspend fun setAppLanguage(languageCode: String) {
         context.dataStore.edit {
             it[PreferencesKeys.APP_LANGUAGE] = languageCode

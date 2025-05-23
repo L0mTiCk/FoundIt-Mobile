@@ -114,6 +114,10 @@
     <string name="days">Days</string>
     <string name="publication_duration_info_title">How the limit is calculated</string>
     <string name="publication_duration_info_text">Your maximum publication time is based on your level. The formula is: level × 3.\nFor example, level 1 allows up to 3 days, level 2 allows up to 6 days, and so on.</string>
+    <plurals name="days_count">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
 
 
     <string name="about_dialog_title">About Found It</string>

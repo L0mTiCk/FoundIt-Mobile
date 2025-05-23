@@ -8,6 +8,7 @@ import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateTextFieldInState
 import com.l0mtick.founditmobile.main.domain.model.Category
+import com.l0mtick.founditmobile.main.domain.repository.AddItemRepository
 import com.l0mtick.founditmobile.main.domain.repository.CategoriesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class AddItemViewModel(
     private val validator: ValidationManager,
-    private val categoriesRepository: CategoriesRepository
+    private val categoriesRepository: CategoriesRepository,
+    private val addItemRepository: AddItemRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -28,6 +30,13 @@ class AddItemViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
+                    launch {
+                        _state.update {
+                            it.copy(
+                                publishLimit = (addItemRepository.getUserLevel() ?: 1) * 3f
+                            )
+                        }
+                    }
                     when(val categories = categoriesRepository.getAllCategories()) {
                         is Result.Success -> {
                             _state.update {
@@ -56,7 +65,7 @@ class AddItemViewModel(
             AddItemAction.CenterOnUserLocation -> TODO()
             is AddItemAction.RemovePhoto -> removePhoto(action.uri)
             is AddItemAction.SelectCategory -> selectCategory(action.category)
-            AddItemAction.SubmitItem -> TODO()
+            AddItemAction.SubmitItem -> submit()
             is AddItemAction.UpdateDescription -> updateDescription(action.description)
             is AddItemAction.UpdateTitle -> updateTitle(action.title)
             is AddItemAction.UpdatePublishTime -> updatePublishTime(action.value)
@@ -111,6 +120,14 @@ class AddItemViewModel(
         _state.update {
             it.copy(
                 publishTime = value
+            )
+        }
+    }
+
+    private fun submit() {
+        _state.update {
+            it.copy(
+                isSubmitting = true
             )
         }
     }

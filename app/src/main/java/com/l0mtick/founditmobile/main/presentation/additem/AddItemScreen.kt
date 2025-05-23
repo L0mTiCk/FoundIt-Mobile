@@ -260,7 +260,7 @@ fun AddItemScreen(
             onValueChange = {
                 onAction(AddItemAction.UpdatePublishTime(it))
             },
-            userLimit = 30f,
+            userLimit = state.publishLimit,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
         Spacer(Modifier.height(24.dp))
@@ -326,8 +326,8 @@ fun AddItemScreen(
 
         LoadingPrimaryButton(
             text = stringResource(R.string.submit_item),
-            onClick = { /* Здесь будет добавление метки */ },
-            isLoading = false,
+            onClick = { onAction(AddItemAction.SubmitItem) },
+            isLoading = state.isSubmitting,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
