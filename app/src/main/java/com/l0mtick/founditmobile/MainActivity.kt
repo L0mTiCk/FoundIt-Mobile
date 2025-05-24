@@ -48,9 +48,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         
         notificationHelper = NotificationHelper(this)
-        notificationHelper.createNotificationChannel()
+        notificationHelper.createNotificationChannels()
         
-        // Проверяем разрешения при запуске
         checkNotificationPermission()
         
         // Обрабатываем intent, если приложение запущено из уведомления

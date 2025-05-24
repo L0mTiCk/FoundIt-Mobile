@@ -13,7 +13,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.l0mtick.founditmobile.MainActivity
 import com.l0mtick.founditmobile.R
-import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.NotificationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,75 +21,123 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.android.inject
 
-class FoundItFirebaseMessagingService: FirebaseMessagingService()  {
+class FoundItFirebaseMessagingService : FirebaseMessagingService() {
 
     private val notificationRepository: NotificationRepository by inject()
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val areNotificationsEnabled = runBlocking {
+        val areNotificationsEnabledGlobally = runBlocking {
             notificationRepository.areNotificationsEnabled()
         }
-        if (!checkNotificationPermission() && !areNotificationsEnabled)  {
+        if (!checkNotificationPermission() && !areNotificationsEnabledGlobally) {
+            Log.d(TAG, "Notifications skipped due to permissions or app settings.")
             return
         }
+
         val data = message.data
+        Log.d(TAG, "Received FCM data: $data")
+        val notificationType = data["notification_type"]
 
-        val chatId = data["chat_id"]?.toIntOrNull() ?: return
-        val content = data["body_text"] ?: return
+        when (notificationType) {
+            "NEW_CHAT_MESSAGE" -> handleNewChatMessage(data)
+            "MODERATION_SUCCESS" -> handleModerationSuccess(data)
+            else -> Log.w(TAG, "Received unknown notification type: $notificationType or type is missing.")
+        }
+    }
 
-        val titleKey = data["title_loc_key"]
-        val titleArgsKey = data["title_loc_args"]
+    private fun handleNewChatMessage(data: Map<String, String>) {
+        val chatId = data["chat_id"]?.toIntOrNull()
+        if (chatId == null) {
+            Log.w(TAG, "Chat ID missing for NEW_CHAT_MESSAGE notification.")
+            return
+        }
+        val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
+        val body = getLocalizedBody(null, null, data["body_text"])
 
-        val title = getLocalizedTitle(
-            key = titleKey,
-            argsJson = titleArgsKey
-        )
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra("chat_id", chatId)
+            putExtra("notification_type", "NEW_CHAT_MESSAGE")
         }
         val pendingIntent = PendingIntent.getActivity(
             this, chatId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = NotificationCompat.Builder(this, NotificationHelper.CHANNEL_ID)
+        showNotification(
+            notificationId = chatId,
+            title = title,
+            body = body,
+            pendingIntent = pendingIntent,
+            channelId = NotificationHelper.CHANNEL_ID_CHAT
+        )
+    }
+
+    private fun handleModerationSuccess(data: Map<String, String>) {
+        val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
+        val body = getLocalizedBody(data["body_loc_key"], null, null)
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra("notification_type", "MODERATION_SUCCESS")
+        }
+        val notificationId = System.currentTimeMillis().toInt()
+        val requestCode = notificationId
+        val pendingIntent = PendingIntent.getActivity(
+            this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        showNotification(
+            notificationId = notificationId,
+            title = title,
+            body = body,
+            pendingIntent = pendingIntent,
+            channelId = NotificationHelper.CHANNEL_ID_MODERATION
+        )
+    }
+
+    private fun showNotification(
+        notificationId: Int,
+        title: String,
+        body: String,
+        pendingIntent: PendingIntent,
+        channelId: String
+    ) {
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
-            .setContentText(content)
+            .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .build()
-            
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+
         val notificationManager = NotificationManagerCompat.from(this)
         if (checkNotificationPermission()) {
             try {
-                notificationManager.notify(chatId, notification)
+                notificationManager.notify(notificationId, notificationBuilder.build())
             } catch (e: SecurityException) {
+                Log.e(TAG, "SecurityException on notify: ${e.message}", e)
             }
+        } else {
+            Log.w(TAG, "Notification permission denied. Notification not shown.")
         }
     }
 
+
+
     override fun onNewToken(token: String) {
-        // Отправляем токен на сервер, но только если пользователь авторизован
+        Log.d(TAG, "New FCM token: $token")
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 notificationRepository.saveLocalToken(token)
                 val result = notificationRepository.sendPushToken(token)
-                when (result) {
-                    is Result.Success -> {
-                        Log.d(TAG, "Push token успешно отправлен на сервер")
-                    }
-                    is Result.Error -> {
-                        Log.w(TAG, "Не удалось отправить push token: ${result.error}")
-                    }
-                }
+                Log.d(TAG, "Push token send attempt finished: $result")
             } catch (e: Exception) {
-                Log.e(TAG, "Ошибка при отправке push token", e)
+                Log.e(TAG, "Error handling new push token", e)
             }
         }
     }
-    
+
     private fun checkNotificationPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(
@@ -102,26 +149,74 @@ class FoundItFirebaseMessagingService: FirebaseMessagingService()  {
         }
     }
 
-    companion object {
-        private const val TAG = "FirebaseMessaging"
-    }
-    
-    private fun getLocalizedTitle(key: String?, argsJson: String?): String {
-        return when (key) {
-            "new_message_notification_title" -> {
-                val args = try {
-                    Json.decodeFromString<List<String>>(argsJson ?: "")
-                } catch (_: Exception) {
-                    null
-                }
-                if (args != null && args.size >= 2) {
-                    getString(R.string.new_message_notification_title, args[0], args[1])
-                } else {
-                    getString(R.string.new_message_fallback_title)
-                }
-            }
-            else -> getString(R.string.new_message_fallback_title)
+    private fun parseJsonArgs(argsJson: String?): List<String> {
+        return try {
+            if (argsJson.isNullOrBlank()) emptyList() else Json.decodeFromString<List<String>>(argsJson)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to parse localization args: '$argsJson'", e)
+            emptyList()
         }
     }
 
+    private fun getLocalizedTitle(key: String?, argsJson: String?): String {
+        val args = parseJsonArgs(argsJson)
+
+        val titleResId = when (key) {
+            "new_message_notification_title" -> R.string.new_message_notification_title
+            "moderation_success_notification_title" -> R.string.moderation_success_notification_title
+            else -> {
+                Log.w(TAG, "Unknown title_loc_key: '$key'")
+                R.string.default_notification_title
+            }
+        }
+
+        return try {
+            if (args.isEmpty() && titleResId == R.string.default_notification_title) {
+                getString(titleResId)
+            } else if (args.isEmpty() && (titleResId == R.string.new_message_notification_title || titleResId == R.string.moderation_success_notification_title)) {
+                Log.w(TAG, "Missing arguments for title key: $key (resId: $titleResId)")
+                getString(R.string.default_notification_title)
+            }
+            else {
+                getString(titleResId, *args.toTypedArray())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error formatting localized title for key '$key' with args '$args'", e)
+            getString(R.string.default_notification_title)
+        }
+    }
+
+    private fun getLocalizedBody(key: String?, argsJson: String?, directBody: String?): String {
+        if (!directBody.isNullOrBlank()) {
+            return directBody
+        }
+
+        val args = parseJsonArgs(argsJson)
+
+        val bodyResId = when (key) {
+            "moderation_success_notification_body" -> R.string.moderation_success_notification_body
+            else -> {
+                Log.w(TAG, "Unknown body_loc_key: '$key', and no direct_body provided.")
+                R.string.default_notification_body
+            }
+        }
+
+        return try {
+            if (args.isEmpty() && bodyResId == R.string.default_notification_body) {
+                getString(bodyResId)
+            } else if (args.isEmpty() && bodyResId == R.string.moderation_success_notification_body) {
+                getString(bodyResId)
+            }
+            else {
+                getString(bodyResId, *args.toTypedArray())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error formatting localized body for key '$key' with args '$args'", e)
+            getString(R.string.default_notification_body)
+        }
+    }
+
+    companion object {
+        private const val TAG = "FoundItFirebaseMsgSvc"
+    }
 }

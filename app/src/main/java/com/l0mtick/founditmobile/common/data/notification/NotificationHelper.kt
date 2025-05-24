@@ -9,24 +9,38 @@ import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.l0mtick.founditmobile.R
 
 class NotificationHelper(private val context: Context) {
 
     companion object {
-        const val CHANNEL_ID = "chat_messages"
+        const val CHANNEL_ID_CHAT = "chat_messages"
+
+        const val CHANNEL_ID_MODERATION = "moderation_updates"
+
         const val PERMISSION_REQUEST_CODE = 123
     }
 
-    fun createNotificationChannel() {
+    fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Chat messages"
-            val descriptionText = "New messages notifications"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+
+            val chatChannelName = context.getString(R.string.notification_channel_chat_name)
+            val chatChannelDescription = context.getString(R.string.notification_channel_chat_description)
+            val chatChannelImportance = NotificationManager.IMPORTANCE_HIGH
+            val chatChannel = NotificationChannel(CHANNEL_ID_CHAT, chatChannelName, chatChannelImportance).apply {
+                description = chatChannelDescription
+            }
+            notificationManager.createNotificationChannel(chatChannel)
+
+            val moderationChannelName = context.getString(R.string.notification_channel_moderation_name)
+            val moderationChannelDescription = context.getString(R.string.notification_channel_moderation_description)
+            val moderationChannelImportance = NotificationManager.IMPORTANCE_HIGH
+            val moderationChannel = NotificationChannel(CHANNEL_ID_MODERATION, moderationChannelName, moderationChannelImportance).apply {
+                description = moderationChannelDescription
+            }
+            notificationManager.createNotificationChannel(moderationChannel)
+
         }
     }
 
@@ -41,7 +55,7 @@ class NotificationHelper(private val context: Context) {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else {
-            true // До Android 13 разрешение не требуется
+            true
         }
     }
 

@@ -91,9 +91,17 @@
     <!--  Notifications-->
     <string name="new_message_notification_title">%1$s for %2$s</string>
     <string name="new_message_fallback_title">New message</string>
+    <string name="default_notification_title">New notification</string>
+    <string name="default_notification_body">New notification</string>
+    <string name="moderation_success_notification_title">Item Approved: %1$s</string>
+    <string name="moderation_success_notification_body">Your item is now live and visible to others!</string>
     <string name="chat_notification_channel" translatable="false">chat_channel</string>
     <string name="permission_dialog_title">Allow notifications</string>
     <string name="permission_dialog_description">To receive updates about items and messages from other users, please allow notifications</string>
+    <string name="notification_channel_chat_name">Chat Messages</string>
+    <string name="notification_channel_chat_description">Notifications for new messages in your chats.</string>
+    <string name="notification_channel_moderation_name">Item Updates</string>
+    <string name="notification_channel_moderation_description">Notifications about the status of your items (e.g., approval).</string>
 
     <!-- Add item-->
     <string name="add_item_title">Add Item</string>
