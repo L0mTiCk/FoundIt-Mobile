@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.l0mtick.founditmobile.R
@@ -90,7 +91,8 @@ fun EditableImagesPager(
                             Text(
                                 text = stringResource(R.string.no_images_added_description),
                                 style = Theme.typography.body,
-                                color = Theme.colors.onSurfaceVariant
+                                color = Theme.colors.onSurfaceVariant,
+                                textAlign = TextAlign.Center
                             )
                             Spacer(Modifier.height(6.dp))
                             PrimaryButton(

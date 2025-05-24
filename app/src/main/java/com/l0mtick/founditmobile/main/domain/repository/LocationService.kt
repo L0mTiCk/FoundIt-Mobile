@@ -65,4 +65,6 @@ interface LocationService {
      * Updates the [locationAvailabilityState].
      */
     fun checkPlayServices()
+
+    fun onCleared()
 }

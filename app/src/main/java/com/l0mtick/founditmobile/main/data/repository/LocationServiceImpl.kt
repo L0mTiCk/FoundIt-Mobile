@@ -3,7 +3,10 @@ package com.l0mtick.founditmobile.main.data.repository
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -55,12 +58,34 @@ class LocationServiceImpl(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+    
+    private val gpsStatusReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+                // Обновляем статус GPS при изменении
+                refreshGpsStatus()
+                println("LocationService: GPS status changed, refreshed status")
+            }
+        }
+    }
 
     init {
         // Perform initial checks when the service is created
         checkPlayServices()
         checkInitialPermissions()
         refreshGpsStatus() // Initial GPS check
+
+        // Регистрируем BroadcastReceiver для отслеживания изменений статуса GPS
+        val intentFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        application.registerReceiver(gpsStatusReceiver, intentFilter)
+    }
+
+    override fun onCleared() {
+        try {
+            application.unregisterReceiver(gpsStatusReceiver)
+        } catch (e: Exception) {
+            println("LocationService Error: Could not unregister GPS status receiver. $e")
+        }
     }
 
     override fun checkPlayServices() {

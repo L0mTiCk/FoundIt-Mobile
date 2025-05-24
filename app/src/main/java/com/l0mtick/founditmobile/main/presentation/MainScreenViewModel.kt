@@ -33,7 +33,6 @@ class MainScreenViewModel(
     // Состояние гостевого режима
     val isGuestUser = userSessionManager.isGuestUser
 
-    // Channel for one-off events like triggering launchers
     private val _eventChannel = Channel<LocationUiEvent>()
     val eventChannel = _eventChannel.receiveAsFlow()
 

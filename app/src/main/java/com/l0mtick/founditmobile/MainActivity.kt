@@ -24,6 +24,7 @@ import com.l0mtick.founditmobile.common.presentation.components.CustomSnackbar
 import com.l0mtick.founditmobile.common.presentation.components.NoWifiBottomSheet
 import com.l0mtick.founditmobile.common.presentation.components.NotificationPermissionDialog
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import com.l0mtick.founditmobile.main.presentation.MainEventManager
 import com.l0mtick.founditmobile.main.presentation.MainRoot
 import com.l0mtick.founditmobile.start.presentation.StartRoot
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel by inject<MainActivityViewModel>()
     private val snackbarManager by inject<SnackbarManager>()
+    private val locationService by inject<LocationService>()
     private lateinit var notificationHelper: NotificationHelper
     
     private val requestPermissionLauncher = registerForActivityResult(
@@ -143,6 +145,11 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNotificationIntent(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationService.onCleared()
     }
     
     private fun handleNotificationIntent(intent: Intent?) {
