@@ -43,6 +43,7 @@ class LostItemDetailsViewModel(
                                     owner = item.data.second
                                 )
                             }
+                            Log.d("details_viewmodel", item.data.first.toString())
                         }
                         is Result.Error -> {
                             Log.e("details_viewmodel", item.error.toString())

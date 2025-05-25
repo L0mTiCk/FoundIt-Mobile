@@ -46,7 +46,7 @@ val mainModule = module {
 
     single<LocationService> { LocationServiceImpl(application = get()) }
 
-    single<AddItemRepository> { AddItemRepositoryImpl(localStorage = get()) }
+    single<AddItemRepository> { AddItemRepositoryImpl(mainApi = get(), localStorage = get(), context = get()) }
 
     viewModel {
         MainScreenViewModel(locationService = get(), userSessionManager = get())
@@ -94,6 +94,7 @@ val mainModule = module {
             validator = get(),
             categoriesRepository = get(),
             addItemRepository = get(),
+            locationService = get(),
             snackbarManager = get()
         )
     }

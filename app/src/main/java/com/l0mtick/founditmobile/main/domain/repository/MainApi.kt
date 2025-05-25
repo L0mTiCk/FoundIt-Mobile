@@ -4,6 +4,7 @@ import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
+import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
@@ -33,5 +34,20 @@ interface MainApi {
     suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network>
 
     suspend fun sendUserPushToken(token: String): Result<Unit, DataError.Network>
+    
+    /**
+     * Creates a new lost item without photos
+     * @return Result containing the created item ID
+     */
+    suspend fun createItem(request: CreateItemRequest): Result<Int, DataError.Network>
+    
+    /**
+     * Uploads a photo for a specific lost item
+     * @param itemId ID of the lost item to attach the photo to
+     * @param photoData Binary data of the photo
+     * @param fileName Name of the photo file
+     * @return Result containing the URL of the uploaded photo
+     */
+    suspend fun uploadItemPhoto(itemId: Int, photoData: ByteArray, fileName: String): Result<String, DataError.Network>
 
 }

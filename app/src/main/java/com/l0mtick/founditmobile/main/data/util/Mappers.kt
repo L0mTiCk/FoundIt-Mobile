@@ -10,6 +10,7 @@ import com.l0mtick.founditmobile.main.domain.model.Chat
 import com.l0mtick.founditmobile.main.domain.model.LostItem
 import com.l0mtick.founditmobile.main.domain.model.PaginatedData
 import com.l0mtick.founditmobile.main.domain.model.User
+import java.util.Locale
 
 fun CategoryDTO.toModel(languageCode: String = "en"): Category = Category(
     id = id,
@@ -53,7 +54,7 @@ fun LostItemDTO.toModel(): LostItem {
         photoUrls = this.photoUrls,
         isModerated = this.isModerated,
         status = this.status,
-        categories = this.categories.map { it.toModel() }
+        categories = this.categories.map { it.toModel(Locale.getDefault().language) }
     )
 }
 

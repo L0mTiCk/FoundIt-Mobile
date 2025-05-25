@@ -45,7 +45,7 @@ inline fun <reified S> ViewModel.updateAndValidateTextFieldInState(
 ) {
     val current = stateFlow.value
 
-    val updatedField = getField(current).copy(value = newValue.trim())
+    val updatedField = getField(current).copy(value = newValue)
     stateFlow.update { setField(it, updatedField) }
 
     viewModelScope.launch {

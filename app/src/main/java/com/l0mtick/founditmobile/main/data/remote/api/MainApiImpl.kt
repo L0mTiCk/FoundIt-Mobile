@@ -8,6 +8,7 @@ import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
+import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
@@ -15,6 +16,7 @@ import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
 import io.ktor.client.HttpClient
+import io.ktor.util.reflect.typeInfo
 
 class MainApiImpl(
     httpClient: HttpClient,
@@ -99,6 +101,24 @@ class MainApiImpl(
         return postAuth(
             path = "user/push-token",
             body = request
+        )
+    }
+    
+    override suspend fun createItem(request: CreateItemRequest): Result<Int, DataError.Network> {
+        return postAuth(
+            path = "user/item",
+            body = request
+        )
+    }
+    
+    override suspend fun uploadItemPhoto(itemId: Int, photoData: ByteArray, fileName: String): Result<String, DataError.Network> {
+        return uploadFileAuth(
+            type = typeInfo<String>(),
+            path = "image/lost-item",
+            fileData = photoData,
+            fileName = fileName,
+            fieldName = "photo",
+            additionalFields = mapOf("itemId" to itemId.toString())
         )
     }
 }

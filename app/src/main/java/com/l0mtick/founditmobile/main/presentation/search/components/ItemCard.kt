@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,10 @@ fun BigItemCard(
             imageUrl = imageUrl,
             contentDescription = "Item image",
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.sizeIn(minHeight = 150.dp, maxHeight = 200.dp)
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .sizeIn(minHeight = 150.dp, maxHeight = 200.dp)
+                .align(Alignment.CenterHorizontally)
         )
         Spacer(Modifier.height(18.dp))
         Text(

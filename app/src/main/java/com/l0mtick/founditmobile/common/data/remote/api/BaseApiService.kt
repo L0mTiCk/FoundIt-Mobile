@@ -13,11 +13,14 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -257,7 +260,105 @@ abstract class BaseApiService(
     @PublishedApi
     internal val `access$localStorage`: LocalStorage
         get() = localStorage
+        
+    /**
+     * Performs an authenticated multipart file upload request.
+     *
+     * @param T The expected type of the response body.
+     * @param path The endpoint path relative to the base URL.
+     * @param fileData The binary data of the file to upload.
+     * @param fileName The name of the file being uploaded.
+     * @param fieldName The form field name for the file.
+     * @param additionalFields Optional additional form fields to include in the request.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError.Network].
+     */
+    @PublishedApi
+    internal suspend fun <T: Any> uploadFileAuth(
+        type: TypeInfo,
+        path: String,
+        fileData: ByteArray,
+        fileName: String,
+        fieldName: String = "file",
+        additionalFields: Map<String, String> = emptyMap(),
+        onUnauthorized: () -> Unit = defaultUnauthorizedHandler
+    ): Result<T, DataError.Network> {
+        return try {
+            if (!isConnected()) {
+                return Result.Error(DataError.Network.NO_INTERNET)
+            }
+            
+            val result = `access$httpClient`.submitFormWithBinaryData(
+                url = "$baseUrl/$path",
+                formData = formData {
+                    // Add the file part
+                    // Add additional fields
+                    for ((key, value) in additionalFields) {
+                        append(key, value)
+                    }
 
+                    append(fieldName, fileData, Headers.build {
+                        append(HttpHeaders.ContentDisposition, "filename=\"$fileName\"")
+                    })
+                }
+            ) {
+                // Add authorization header
+                val token = `access$localStorage`.getToken()
+                header(HttpHeaders.Authorization, "Bearer $token")
+            }
+            
+            if (!result.status.isSuccess()) {
+                val error = when (result.status) {
+                    HttpStatusCode.InternalServerError -> DataError.Network.SERVER_ERROR
+                    else -> DataError.Network.UNKNOWN
+                }
+                return Result.Error(error)
+            }
+            
+            return Result.Success(result.body(type))
+            
+        } catch (e: RedirectResponseException) {
+            Result.Error(DataError.Network.UNKNOWN)
+        } catch (e: ClientRequestException) {
+            if (e.response.status == HttpStatusCode.Unauthorized) {
+                val refreshed = defaultRefreshTokenHandler()
+                if (!refreshed) {
+                    onUnauthorized()
+                } else {
+                    return uploadFileAuth(
+                        type = type,
+                        path = path,
+                        fileData = fileData,
+                        fileName = fileName,
+                        fieldName = fieldName,
+                        additionalFields = additionalFields,
+                        onUnauthorized = onUnauthorized
+                    )
+                }
+            }
+            Log.d("base_api", e.toString())
+            
+            val error = when (e.response.status) {
+                HttpStatusCode.BadRequest -> DataError.Network.BAD_REQUEST
+                HttpStatusCode.RequestTimeout -> DataError.Network.REQUEST_TIMEOUT
+                HttpStatusCode.TooManyRequests -> DataError.Network.TOO_MANY_REQUESTS
+                HttpStatusCode.PayloadTooLarge -> DataError.Network.PAYLOAD_TOO_LARGE
+                HttpStatusCode.Conflict -> DataError.Network.CONFLICT
+                else -> DataError.Network.UNKNOWN
+            }
+            
+            Result.Error(error)
+        } catch (e: ServerResponseException) {
+            Result.Error(DataError.Network.SERVER_ERROR)
+        } catch (e: SerializationException) {
+            Result.Error(DataError.Network.SERIALIZATION)
+        } catch (e: IOException) {
+            Result.Error(DataError.Network.NO_INTERNET)
+        } catch (e: Exception) {
+            Log.d("base_api", e.toString())
+            Result.Error(DataError.Network.UNKNOWN)
+        }
+    }
 }
 
 /**
