@@ -17,7 +17,15 @@ class AddItemRepositoryImpl(
     private val context: Context
 ): AddItemRepository {
     override suspend fun getUserLevel(): Int? {
-        return localStorage.getLevel()
+        return when(val result = mainApi.getMyLevel()) {
+            is Result.Success -> {
+                localStorage.setLevel(result.data)
+                result.data
+            }
+            is Result.Error -> {
+                localStorage.getLevel()
+            }
+        }
     }
     
     override suspend fun createItem(

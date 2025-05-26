@@ -60,4 +60,6 @@ interface MainApi {
      */
     suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network>
 
+    suspend fun getMyLevel(): Result<Int, DataError.Network>
+
 }

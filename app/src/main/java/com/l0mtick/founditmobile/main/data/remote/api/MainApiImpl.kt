@@ -135,4 +135,10 @@ class MainApiImpl(
             body = mapOf("content" to content)
         )
     }
+
+    override suspend fun getMyLevel(): Result<Int, DataError.Network> {
+        return getAuth(
+            path = "user/users/my-level"
+        )
+    }
 }
