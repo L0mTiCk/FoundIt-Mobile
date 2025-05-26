@@ -82,7 +82,10 @@ val mainModule = module {
     }
 
     viewModel {
-        ChatViewModel()
+        ChatViewModel(
+            chatRepository = get(),
+            savedStateHandle = get()
+        )
     }
 
     viewModel {

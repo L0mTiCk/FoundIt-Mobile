@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -17,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
+import com.l0mtick.founditmobile.ui.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +27,8 @@ fun PhoneConfirmationBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        containerColor = Theme.colors.surface
     ) {
         Column(
             modifier = Modifier
@@ -48,12 +50,11 @@ fun PhoneConfirmationBottomSheet(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
+            PrimaryButton(
+                text = stringResource(R.string.phone_confirmation_continue),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onContinue
-            ) {
-                Text(text = stringResource(R.string.phone_confirmation_continue))
-            }
+            )
         }
     }
 }

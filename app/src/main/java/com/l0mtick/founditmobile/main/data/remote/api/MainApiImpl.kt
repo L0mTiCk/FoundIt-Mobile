@@ -12,6 +12,7 @@ import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.FullDataMessageResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 import com.l0mtick.founditmobile.main.domain.repository.MainApi
@@ -58,6 +59,12 @@ class MainApiImpl(
     override suspend fun getCurrentUserChats(): Result<ChatsResponse, DataError.Network> {
         return getAuth<ChatsResponse>(
             path = "user/chats"
+        )
+    }
+    
+    override suspend fun getChatMessages(chatId: Int): Result<FullDataMessageResponse, DataError.Network> {
+        return getAuth<FullDataMessageResponse>(
+            path = "user/messages/$chatId"
         )
     }
 
@@ -119,6 +126,13 @@ class MainApiImpl(
             fileName = fileName,
             fieldName = "photo",
             additionalFields = mapOf("itemId" to itemId.toString())
+        )
+    }
+    
+    override suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network> {
+        return postAuth(
+            path = "messages/$chatId",
+            body = mapOf("content" to content)
         )
     }
 }

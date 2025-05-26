@@ -46,7 +46,7 @@ sealed interface NavigationRoute {
         data class ItemDetails(val itemId: Int) : Main
 
         @Serializable
-        data object Chat : Main
+        data class Chat(val chatId: Int) : Main
 
     }
 

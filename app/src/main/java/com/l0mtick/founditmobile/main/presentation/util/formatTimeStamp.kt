@@ -2,6 +2,11 @@ package com.l0mtick.founditmobile.main.presentation.util
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Date
 import java.util.Locale
 
@@ -115,4 +120,33 @@ fun formatTimestampToShortDate(millis: Long, locale: Locale = Locale.getDefault(
     val date = Date(millis)
     val format = SimpleDateFormat("MMM dd, yyyy", locale)
     return format.format(date)
+}
+
+fun formatChatTimestamp(timestampMillis: Long): String {
+    val locale = Locale.getDefault()
+    val messageDateTime = Instant.ofEpochMilli(timestampMillis)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
+
+
+    val today = LocalDate.now(ZoneId.systemDefault())
+    val messageDate = messageDateTime.toLocalDate()
+
+    return when {
+        messageDate.isEqual(today) -> {
+            DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+                .withLocale(locale)
+                .format(messageDateTime)
+        }
+        messageDate.year == today.year -> {
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
+                .withLocale(locale)
+                .format(messageDateTime)
+        }
+        else -> {
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+                .withLocale(locale)
+                .format(messageDateTime)
+        }
+    }
 }

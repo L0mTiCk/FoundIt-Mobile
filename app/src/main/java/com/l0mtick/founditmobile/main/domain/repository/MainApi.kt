@@ -8,6 +8,7 @@ import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.DetailedLostItemResponse
+import com.l0mtick.founditmobile.main.data.remote.responses.FullDataMessageResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 
@@ -21,6 +22,7 @@ interface MainApi {
     suspend fun getCurrentUserProfile(): Result<UserDTO, DataError.Network>
     suspend fun getCurrentUserFavoriteCount(): Result<Int, DataError.Network>
     suspend fun getCurrentUserChats(): Result<ChatsResponse, DataError.Network>
+    suspend fun getChatMessages(chatId: Int): Result<FullDataMessageResponse, DataError.Network>
 
     suspend fun searchLostItems(
         searchQuery: String?,
@@ -49,5 +51,13 @@ interface MainApi {
      * @return Result containing the URL of the uploaded photo
      */
     suspend fun uploadItemPhoto(itemId: Int, photoData: ByteArray, fileName: String): Result<String, DataError.Network>
+    
+    /**
+     * Sends a message to a chat
+     * @param chatId ID of the chat
+     * @param content Message content
+     * @return Result containing the sent message
+     */
+    suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network>
 
 }

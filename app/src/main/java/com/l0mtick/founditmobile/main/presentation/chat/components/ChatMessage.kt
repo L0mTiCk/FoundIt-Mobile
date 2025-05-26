@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,11 +48,6 @@ fun ChatMessage(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (isFromMe) {
-                Text(
-                    text = sentDate,
-                    style = Theme.typography.small,
-                    color = Theme.colors.onSurfaceVariant
-                )
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = "You",
@@ -71,26 +67,38 @@ fun ChatMessage(
                     style = Theme.typography.small,
                     color = Theme.colors.onSurfaceVariant
                 )
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = sentDate,
-                    style = Theme.typography.small,
-                    color = Theme.colors.onSurfaceVariant
-                )
             }
         }
         Box(
             modifier = Modifier
-                .then(if (!isFromMe) Modifier.padding(start = 52.dp).offset(y = (-8).dp) else Modifier.padding(top = 8.dp))
+                .then(
+                    if (!isFromMe) Modifier
+                        .padding(start = 52.dp)
+                        .offset(y = (-8).dp)
+                    else Modifier
+                        .padding(top = 8.dp)
+                        .align(Alignment.End)
+                )
                 .clip(messageForm)
                 .background(Theme.colors.surface)
                 .padding(12.dp)
         ) {
-            Text(
-                text = message,
-                style = Theme.typography.body,
-                lineHeight = 18.sp
-            )
+            Column {
+                Text(
+                    text = message,
+                    style = Theme.typography.body,
+                    lineHeight = 18.sp
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = sentDate,
+                    style = Theme.typography.small.copy(
+                        fontSize = 10.sp
+                    ),
+                    color = Theme.colors.onSurfaceVariant,
+                    modifier = Modifier.align(Alignment.End)
+                )
+            }
         }
     }
 }

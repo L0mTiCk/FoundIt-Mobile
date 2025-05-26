@@ -4,10 +4,14 @@ import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.CategoryDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
+import com.l0mtick.founditmobile.main.data.remote.dto.MessageDTO
+import com.l0mtick.founditmobile.main.data.remote.responses.FullDataMessageResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.PaginatedResponse
 import com.l0mtick.founditmobile.main.domain.model.Category
 import com.l0mtick.founditmobile.main.domain.model.Chat
+import com.l0mtick.founditmobile.main.domain.model.ChatData
 import com.l0mtick.founditmobile.main.domain.model.LostItem
+import com.l0mtick.founditmobile.main.domain.model.Message
 import com.l0mtick.founditmobile.main.domain.model.PaginatedData
 import com.l0mtick.founditmobile.main.domain.model.User
 import java.util.Locale
@@ -40,6 +44,15 @@ fun ChatDTO.toModel(): Chat = Chat(
     lastMessageAt = lastMessageAt
 )
 
+fun MessageDTO.toModel(): Message = Message(
+    id = id,
+    chatId = chatId,
+    senderId = senderId,
+    content = content,
+    createdAt = createdAt,
+    isRead = isRead
+)
+
 fun LostItemDTO.toModel(): LostItem {
     return LostItem(
         id = this.id,
@@ -57,6 +70,14 @@ fun LostItemDTO.toModel(): LostItem {
         categories = this.categories.map { it.toModel(Locale.getDefault().language) }
     )
 }
+
+fun FullDataMessageResponse.toModel(): ChatData = ChatData(
+    itemTitle = itemTitle,
+    itemDescription = itemDescription,
+    itemPictureUrl = itemPictureUrl,
+    interlocutor = interlocutor.toModel(),
+    messages = messages.map { it.toModel() }
+)
 
 fun <T_DTO, T_Model> PaginatedResponse<T_DTO>.toModel(
     itemMapper: (T_DTO) -> T_Model

@@ -132,4 +132,9 @@
 
     <string name="about_dialog_title">Про Found It</string>
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>
+
+    <!--  Chat-->
+    <string name="empty_chat_title">Чат пустой</string>
+    <string name="empty_chat_description">Здесь еще нет сообщений, попробуйте отправить первое</string>
+    <string name="send_message_placeholder">Введите сообщение...</string>
 </resources>

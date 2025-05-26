@@ -35,7 +35,13 @@ fun InboxRoot(
     InboxScreen(
         state = state,
         onAction = viewModel::onAction,
-        onNavToChat = { navController.navigate(NavigationRoute.Main.Chat) }
+        onNavToChat = { chatId ->
+            navController.navigate(
+                NavigationRoute.Main.Chat(
+                    chatId = chatId,
+                )
+            )
+        }
     )
 }
 
@@ -43,7 +49,7 @@ fun InboxRoot(
 fun InboxScreen(
     state: InboxState,
     onAction: (InboxAction) -> Unit,
-    onNavToChat: () -> Unit
+    onNavToChat: (chatIt: Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -92,7 +98,7 @@ fun InboxScreen(
                         itemHeader = chat.ownerItemTitle,
                         lastMessage = chat.lastMessage ?: "-----",
                         messageDate = formatRelativeTime(chat.lastMessageAt),
-                        { onNavToChat() },
+                        { onNavToChat(chat.id) },
                         Modifier.padding(vertical = 6.dp, horizontal = 20.dp),
                     )
                 }
@@ -108,7 +114,8 @@ private fun Preview() {
         InboxScreen(
             state = InboxState(),
             onAction = {},
-            onNavToChat = {}
+            onNavToChat = { _ ->
+            }
         )
     }
 }

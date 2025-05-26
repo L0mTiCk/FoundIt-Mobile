@@ -234,7 +234,9 @@ fun MainScreen(
                 }
 
                 composable<NavigationRoute.Main.Chat> {
-                    ChatRoot()
+                    ChatRoot(
+                        navController = localNavController
+                    )
                 }
                 
                 composable<NavigationRoute.Main.Settings> {
@@ -246,7 +248,9 @@ fun MainScreen(
 
                 composable<NavigationRoute.Main.Add> {
                     AddItemRoot(
-                        onNavBack = {}
+                        onNavBack = {
+                            localNavController.navigateUp()
+                        }
                     )
                 }
             }
