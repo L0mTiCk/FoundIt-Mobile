@@ -58,3 +58,34 @@ inline fun <reified S> ViewModel.updateAndValidateTextFieldInState(
         stateFlow.update { setField(it, validatedField) }
     }
 }
+
+/**
+ * Рассчитывает общее количество опыта (XP), необходимое для достижения указанного уровня.
+ * Уровень 1 требует 0 XP.
+ *
+ * @param level Целевой уровень (на который хочет перейти пользователь).
+ * @return Общее количество XP для достижения этого уровня.
+ */
+fun getRequiredExperienceForLevel(level: Int): Long {
+    require(level >= 1) { "Уровень должен быть не менее 1" }
+    if (level == 1) {
+        return 0L
+    }
+    // Формула для общего XP до уровня 'level' (n-1) * (5n - 4) / 2
+    // Используем 1L, чтобы гарантировать вычисления в Long
+    return (level - 1L) * (5L * level - 4) / 2
+}
+
+/**
+ * Рассчитывает количество опыта (XP), необходимое для перехода с текущего уровня
+ * на следующий (т.е. XP, которое нужно набрать на этом уровне).
+ * Это и есть наша формула 5n - 2.
+ *
+ * @param currentLevel Текущий уровень пользователя.
+ * @return Количество XP, которое нужно набрать, чтобы перейти на следующий уровень.
+ */
+fun getXpNeededToAdvanceFromLevel(currentLevel: Int): Long {
+    require(currentLevel >= 1) { "Текущий уровень должен быть не менее 1" }
+    // Формула 5n - 2, где n - текущий уровень
+    return (5L * currentLevel) - 2
+}

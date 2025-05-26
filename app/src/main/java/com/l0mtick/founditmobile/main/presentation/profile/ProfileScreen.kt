@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -77,7 +78,8 @@ fun ProfileScreen(
         }
         item {
             UserLevelBox(
-                level = state.user?.level ?: 0,
+                level = state.user?.level ?: 1,
+                items = state.user?.levelItemsCount ?: 0,
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .clip(RoundedCornerShape(12.dp))
@@ -86,14 +88,14 @@ fun ProfileScreen(
         }
         item {
             Text(
-                text = "Your account",
+                text = stringResource(R.string.profile_your_account),
                 style = Theme.typography.headline,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
         }
         item {
             ProfileScreenRow(
-                header = "Favorites",
+                header = stringResource(R.string.profile_favorites),
                 description = context.resources.getQuantityString(
                     R
                         .plurals.items_count,
@@ -105,7 +107,7 @@ fun ProfileScreen(
                 modifier = rowsModifier
             )
             ProfileScreenRow(
-                header = "My items",
+                header = stringResource(R.string.profile_my_items),
                 description = context.resources.getQuantityString(
                     R.plurals.items_count,
                     state.user?.levelItemsCount ?: 0,
@@ -116,13 +118,13 @@ fun ProfileScreen(
                 modifier = rowsModifier
             )
             ProfileScreenRow(
-                header = "Settings",
+                header = stringResource(R.string.profile_settings),
                 onClick = onNavigateToSettings,
                 trailingIcon = Icons.Default.Settings,
                 modifier = rowsModifier
             )
             ProfileScreenRow(
-                header = "About",
+                header = stringResource(R.string.profile_about),
                 onClick = {
                     isAboutShown = true
                 },
