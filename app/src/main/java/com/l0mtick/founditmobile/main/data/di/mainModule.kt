@@ -1,6 +1,8 @@
 package com.l0mtick.founditmobile.main.data.di
 
 import com.l0mtick.founditmobile.main.data.remote.api.MainApiImpl
+import com.l0mtick.founditmobile.main.data.remote.websocket.ChatWebSocketClient
+import com.l0mtick.founditmobile.main.data.remote.websocket.ChatWebSocketClientImpl
 import com.l0mtick.founditmobile.main.data.repository.AddItemRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.CategoriesRepositoryImpl
 import com.l0mtick.founditmobile.main.data.repository.ChatRepositoryImpl
@@ -23,6 +25,7 @@ import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetai
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileViewModel
 import com.l0mtick.founditmobile.main.presentation.search.SearchViewModel
 import com.l0mtick.founditmobile.main.presentation.settings.SettingsViewModel
+import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -40,13 +43,21 @@ val mainModule = module {
 
     single<UsersRepository> { UsersRepositoryImpl(mainApi = get(), localStorage = get()) }
 
-    single<ChatRepository> { ChatRepositoryImpl(mainApi = get()) }
+    single<ChatRepository> { ChatRepositoryImpl(mainApi = get(), chatWebSocketClient = get()) }
 
     single<LostItemRepository> { LostItemRepositoryImpl(mainApi = get()) }
 
     single<LocationService> { LocationServiceImpl(application = get()) }
 
     single<AddItemRepository> { AddItemRepositoryImpl(mainApi = get(), localStorage = get(), context = get()) }
+
+    single<ChatWebSocketClient> {
+        val json = Json {
+            ignoreUnknownKeys = true
+            prettyPrint = true
+        }
+        ChatWebSocketClientImpl(httpClient = get(), json = json, localStorage = get())
+    }
 
     viewModel {
         MainScreenViewModel(locationService = get(), userSessionManager = get())

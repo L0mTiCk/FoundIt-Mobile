@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.main.data.remote.websocket.ChatWebSocketClient
 import com.l0mtick.founditmobile.main.domain.repository.ChatRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -29,7 +32,32 @@ class ChatViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 loadMessages()
+                chatRepository.getWebSocketConnectionState()
+                    .onEach { connectionState ->
+                        _state.update {
+                            it.copy(
+                                isConnected = connectionState == ChatWebSocketClient.ConnectionState.CONNECTED
+                            )
+                        }
+                        Log.d("chat_viewmodel", "Wen socket connection state: $connectionState")
+                    }
+                    .launchIn(viewModelScope)
+
+                chatRepository.getIncomingMessages()
+                    .onEach { message ->
+                        _state.update { currentState ->
+                            currentState.copy(
+                                messages = currentState.messages + message
+                            )
+                        }
+                        Log.d("chat_viewmodel", "New message from websocket: $message")
+                    }
+                    .launchIn(viewModelScope)
+                viewModelScope.launch {
+                    chatRepository.connectToWebSocket()
+                }
                 hasLoadedInitialData = true
+
             }
         }
         .stateIn(
@@ -52,7 +80,7 @@ class ChatViewModel(
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            
+
             when (val result = chatRepository.getChatData(currentChatId)) {
                 is Result.Success -> {
                     _state.update {
@@ -67,6 +95,7 @@ class ChatViewModel(
                         )
                     }
                 }
+
                 is Result.Error -> {
                     Log.e("ChatViewModel", "Failed to load messages: ${result.error}")
                     _state.update { it.copy(isLoading = false) }
@@ -79,26 +108,25 @@ class ChatViewModel(
         val currentChatId = _state.value.chatId
         if (currentChatId == -1 || _state.value.messageInput.isBlank()) return
 
-//        viewModelScope.launch {
-//            _state.update { it.copy(isSending = true) }
-//
-//            when (val result = chatRepository.sendMessage(currentChatId, _state.value.messageInput.trim())) {
-//                is Result.Success -> {
-//                    _state.update {
-//                        it.copy(
-//                            messageInput = "",
-//                            isSending = false
-//                        )
-//                    }
-//                    // Reload messages to get the new message
+        viewModelScope.launch {
+            _state.update { it.copy(isSending = true) }
+            Log.d("chat_viewmodel", "Trying to send message for chat id $currentChatId, with content ${_state.value.messageInput}")
+            when (val result = chatRepository.sendMessage(currentChatId, _state.value.messageInput.trim())) {
+                is Result.Success -> {
+                    _state.update {
+                        it.copy(
+                            messageInput = "",
+                            isSending = false
+                        )
+                    }
 //                    loadMessages()
-//                }
-//                is Result.Error -> {
-//                    Log.e("ChatViewModel", "Failed to send message: ${result.error}")
-//                    _state.update { it.copy(isSending = false) }
-//                }
-//            }
-//        }
+                }
+                is Result.Error -> {
+                    Log.e("ChatViewModel", "Failed to send message: ${result.error}")
+                    _state.update { it.copy(isSending = false) }
+                }
+            }
+        }
     }
 
     private fun updateMessageInput(text: String) {

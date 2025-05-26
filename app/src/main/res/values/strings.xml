@@ -89,7 +89,7 @@
     <string name="settings_sign_out_confirmation">Are you sure you want to sign out?</string>
 
     <!--  Notifications-->
-    <string name="new_message_notification_title">%1$s for %2$s</string>
+    <string name="new_message_notification_title">%1$s for "%2$s"</string>
     <string name="new_message_fallback_title">New message</string>
     <string name="default_notification_title">New notification</string>
     <string name="default_notification_body">New notification</string>

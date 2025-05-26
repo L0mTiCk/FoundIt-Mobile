@@ -86,25 +86,25 @@ fun formatRelativeTime(
 
         minutes < 60 -> {
             if (locale.language == "ru") {
-                "отправлено ${pluralRu(minutes.toInt(), "минута", "минуты", "минут")} назад"
+                "${pluralRu(minutes.toInt(), "минута", "минуты", "минут")} назад"
             } else {
-                "sent $minutes ${if (minutes == 1L) "minute" else "minutes"} ago"
+                "$minutes ${if (minutes == 1L) "minute" else "minutes"} ago"
             }
         }
 
         hours < 24 -> {
             if (locale.language == "ru") {
-                "отправлено ${pluralRu(hours.toInt(), "час", "часа", "часов")} назад"
+                "${pluralRu(hours.toInt(), "час", "часа", "часов")} назад"
             } else {
-                "sent $hours ${if (hours == 1L) "hour" else "hours"} ago"
+                "$hours ${if (hours == 1L) "hour" else "hours"} ago"
             }
         }
 
         days < 7 -> {
             if (locale.language == "ru") {
-                "отправлено ${pluralRu(days.toInt(), "день", "дня", "дней")} назад"
+                "${pluralRu(days.toInt(), "день", "дня", "дней")} назад"
             } else {
-                "sent $days ${if (days == 1L) "day" else "days"} ago"
+                "$days ${if (days == 1L) "day" else "days"} ago"
             }
         }
 

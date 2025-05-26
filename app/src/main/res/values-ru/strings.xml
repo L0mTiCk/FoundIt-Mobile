@@ -91,7 +91,7 @@
 
 
     <!--  Notifications-->
-    <string name="new_message_notification_title">%1$s для %2$s</string>
+    <string name="new_message_notification_title">%1$s для "%2$s"</string>
     <string name="new_message_fallback_title">Новое сообщение</string>
     <string name="default_notification_title">Новое уведомление</string>
     <string name="default_notification_body">Новое уведомление</string>

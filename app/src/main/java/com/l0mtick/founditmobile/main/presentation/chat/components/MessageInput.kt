@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,7 +49,15 @@ fun MessageInput(
             enabled = enabled,
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier.weight(1f),
-            textStyle = Theme.typography.body
+            textStyle = Theme.typography.body,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Theme.colors.brand,
+                cursorColor = Theme.colors.brand,
+                selectionColors = TextSelectionColors(
+                    handleColor = Theme.colors.brand,
+                    backgroundColor = Theme.colors.brandMuted
+                )
+            )
         )
         
         IconButton(

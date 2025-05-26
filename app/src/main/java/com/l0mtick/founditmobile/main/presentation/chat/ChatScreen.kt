@@ -13,11 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -59,6 +62,8 @@ fun ChatScreen(
     onAction: (ChatAction) -> Unit,
 ) {
     val messageInputHeight = 72.dp
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -70,7 +75,13 @@ fun ChatScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         } else {
+            LaunchedEffect(state.messages.size) {
+                if (state.messages.isNotEmpty()) {
+                    listState.animateScrollToItem(state.messages.lastIndex)
+                }
+            }
             LazyColumn(
+                state = listState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = messageInputHeight)
             ) {
