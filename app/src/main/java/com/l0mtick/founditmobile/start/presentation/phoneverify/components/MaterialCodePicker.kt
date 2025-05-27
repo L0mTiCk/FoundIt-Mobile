@@ -1,7 +1,6 @@
 package com.l0mtick.founditmobile.start.presentation.phoneverify.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -154,7 +153,8 @@ class MaterialCodePicker {
                             start = 3.dp,
                             end = if (showDropDownAfterFlag) 3.dp else 0.dp
                         ),
-                        style = countrycodetextstyle
+                        style = countrycodetextstyle,
+                        color = Theme.colors.onSurfaceVariant,
                     )
                 }
                 if (!showDropDownAfterFlag) {
@@ -195,7 +195,8 @@ class MaterialCodePicker {
                                     text = stringResource(R.string.select_country_region),
                                     modifier = Modifier.fillMaxWidth(),
                                     textAlign = TextAlign.Center,
-                                    style = appbartitleStyle
+                                    style = appbartitleStyle,
+                                    color = Theme.colors.onSurface,
                                 )
                             },
                             navigationIcon = {
@@ -322,12 +323,14 @@ class MaterialCodePicker {
                                                 style = countrytextstyle,
                                                 textAlign = TextAlign.Start,
                                                 overflow = TextOverflow.Ellipsis,
-                                                modifier = Modifier.widthIn(200.dp)
+                                                modifier = Modifier.widthIn(200.dp),
+                                                color = Theme.colors.onSurface,
                                             )
                                             if (showCountryCodeInDIalog)
                                                 Text(
                                                     text = countryItem.countryPhoneCode,
                                                     style = dialogcountrycodetextstyle,
+                                                    color = Theme.colors.onSurface,
                                                 )
                                         }
                                     }

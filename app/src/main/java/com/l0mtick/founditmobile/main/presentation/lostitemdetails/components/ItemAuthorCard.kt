@@ -41,7 +41,8 @@ fun ItemAuthorCard(
         Column {
             Text(
                 text = user.username,
-                style = Theme.typography.body
+                style = Theme.typography.body,
+                color = Theme.colors.onSurface,
             )
             Spacer(Modifier.height(4.dp))
             Text(

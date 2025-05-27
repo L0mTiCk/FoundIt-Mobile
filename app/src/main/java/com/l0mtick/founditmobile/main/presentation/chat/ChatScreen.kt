@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -63,7 +62,6 @@ fun ChatScreen(
 ) {
     val messageInputHeight = 72.dp
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -127,7 +125,8 @@ fun ChatScreen(
                             ) {
                                 Text(
                                     text = stringResource(R.string.empty_chat_title),
-                                    style = Theme.typography.title
+                                    style = Theme.typography.title,
+                                    color = Theme.colors.onSurface
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Text(

@@ -38,6 +38,7 @@ fun ChatHeader(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Exit chat",
+                tint = Theme.colors.onSurface
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -51,7 +52,8 @@ fun ChatHeader(
         Text(
             text = username,
             style = Theme.typography.body,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = Theme.colors.onSurface
         )
     }
 }

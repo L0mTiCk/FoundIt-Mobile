@@ -30,6 +30,7 @@ import com.l0mtick.founditmobile.common.presentation.components.SecondaryButton
 import com.l0mtick.founditmobile.common.presentation.util.TextFieldState
 import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.start.presentation.login.LoginAction
+import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
 fun LogInForm(
@@ -94,7 +95,9 @@ fun LogInForm(
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(R.string.or),
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                color = Theme.colors.onSurface,
+
             )
             HorizontalDivider(modifier = Modifier.weight(1f))
         }

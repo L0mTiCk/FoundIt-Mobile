@@ -52,7 +52,8 @@ fun ChatCard(
                 Text(
                     text = username,
                     style = Theme.typography.body,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = Theme.colors.onSurface
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
@@ -65,7 +66,8 @@ fun ChatCard(
                 text = itemHeader,
                 style = Theme.typography.body,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
+                color = Theme.colors.onSurface
             )
             Text(
                 text = lastMessage,

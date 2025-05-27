@@ -85,7 +85,8 @@ fun EditableImagesPager(
                         ) {
                             Text(
                                 text = stringResource(R.string.no_images_added),
-                                style = Theme.typography.title
+                                style = Theme.typography.title,
+                                color = Theme.colors.onSurface
                             )
                             Spacer(Modifier.height(4.dp))
                             Text(
@@ -101,8 +102,8 @@ fun EditableImagesPager(
                                     photoPickerLauncher.launch("image/*")
                                 },
                                 buttonColors = ButtonDefaults.buttonColors(
-                                    containerColor = Theme.colors.brandMuted,
-                                    contentColor = Theme.colors.onSurface
+                                    containerColor = Theme.colors.brand,
+                                    contentColor = Theme.colors.onBrand
                                 )
                             )
                         }

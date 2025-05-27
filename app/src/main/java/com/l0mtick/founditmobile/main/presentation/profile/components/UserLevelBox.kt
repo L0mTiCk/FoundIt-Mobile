@@ -59,7 +59,8 @@ fun UserLevelBox(
                 val descriptions = stringArrayResource(R.array.level_descriptions)
                 Text(
                     text = titles[levelIndex],
-                    style = Theme.typography.title
+                    style = Theme.typography.title,
+                    color = Theme.colors.onSurface
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
@@ -142,7 +143,7 @@ private fun UserProgressBox(
         Text(
             text = "$currentLevelXpGained/$xpToAdvance",
             style = Theme.typography.body,
-            color = Theme.colors.text
+            color = Theme.colors.onSurface
         )
     }
 }

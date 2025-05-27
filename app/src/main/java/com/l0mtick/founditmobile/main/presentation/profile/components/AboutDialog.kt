@@ -40,12 +40,14 @@ fun AboutDialog(
             ) {
                 Text(
                     text = stringResource(R.string.about_dialog_title),
-                    style = Theme.typography.title
+                    style = Theme.typography.title,
+                    color = Theme.colors.onSurface
                 )
                 Spacer(Modifier.height(14.dp))
                 Text(
                     text = stringResource(R.string.about_dialog_description),
-                    style = Theme.typography.body
+                    style = Theme.typography.body,
+                    color = Theme.colors.onSurface
                 )
                 Spacer(Modifier.height(12.dp))
                 PrimaryButton(

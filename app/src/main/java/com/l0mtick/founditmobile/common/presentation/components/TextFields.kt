@@ -39,7 +39,9 @@ fun OutlinedAppTextField(
         isError = isError,
         supportingText = {
             if (isError && !errorText.isNullOrBlank()) {
-                Text(errorText)
+                Text(
+                   text =  errorText,
+                )
             }
         },
         keyboardOptions = keyboardOptions,
@@ -48,8 +50,11 @@ fun OutlinedAppTextField(
         singleLine = singleLine,
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Theme.colors.onSurface,
+            unfocusedTextColor = Theme.colors.onSurface,
             focusedBorderColor = Theme.colors.brand,
+            errorTextColor = Theme.colors.onSurface,
             focusedLabelColor = Theme.colors.brand,
+            unfocusedLabelColor = Theme.colors.onSurfaceVariant,
             cursorColor = Theme.colors.brand,
             selectionColors = TextSelectionColors(
                 handleColor = Theme.colors.brand,

@@ -38,16 +38,18 @@ fun PhoneConfirmationBottomSheet(
         ) {
             Text(
                 text = stringResource(R.string.phone_confirmation_title),
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                color = Theme.colors.onSurface,
             )
             Text(
                 text = stringResource(R.string.phone_confirmation_description),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Theme.colors.onSurface,
             )
             Text(
                 text = stringResource(R.string.phone_confirmation_note),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Theme.colors.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(16.dp))
             PrimaryButton(

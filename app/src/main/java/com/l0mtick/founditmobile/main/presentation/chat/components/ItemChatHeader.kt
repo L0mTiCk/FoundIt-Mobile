@@ -43,7 +43,8 @@ fun ItemChatHeader(
                 text = header,
                 style = Theme.typography.body,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Theme.colors.onSurface
             )
             Spacer(Modifier.height(4.dp))
             Text(

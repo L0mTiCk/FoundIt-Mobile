@@ -141,7 +141,8 @@ fun AddItemScreen(
         Text(
             text = stringResource(R.string.information),
             style = Theme.typography.title,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = Theme.colors.onSurface
         )
 
         Spacer(Modifier.height(16.dp))
@@ -185,6 +186,7 @@ fun AddItemScreen(
                 focusedTextColor = Theme.colors.onSurface,
                 focusedBorderColor = Theme.colors.brand,
                 focusedLabelColor = Theme.colors.brand,
+                unfocusedLabelColor = Theme.colors.onSurfaceVariant,
                 cursorColor = Theme.colors.brand,
                 selectionColors = TextSelectionColors(
                     handleColor = Theme.colors.brand,
@@ -218,7 +220,8 @@ fun AddItemScreen(
                     text = state.selectedCategory?.name ?: stringResource(R.string.select_category),
                     style = Theme.typography.body,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = Theme.colors.onSurfaceVariant
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -252,7 +255,8 @@ fun AddItemScreen(
         Text(
             text = stringResource(R.string.publication_duration),
             style = Theme.typography.title,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = Theme.colors.onSurface
         )
         Spacer(Modifier.height(16.dp))
         PublishingTimeSlider(
@@ -268,7 +272,8 @@ fun AddItemScreen(
         Text(
             text = stringResource(R.string.location),
             style = Theme.typography.title,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = Theme.colors.onSurface
         )
 
         Spacer(Modifier.height(16.dp))

@@ -87,16 +87,15 @@ fun PhoneTextFieldWithCountry(
                 backgroundColor = Theme.colors.background,
                 surfaceColor = Theme.colors.surface,
                 outlineColor = Theme.colors.brand,
-                disabledOutlineColor = MaterialTheme.colorScheme.outline.copy(0.1f),
-                unfocusedOutlineColor = MaterialTheme.colorScheme.onBackground.copy(0.3f),
-                textColor = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-                cursorColor = MaterialTheme.colorScheme.primary,
-                topAppBarColor = MaterialTheme.colorScheme.surface,
+                disabledOutlineColor = Theme.colors.onSurfaceVariant,
+                unfocusedOutlineColor = Theme.colors.onSurfaceVariant,
+                textColor = Theme.colors.onSurface,
+                cursorColor = Theme.colors.brand,
+                topAppBarColor = Theme.colors.surface,
                 countryItemBgColor = MaterialTheme.colorScheme.surface,
                 searchFieldBgColor = MaterialTheme.colorScheme.surface,
-                dialogNavIconColor = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-                dropDownIconTint = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-
+                dialogNavIconColor = Theme.colors.onSurface,
+                dropDownIconTint = Theme.colors.onSurface,
             )
         )
     }
@@ -227,8 +226,11 @@ fun ForkedMaterialCountryCodePicker(
                     else colors.unfocusedOutlineColor,
                     unfocusedBorderColor = if (error) colors.errorColor else colors.unfocusedOutlineColor,
                     cursorColor =  colors.cursorColor,
-                    focusedContainerColor = colors.surfaceColor
-
+                    focusedContainerColor = colors.surfaceColor,
+                    focusedTextColor = Theme.colors.onSurface,
+                    errorTextColor = Theme.colors.onSurface,
+                    unfocusedTextColor = Theme.colors.onSurface,
+                    disabledTextColor = Theme.colors.onSurface
                 ),
                 onValueChange = {
                     textFieldValueState = it
@@ -245,7 +247,8 @@ fun ForkedMaterialCountryCodePicker(
                     } else{
                         Text(
                             style = phonehintnumbertextstyle,
-                            text = stringResource(id = getNumberHint(defaultCountry.countryCode))
+                            text = stringResource(id = getNumberHint(defaultCountry.countryCode)),
+                            color = Theme.colors.onSurfaceVariant,
                         )
                     }
                 },

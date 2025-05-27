@@ -51,12 +51,14 @@ fun InitialLogin(
     ) {
         Text(
             text = "Found It",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = Theme.colors.onSurface,
         )
         Spacer(Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.app_description),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            color = Theme.colors.onSurface,
         )
         Spacer(Modifier.height(24.dp))
         PrimaryButton(
@@ -69,7 +71,9 @@ fun InitialLogin(
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(R.string.or),
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                color = Theme.colors.onSurface,
+
             )
             HorizontalDivider(modifier = Modifier.weight(1f))
         }
@@ -129,12 +133,14 @@ private fun GuestLoginDialog(
             ) {
                 Text(
                     text = stringResource(R.string.guest_login_title),
-                    style = Theme.typography.title
+                    style = Theme.typography.title,
+                    color = Theme.colors.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.guest_login_description),
-                    style = Theme.typography.body
+                    style = Theme.typography.body,
+                    color = Theme.colors.onSurface,
                 )
                 Spacer(Modifier.height(12.dp))
                 AnimatedVisibility(visible = isLoading) {

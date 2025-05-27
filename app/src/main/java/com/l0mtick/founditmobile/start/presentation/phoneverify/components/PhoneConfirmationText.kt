@@ -2,7 +2,6 @@ package com.l0mtick.founditmobile.start.presentation.phoneverify.components
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
 fun PhoneConfirmationText(
@@ -34,7 +34,7 @@ fun PhoneConfirmationText(
         )
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
+                color = Theme.colors.brand,
                 textDecoration = TextDecoration.Underline
             )
         ) {
@@ -47,7 +47,9 @@ fun PhoneConfirmationText(
 
     Text(
         text = annotatedText,
-        style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+        style = Theme.typography.body,
+        color = Theme.colors.onSurface,
+        textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
             .pointerInput(Unit) {

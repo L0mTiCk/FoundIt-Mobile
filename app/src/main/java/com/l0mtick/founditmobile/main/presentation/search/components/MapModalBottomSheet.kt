@@ -47,7 +47,8 @@ fun MapModalBottomSheet(
         ) {
             Text(
                 text = item.title,
-                style = Theme.typography.title
+                style = Theme.typography.title,
+                color = Theme.colors.onSurface,
             )
             Spacer(Modifier.height(12.dp))
             Row(
@@ -72,7 +73,8 @@ fun MapModalBottomSheet(
                         text = item.description ?: "No description",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = Theme.typography.body
+                        style = Theme.typography.body,
+                        color = Theme.colors.onSurface,
                     )
 //                    Spacer(Modifier.height(4.dp))
                     Text(

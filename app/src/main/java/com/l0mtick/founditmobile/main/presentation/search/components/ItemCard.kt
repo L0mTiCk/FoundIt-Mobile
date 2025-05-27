@@ -73,7 +73,8 @@ fun BigItemCard(
         Spacer(Modifier.height(18.dp))
         Text(
             text = title,
-            style = Theme.typography.title
+            style = Theme.typography.title,
+            color = Theme.colors.onSurface
         )
         Spacer(Modifier.height(10.dp))
         Text(
@@ -178,7 +179,8 @@ fun CompactItemCard(
                 text = title,
                 style = Theme.typography.body,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Theme.colors.onSurface
             )
             
             Spacer(Modifier.height(4.dp))

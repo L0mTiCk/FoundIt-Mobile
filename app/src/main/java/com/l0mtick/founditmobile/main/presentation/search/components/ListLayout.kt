@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
@@ -62,6 +63,7 @@ fun ListLayout(
                 onValueChange = {
                     onAction(SearchAction.OnListSearchValueChange(it))
                 },
+                label = stringResource(R.string.search_hint),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)

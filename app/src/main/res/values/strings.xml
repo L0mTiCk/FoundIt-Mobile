@@ -22,6 +22,7 @@
     <string name="cancel">Cancel</string>
     <string name="exit">Exit</string>
     <string name="login_as_guest">Login as Guest</string>
+    <string name="no_chats">No chats</string>
 
 
     <!--  Navigation-->
@@ -68,6 +69,7 @@
     </plurals>
 
     <!--  Search screen-->
+    <string name="search_hint">Enter query...</string>
     <string name="lost_items">Lost items</string>
     <string name="select_date">Select date</string>
     <string name="clear_date">Clear date</string>

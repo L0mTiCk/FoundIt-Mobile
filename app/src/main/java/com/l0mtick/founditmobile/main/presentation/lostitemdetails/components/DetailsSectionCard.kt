@@ -57,7 +57,8 @@ fun DetailsSectionCard(
         ) {
             Text(
                 text = header,
-                style = Theme.typography.body
+                style = Theme.typography.body,
+                color = Theme.colors.onSurface,
             )
             Spacer(Modifier.height(4.dp))
             Text(

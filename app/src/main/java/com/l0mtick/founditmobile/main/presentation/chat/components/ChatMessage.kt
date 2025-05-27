@@ -87,7 +87,8 @@ fun ChatMessage(
                 Text(
                     text = message,
                     style = Theme.typography.body,
-                    lineHeight = 18.sp
+                    lineHeight = 18.sp,
+                    color = Theme.colors.onSurface
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(

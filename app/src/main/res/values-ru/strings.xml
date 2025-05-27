@@ -22,6 +22,7 @@
     <string name="cancel">Отмена</string>
     <string name="exit">Выйти</string>
     <string name="login_as_guest">Войти как Гость</string>
+    <string name="no_chats">Чатов нет</string>
 
     <!--  Navigation-->
     <string name="navigation_home">Главная</string>
@@ -71,6 +72,7 @@
 
 
     <!--  Search screen-->
+    <string name="search_hint">Введите запрос...</string>
     <string name="lost_items">Потерянные вещи</string>
     <string name="select_date">Выберите дату</string>
     <string name="clear_date">Очистить выбор</string>

@@ -56,7 +56,9 @@ fun MessageInput(
                 selectionColors = TextSelectionColors(
                     handleColor = Theme.colors.brand,
                     backgroundColor = Theme.colors.brandMuted
-                )
+                ),
+                focusedTextColor = Theme.colors.onSurface,
+                unfocusedTextColor = Theme.colors.onSurface
             )
         )
         

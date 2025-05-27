@@ -158,6 +158,7 @@ fun LostItemDetailsScreen(
         Text(
             text = state.lostItem?.title ?: "",
             style = Theme.typography.headline,
+            color = Theme.colors.onSurface,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .defaultPlaceholder(
@@ -170,6 +171,7 @@ fun LostItemDetailsScreen(
         Text(
             text = state.lostItem?.description ?: "",
             style = Theme.typography.body,
+            color = Theme.colors.onSurface,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .defaultPlaceholder(
@@ -227,6 +229,7 @@ fun LostItemDetailsScreen(
         Text(
             text = stringResource(R.string.details_details),
             style = Theme.typography.headline,
+            color = Theme.colors.onSurface,
             modifier = Modifier.padding(horizontal = 20.dp)
         )
         Spacer(Modifier.height(12.dp))
@@ -275,6 +278,7 @@ fun LostItemDetailsScreen(
         Text(
             text = stringResource(R.string.details_location),
             style = Theme.typography.headline,
+            color = Theme.colors.onSurface,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
         )

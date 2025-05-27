@@ -95,7 +95,8 @@ fun PhoneVerificationScreen(
         Spacer(Modifier.height(32.dp))
         Text(
             text = stringResource(R.string.phone_confirmation_title),
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            color = Theme.colors.onSurface,
         )
         Spacer(Modifier.height(12.dp))
         PhoneConfirmationText(
@@ -153,7 +154,8 @@ fun PhoneVerificationScreen(
 
                 Text(
                     text = stringResource(R.string.enter_code_from_telegram),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Theme.colors.onSurface,
                 )
                 Spacer(Modifier.height(24.dp))
                 OtpInputField(

@@ -95,7 +95,8 @@ fun SettingsScreen(
         Text(
             text = stringResource(R.string.settings_preferences),
             style = Theme.typography.headline,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = Theme.colors.onSurface
         )
         
         Spacer(Modifier.height(16.dp))
@@ -158,7 +159,8 @@ fun SettingsScreen(
         Text(
             text = stringResource(R.string.settings_account),
             style = Theme.typography.headline,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = Theme.colors.onSurface
         )
         
         Spacer(Modifier.height(16.dp))

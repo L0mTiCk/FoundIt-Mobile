@@ -56,7 +56,8 @@ fun PublishingTimeSlider(
             title = {
                 Text(
                     text = stringResource(R.string.publication_duration_info_title),
-                    style = Theme.typography.title
+                    style = Theme.typography.title,
+                    color = Theme.colors.onSurface
                 )
             },
             text = {
@@ -80,12 +81,14 @@ fun PublishingTimeSlider(
             val days = value.roundToInt()
             Text(
                 text = pluralStringResource(R.plurals.days_count, days, days),
-                style = Theme.typography.body
+                style = Theme.typography.body,
+                color = Theme.colors.onSurface
             )
             Spacer(Modifier.weight(1f))
             Text(
                 text = "Max: ${userLimit.roundToInt()}",
-                style = Theme.typography.body
+                style = Theme.typography.body,
+                color = Theme.colors.onSurface
             )
             Spacer(Modifier.width(8.dp))
             IconButton(
@@ -94,7 +97,7 @@ fun PublishingTimeSlider(
                     showDialog = true
                 }
             ) {
-                Icon(Icons.Outlined.Info, "Info")
+                Icon(Icons.Outlined.Info, "Info", tint = Theme.colors.onSurface)
             }
         }
         Slider(

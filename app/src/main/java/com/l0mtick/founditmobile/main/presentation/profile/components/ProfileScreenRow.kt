@@ -44,7 +44,8 @@ fun ProfileScreenRow(
         Column {
             Text(
                 text = header,
-                style = Theme.typography.body
+                style = Theme.typography.body,
+                color = Theme.colors.onSurface
             )
             description?.let {
                 Spacer(Modifier.height(6.dp))

@@ -1,6 +1,5 @@
 package com.l0mtick.founditmobile.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationDrawerItemColors
@@ -25,14 +24,18 @@ val baseLightColors = FoundItColors(
     onBackground = Color(0xFF171A1F),
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF171A1F),
-    onSurfaceVariant = Color(0xFF565E6C),
+    onSurfaceVariant = Color(0xFF5F6877),
     text = Color(0xFF0D141C)
 )
 
 //TODO: replace with actual dark theme
 val baseDarkColors = baseLightColors.copy(
     background = Color(0xFF171A1F),
-)
+    brandMuted = Color(0xFFD7E4DD),
+    surface = Color(0xFF1D2026),
+    onSurface = Color(0xFFFFFFFF),
+    onSurfaceVariant = Color(0xFF9A9FB2),
+    )
 
 val baseTypography = FoundItTypography(
     headline = TextStyle(
@@ -56,7 +59,7 @@ val baseTypography = FoundItTypography(
 
 @Composable
 fun FoundItMobileTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
 

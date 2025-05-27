@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -83,7 +84,11 @@ fun InboxScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("No chats")
+                        Text(
+                            text = stringResource(R.string.no_chats),
+                            style = Theme.typography.headline,
+                            color = Theme.colors.onSurface
+                        )
                     }
                 }
             } else {

@@ -52,6 +52,7 @@ fun UserProfile(
                 Text(
                     text = user?.username ?: "",
                     style = Theme.typography.headline,
+                    color = Theme.colors.onSurface,
                     modifier = Modifier
                         .defaultPlaceholder(visible = user == null, width = 100.dp)
                         .animateBounds(this)
