@@ -7,4 +7,5 @@ data class LostItemDetailsState(
     val isGuest: Boolean = false,
     val lostItem: LostItem? = null,
     val owner: User? = null,
+    val isChatLoading: Boolean = false
 )

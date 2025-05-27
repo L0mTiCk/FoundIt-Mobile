@@ -25,6 +25,7 @@ import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetai
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileViewModel
 import com.l0mtick.founditmobile.main.presentation.search.SearchViewModel
 import com.l0mtick.founditmobile.main.presentation.settings.SettingsViewModel
+import com.l0mtick.founditmobile.main.presentation.useritems.UserItemsViewModel
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -49,7 +50,13 @@ val mainModule = module {
 
     single<LocationService> { LocationServiceImpl(application = get()) }
 
-    single<AddItemRepository> { AddItemRepositoryImpl(mainApi = get(), localStorage = get(), context = get()) }
+    single<AddItemRepository> {
+        AddItemRepositoryImpl(
+            mainApi = get(),
+            localStorage = get(),
+            context = get()
+        )
+    }
 
     single<ChatWebSocketClient> {
         val json = Json {
@@ -84,6 +91,7 @@ val mainModule = module {
         LostItemDetailsViewModel(
             itemRepository = get(),
             userSessionManager = get(),
+            snackbarManager = get(),
             savedStateHandle = get()
         )
     }
@@ -95,6 +103,7 @@ val mainModule = module {
     viewModel {
         ChatViewModel(
             chatRepository = get(),
+            snackbarManager = get(),
             savedStateHandle = get()
         )
     }
@@ -113,4 +122,11 @@ val mainModule = module {
         )
     }
 
+    viewModel {
+        UserItemsViewModel(
+            lostItemRepository = get(),
+            snackbarManager = get(),
+            savedStateHandle = get()
+        )
+    }
 }

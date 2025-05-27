@@ -7,10 +7,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -126,6 +133,98 @@ private fun BigItemCardPreview() {
             postedTimestamp = 1746034187000L,
             distance = 100F,
             onClick = {}
+        )
+    }
+}
+
+@Composable
+fun CompactItemCard(
+    id: Int,
+    title: String,
+    description: String,
+    postedTimestamp: Long,
+    modifier: Modifier = Modifier,
+    imageUrl: String? = null,
+    isUserCreated: Boolean = true,
+    onClick: (Int) -> Unit,
+    onActionClick: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick(id) }
+            .padding(12.dp)
+            .then(modifier),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Image
+        PlaceholderImage(
+            imageUrl = imageUrl,
+            contentDescription = "Item image",
+            shape = RoundedCornerShape(8.dp),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(80.dp)
+        )
+        
+        Spacer(Modifier.width(12.dp))
+        
+        // Content
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                style = Theme.typography.body,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Spacer(Modifier.height(4.dp))
+            
+            Text(
+                text = description,
+                style = Theme.typography.description,
+                color = Theme.colors.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Spacer(Modifier.height(4.dp))
+            
+            Text(
+                text = formatTimeAgo(postedTimestamp),
+                style = Theme.typography.description,
+                color = Theme.colors.onSurfaceVariant
+            )
+        }
+        
+        // Action button
+        IconButton(
+            onClick = { onActionClick(id) }
+        ) {
+            Icon(
+                imageVector = if (isUserCreated) Icons.Filled.Delete else Icons.Filled.Favorite,
+                contentDescription = if (isUserCreated) "Delete item" else "Remove from favorites",
+                tint = Theme.colors.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun CompactItemCardPreview() {
+    FoundItMobileTheme {
+        CompactItemCard(
+            id = 1,
+            title = "Lost iPhone 13 Pro",
+            description = "I lost my iPhone 13 Pro in the park yesterday. It has a black case and a cracked screen.",
+            postedTimestamp = System.currentTimeMillis() - 24 * 60 * 60 * 1000,
+            isUserCreated = true,
+            onClick = {},
+            onActionClick = {}
         )
     }
 }

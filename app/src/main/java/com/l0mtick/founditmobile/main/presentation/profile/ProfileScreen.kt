@@ -48,6 +48,12 @@ fun ProfileRoot(
         onAction = viewModel::onAction,
         onNavigateToSettings = {
             navController.navigate(NavigationRoute.Main.Settings)
+        },
+        onNavigateToMy = {
+            navController.navigate(NavigationRoute.Main.UserItems(isFavorite = false))
+        },
+        onNavigateToFavorites = {
+            navController.navigate(NavigationRoute.Main.UserItems(isFavorite = true))
         }
     )
 }
@@ -57,6 +63,8 @@ fun ProfileScreen(
     state: ProfileState,
     onAction: (ProfileAction) -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateToMy: () -> Unit,
+    onNavigateToFavorites: () -> Unit,
 ) {
     val context = LocalContext.current
     val rowsModifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
@@ -103,7 +111,7 @@ fun ProfileScreen(
                     state.favoriteCount
                 ),
                 trailingIcon = Icons.Default.FavoriteBorder,
-                onClick = { },
+                onClick = onNavigateToFavorites,
                 modifier = rowsModifier
             )
             ProfileScreenRow(
@@ -114,7 +122,7 @@ fun ProfileScreen(
                     state.user?.levelItemsCount ?: 0
                 ),
                 trailingIcon = Icons.AutoMirrored.Filled.List,
-                onClick = { },
+                onClick = onNavigateToMy,
                 modifier = rowsModifier
             )
             ProfileScreenRow(
@@ -147,7 +155,9 @@ private fun Preview() {
         ProfileScreen(
             state = ProfileState(),
             onAction = {},
-            onNavigateToSettings = {}
+            onNavigateToSettings = {},
+            onNavigateToMy = {},
+            onNavigateToFavorites = {}
         )
     }
 }

@@ -84,9 +84,23 @@ fun ListLayout(
                 onCategoryClick = {
                     onAction(SearchAction.OnCategorySelect(it))
                 },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp)
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp)
             )
         }
+
+        item {
+            DatePickerChip(
+                selectedDate = state.selectedDate,
+                onDateSelected = { timestamp ->
+                    onAction(SearchAction.OnDateSelected(timestamp))
+                },
+                onDateCleared = {
+                    onAction(SearchAction.OnDateCleared)
+                },
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 2.dp)
+            )
+        }
+
 
         items(state.items.items, key = { it.id }) { item ->
             var distanceInMeters by remember(item.id) { mutableStateOf<Float?>(null) }

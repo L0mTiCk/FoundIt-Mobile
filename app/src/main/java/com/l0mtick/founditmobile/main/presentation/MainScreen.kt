@@ -50,6 +50,7 @@ import com.l0mtick.founditmobile.main.presentation.lostitemdetails.LostItemDetai
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileRoot
 import com.l0mtick.founditmobile.main.presentation.search.SearchRoot
 import com.l0mtick.founditmobile.main.presentation.settings.SettingsRoot
+import com.l0mtick.founditmobile.main.presentation.useritems.UserItemsRoot
 import com.l0mtick.founditmobile.ui.theme.Theme
 import org.koin.androidx.compose.koinViewModel
 
@@ -251,6 +252,12 @@ fun MainScreen(
                         onNavBack = {
                             localNavController.navigateUp()
                         }
+                    )
+                }
+
+                composable<NavigationRoute.Main.UserItems> {
+                    UserItemsRoot(
+                        navController = localNavController
                     )
                 }
             }

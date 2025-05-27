@@ -3,6 +3,7 @@ package com.l0mtick.founditmobile.main.domain.repository
 import com.l0mtick.founditmobile.common.data.remote.dto.UserDTO
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
 import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
@@ -61,5 +62,14 @@ interface MainApi {
     suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network>
 
     suspend fun getMyLevel(): Result<Int, DataError.Network>
+
+    suspend fun getFavoriteLostItems(): Result<List<LostItemDTO>, DataError.Network>
+    suspend fun getUserCreatedLostItems(): Result<List<LostItemDTO>, DataError.Network>
+    suspend fun addItemToFavorites(itemId: Int): Result<Unit, DataError.Network>
+    suspend fun removeItemFromFavorites(itemId: Int): Result<Unit, DataError.Network>
+
+    suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network>
+
+    suspend fun createChatForItem(userId: Int, itemId: Int): Result<ChatDTO, DataError.Network>
 
 }

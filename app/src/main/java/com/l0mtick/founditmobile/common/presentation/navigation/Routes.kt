@@ -48,6 +48,9 @@ sealed interface NavigationRoute {
         @Serializable
         data class Chat(val chatId: Int) : Main
 
+        @Serializable
+        data class UserItems(val isFavorite: Boolean) : Main
+
     }
 
 }

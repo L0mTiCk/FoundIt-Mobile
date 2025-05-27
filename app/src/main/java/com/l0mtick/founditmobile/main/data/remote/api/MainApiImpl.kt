@@ -7,7 +7,9 @@ import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ConnectivityObserver
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
+import com.l0mtick.founditmobile.main.data.remote.dto.ChatDTO
 import com.l0mtick.founditmobile.main.data.remote.dto.LostItemDTO
+import com.l0mtick.founditmobile.main.data.remote.requests.CreateChatRequest
 import com.l0mtick.founditmobile.main.data.remote.requests.CreateItemRequest
 import com.l0mtick.founditmobile.main.data.remote.responses.CategoriesResponse
 import com.l0mtick.founditmobile.main.data.remote.responses.ChatsResponse
@@ -139,6 +141,50 @@ class MainApiImpl(
     override suspend fun getMyLevel(): Result<Int, DataError.Network> {
         return getAuth(
             path = "user/users/my-level"
+        )
+    }
+
+    override suspend fun getFavoriteLostItems(): Result<List<LostItemDTO>, DataError.Network> {
+        return getAuth(
+            path = "user/items/favorite"
+        )
+    }
+
+    override suspend fun getUserCreatedLostItems(): Result<List<LostItemDTO>, DataError.Network> {
+        return getAuth(
+            path = "user/items/my"
+        )
+    }
+
+    override suspend fun addItemToFavorites(itemId: Int): Result<Unit, DataError.Network> {
+        return getAuth(
+            path = "user/items/favorite/add",
+            params = { append("itemId", itemId.toString()) }
+        )
+    }
+
+    override suspend fun removeItemFromFavorites(itemId: Int): Result<Unit, DataError.Network> {
+        return getAuth(
+            path = "user/items/favorite/remove",
+            params = { append("itemId", itemId.toString()) }
+        )
+    }
+
+    override suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network> {
+        return getAuth(
+            path = "user/item/delete",
+            params = { append("itemId", itemId.toString()) }
+        )
+    }
+
+    override suspend fun createChatForItem(
+        userId: Int,
+        itemId: Int
+    ): Result<ChatDTO, DataError.Network> {
+        val request = CreateChatRequest(userId, itemId)
+        return postAuth(
+            path = "user/chat",
+            body = request
         )
     }
 }

@@ -16,6 +16,7 @@ sealed class SearchState {
         val userLocation: Location = Location(""),
         val categories: List<Category> = emptyList(),
         val selectedCategories: Set<Long> = emptySet(),
+        val selectedDate: Long? = null,
         val items: PaginatedData<LostItem> = PaginatedData(emptyList(), false, null)
     ) : SearchState()
 

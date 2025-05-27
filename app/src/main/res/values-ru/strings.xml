@@ -68,14 +68,33 @@
         <item quantity="other">%d вещей</item> <!-- fallback -->
     </plurals>
 
+
+
     <!--  Search screen-->
     <string name="lost_items">Потерянные вещи</string>
-
+    <string name="select_date">Выберите дату</string>
+    <string name="clear_date">Очистить выбор</string>
+    <string name="selected_date">Дата: %1$s</string>
     <string name="no_internet_header">Упс!</string>
     <string name="no_internet_description">Интернет-соединение не найдено\nПроверьте подключение, чтобы продолжить</string>
 
     <string name="guest_login_title">Гостевой доступ</string>
     <string name="guest_login_description">Вы собираетесь продолжить как Гость. Функции приложения будут ограничены</string>
+
+    <!-- Details screen-->
+    <string name="details_to_chat">Чат</string>
+    <string name="details_add_favorite">В избранное</string>
+    <string name="details_details">Подробности</string>
+    <string name="details_category">Категория</string>
+    <string name="details_publish_date">Дата публикации</string>
+    <string name="details_expire_date">Срок действия</string>
+    <string name="details_location">Местоположение</string>
+    <string name="details_report">Пожаловаться</string>
+    <string name="details_add_fav_succeess">Добавлено в избранное</string>
+    <string name="details_add_fav_error">Ошибка при добавлении в избранное</string>
+    <string name="details_not_loaded_error">Подождите загрузки данных</string>
+    <string name="details_not_created_chat_error">Ошибка при создании чата</string>
+    <string name="details_created_chat_error">Чат с пользователем создан</string>
 
     <!--  Settings-->
     <string name="settings_title">Настройки</string>
@@ -88,6 +107,23 @@
     <string name="settings_sign_out_header">Выход</string>
     <string name="settings_sign_out_description">Выход из аккаунта на устройстве</string>
     <string name="settings_sign_out_confirmation">Вы уверены, что хотите выйти из аккаунта?</string>
+
+    <string name="my_items">Мои вещи</string>
+    <string name="favorite_items">Избранные вещи</string>
+    <string name="no_items_created">Вы ещё не создали ни 1 метки</string>
+    <string name="no_favorite_items">Вы ещё не добавили ничего в избранное</string>
+    <string name="delete_user_item_success">Вещь удалена</string>
+    <string name="delete_user_item_error">Ошибка при удалении вещи</string>
+    <string name="delete_favorite_item_success">Вещь была убрана из избранных</string>
+    <string name="delete_favorite_item_error">Ошибка при удалении из избранных</string>
+    <string name="dialog_remove_from_favorites_title">Удалить из избранного?</string>
+    <string name="dialog_remove_from_favorites_message">Эта вещь больше не будет отображаться в вашем списке избранного.</string>
+    <string name="dialog_remove_from_favorites_confirm">Удалить</string>
+    <string name="dialog_remove_from_favorites_cancel">Отмена</string>
+    <string name="dialog_delete_item_title">Удалить метку?</string>
+    <string name="dialog_delete_item_message">Это действие необратимо. Метка будет удалена навсегда.</string>
+    <string name="dialog_delete_item_confirm">Удалить</string>
+    <string name="dialog_delete_item_cancel">Отмена</string>
 
 
     <!--  Notifications-->

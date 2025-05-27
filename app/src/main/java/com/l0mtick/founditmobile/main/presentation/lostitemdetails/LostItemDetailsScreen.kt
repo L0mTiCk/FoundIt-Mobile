@@ -2,7 +2,6 @@ package com.l0mtick.founditmobile.main.presentation.lostitemdetails
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,8 +40,10 @@ import androidx.compose.ui.util.fastJoinToString
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.components.LoadingPrimaryButton
 import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.main.presentation.components.ItemImagesPager
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.lostitemdetails.components.DetailsSectionCard
@@ -67,6 +69,18 @@ fun LostItemDetailsRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(
+        viewModel.events
+    ) { event ->
+        when (event) {
+            is LostItemDetailsEvent.NavigateToChat -> navController.navigate(
+                NavigationRoute.Main.Chat(
+                    event.chatId
+                )
+            )
+        }
+    }
+
     LostItemDetailsScreen(
         state = state,
         onAction = viewModel::onAction,
@@ -79,7 +93,6 @@ fun LostItemDetailsRoot(
     )
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun LostItemDetailsScreen(
     state: LostItemDetailsState,
@@ -105,6 +118,7 @@ fun LostItemDetailsScreen(
             )
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -184,38 +198,40 @@ fun LostItemDetailsScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                Button(
-                    onClick = {},
+                LoadingPrimaryButton(
+                    text = stringResource(R.string.details_to_chat),
+                    onClick = {
+                        onAction(LostItemDetailsAction.OnCreateChatForItem)
+                    },
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Theme.colors.brand,
-                        contentColor = Theme.colors.onBrand
-                    )
-                ) {
-                    Text("Chat")
-                }
+                    isLoading = state.isChatLoading
+                )
                 Spacer(modifier = Modifier.requiredSize(width = 16.dp, height = 1.dp))
                 Button(
-                    onClick = {},
+                    onClick = {
+                        onAction(LostItemDetailsAction.OnAddToFavorites)
+                    },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Theme.colors.onSurfaceVariant.copy(alpha = .2f),
                         contentColor = Theme.colors.onSurfaceVariant
                     )
                 ) {
-                    Text("Favorite")
+                    Text(
+                        stringResource(R.string.details_add_favorite)
+                    )
                 }
             }
             Spacer(Modifier.height(16.dp))
         }
         Text(
-            text = "Details",
+            text = stringResource(R.string.details_details),
             style = Theme.typography.headline,
             modifier = Modifier.padding(horizontal = 20.dp)
         )
         Spacer(Modifier.height(12.dp))
         DetailsSectionCard(
-            header = "Category",
+            header = stringResource(R.string.details_category),
             description = state.lostItem?.categories?.map { it.name }?.fastJoinToString()
                 ?: "Empty",
             icon = Icons.Default.Search,
@@ -233,7 +249,7 @@ fun LostItemDetailsScreen(
         )
         Spacer(Modifier.height(12.dp))
         DetailsSectionCard(
-            header = "Publish date",
+            header = stringResource(R.string.details_publish_date),
             description = formatTimestampToShortDate(state.lostItem?.createdAt ?: 0),
             icon = Icons.Default.DateRange,
             modifier = Modifier
@@ -245,7 +261,7 @@ fun LostItemDetailsScreen(
         )
         Spacer(Modifier.height(12.dp))
         DetailsSectionCard(
-            header = "Expire date",
+            header = stringResource(R.string.details_expire_date),
             description = formatTimestampToShortDate(state.lostItem?.expiresAt ?: 0),
             icon = Icons.Default.DateRange,
             modifier = Modifier
@@ -257,7 +273,7 @@ fun LostItemDetailsScreen(
         )
         Spacer(Modifier.height(16.dp))
         Text(
-            text = "Location",
+            text = stringResource(R.string.details_location),
             style = Theme.typography.headline,
             modifier = Modifier
                 .padding(horizontal = 20.dp)

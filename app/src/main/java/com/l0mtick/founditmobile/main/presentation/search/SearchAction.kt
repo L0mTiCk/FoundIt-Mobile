@@ -5,4 +5,6 @@ sealed interface SearchAction {
     data object OnModeChange : SearchAction
     data object OnCenterOnUser : SearchAction
     data class OnListSearchValueChange(val value: String) : SearchAction
+    data class OnDateSelected(val timestamp: Long) : SearchAction
+    data object OnDateCleared : SearchAction
 }

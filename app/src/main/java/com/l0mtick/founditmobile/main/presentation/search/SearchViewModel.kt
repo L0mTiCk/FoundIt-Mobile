@@ -118,6 +118,8 @@ class SearchViewModel(
             is SearchAction.OnModeChange -> changeMode()
             SearchAction.OnCenterOnUser -> centerOnUserLocation()
             is SearchAction.OnListSearchValueChange -> updateListScreenSearch(action.value)
+            is SearchAction.OnDateSelected -> updateSelectedDate(action.timestamp)
+            SearchAction.OnDateCleared -> clearSelectedDate()
         }
     }
 
@@ -183,6 +185,27 @@ class SearchViewModel(
                 searchValue = value
             )
         }
-
+    }
+    
+    private fun updateSelectedDate(timestamp: Long) {
+        val current = state.value
+        if (current !is SearchState.ListScreen) return
+        
+        _state.update {
+            current.copy(
+                selectedDate = timestamp
+            )
+        }
+    }
+    
+    private fun clearSelectedDate() {
+        val current = state.value
+        if (current !is SearchState.ListScreen) return
+        
+        _state.update {
+            current.copy(
+                selectedDate = null
+            )
+        }
     }
 }

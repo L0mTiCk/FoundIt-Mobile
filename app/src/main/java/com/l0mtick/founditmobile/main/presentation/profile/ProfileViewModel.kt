@@ -21,16 +21,32 @@ class ProfileViewModel(private val usersRepository: UsersRepository) : ViewModel
         .onStart {
             if (!hasLoadedInitialData) {
                 viewModelScope.launch {
-                    when(val result = usersRepository.getMe()) {
-                        is Result.Success -> {
-                            _state.update {
-                                it.copy(
-                                    user = result.data
-                                )
+                    launch {
+                        when(val result = usersRepository.getMe()) {
+                            is Result.Success -> {
+                                _state.update {
+                                    it.copy(
+                                        user = result.data
+                                    )
+                                }
+                            }
+                            is Result.Error -> {
+                                Log.e("profile_viewmodel", result.toString())
                             }
                         }
-                        is Result.Error -> {
-                            Log.e("profile_viewmodel", result.toString())
+                    }
+                    launch {
+                        when(val result = usersRepository.getMyFavoriteCount()) {
+                            is Result.Success -> {
+                                _state.update {
+                                    it.copy(
+                                        favoriteCount = result.data
+                                    )
+                                }
+                            }
+                            is Result.Error -> {
+                                Log.e("profile_viewmodel", result.toString())
+                            }
                         }
                     }
                 }

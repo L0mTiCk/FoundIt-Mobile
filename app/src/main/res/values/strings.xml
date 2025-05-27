@@ -69,12 +69,31 @@
 
     <!--  Search screen-->
     <string name="lost_items">Lost items</string>
+    <string name="select_date">Select date</string>
+    <string name="clear_date">Clear date</string>
+    <string name="selected_date">Date: %1$s</string>
 
     <string name="no_internet_header">Whooops!</string>
     <string name="no_internet_description">No Internet connection found\nCheck your connection to continue</string>
 
     <string name="guest_login_title">Guest access</string>
     <string name="guest_login_description">You are about to continue as a guest. Some features may be limited</string>
+
+    <!-- Details screen-->
+    <string name="details_to_chat">Chat</string>
+    <string name="details_add_favorite">Favorite</string>
+    <string name="details_details">Details</string>
+    <string name="details_category">Category</string>
+    <string name="details_publish_date">Publish date</string>
+    <string name="details_expire_date">Expire date</string>
+    <string name="details_location">Location</string>
+    <string name="details_report">Report item</string>
+    <string name="details_add_fav_succeess">Added to favorites</string>
+    <string name="details_add_fav_error">Error occurred while adding to favorites</string>
+    <string name="details_not_loaded_error">Wait until data loaded</string>
+    <string name="details_not_created_chat_error">Error while creating chat</string>
+    <string name="details_created_chat_error">Chat created!</string>
+
 
     <!-- Settings-->
     <string name="settings_title">Settings</string>
@@ -87,6 +106,26 @@
     <string name="settings_sign_out_header">Sign Out</string>
     <string name="settings_sign_out_description">Sign Out from your account</string>
     <string name="settings_sign_out_confirmation">Are you sure you want to sign out?</string>
+
+    <!-- User Items Screen -->
+    <string name="my_items">My Items</string>
+    <string name="favorite_items">Favorite Items</string>
+    <string name="no_items_created">You haven\'t created any items yet</string>
+    <string name="no_favorite_items">You haven\'t added any items to favorites yet</string>
+    <string name="delete_user_item_success">Item deleted</string>
+    <string name="delete_user_item_error">Error while deleting item</string>
+    <string name="delete_favorite_item_success">Item removed from favorites</string>
+    <string name="delete_favorite_item_error">Error while removing from favorites</string>
+    <string name="dialog_remove_from_favorites_title">Remove from favorites?</string>
+    <string name="dialog_remove_from_favorites_message">This item will no longer appear in your favorites list.</string>
+    <string name="dialog_remove_from_favorites_confirm">Remove</string>
+    <string name="dialog_remove_from_favorites_cancel">Cancel</string>
+    <string name="dialog_delete_item_title">Delete item?</string>
+    <string name="dialog_delete_item_message">This action is irreversible. The item will be permanently deleted.</string>
+    <string name="dialog_delete_item_confirm">Delete</string>
+    <string name="dialog_delete_item_cancel">Cancel</string>
+
+
 
     <!--  Notifications-->
     <string name="new_message_notification_title">%1$s for "%2$s"</string>

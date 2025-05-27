@@ -3,6 +3,7 @@ package com.l0mtick.founditmobile.main.data.repository
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.main.data.util.toModel
+import com.l0mtick.founditmobile.main.domain.model.Chat
 import com.l0mtick.founditmobile.main.domain.model.LostItem
 import com.l0mtick.founditmobile.main.domain.model.PaginatedData
 import com.l0mtick.founditmobile.main.domain.model.User
@@ -56,6 +57,54 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
             }
 
             is Result.Error -> Result.Error(resultDTO.error)
+        }
+    }
+
+    override suspend fun getFavoriteLostItems(): Result<List<LostItem>, DataError.Network> {
+        return when(val result = mainApi.getFavoriteLostItems()) {
+            is Result.Success -> {
+                Result.Success(
+                    data = result.data.map { it.toModel() }
+                )
+            }
+            is Result.Error -> Result.Error(result.error)
+        }
+    }
+
+    override suspend fun getUserCreatedLostItems(): Result<List<LostItem>, DataError.Network> {
+        return when(val result = mainApi.getUserCreatedLostItems()) {
+            is Result.Success -> {
+                Result.Success(
+                    data = result.data.map { it.toModel() }
+                )
+            }
+            is Result.Error -> Result.Error(result.error)
+        }    }
+
+    override suspend fun addItemToFavorites(itemId: Int): Result<Unit, DataError.Network> {
+        return mainApi.addItemToFavorites(itemId)
+    }
+
+    override suspend fun removeItemFromFavorites(itemId: Int): Result<Unit, DataError.Network> {
+        return  mainApi.removeItemFromFavorites(itemId)
+    }
+
+    override suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network> {
+        return mainApi.deleteUserCreatedItem(itemId)
+    }
+
+    override suspend fun createChatForItem(
+        userId: Int,
+        itemId: Int
+    ): Result<Chat, DataError.Network> {
+        val result = mainApi.createChatForItem(userId, itemId)
+        return when (result) {
+            is Result.Success -> {
+                Result.Success(
+                    data = result.data.toModel()
+                )
+            }
+            is Result.Error -> Result.Error(result.error)
         }
     }
 

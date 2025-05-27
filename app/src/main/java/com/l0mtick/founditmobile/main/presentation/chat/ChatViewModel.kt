@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.data.remote.websocket.ChatWebSocketClient
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val chatRepository: ChatRepository,
+    private val snackbarManager: SnackbarManager,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -99,6 +101,7 @@ class ChatViewModel(
                 is Result.Error -> {
                     Log.e("ChatViewModel", "Failed to load messages: ${result.error}")
                     _state.update { it.copy(isLoading = false) }
+                    snackbarManager.showError(result.error)
                 }
             }
         }
