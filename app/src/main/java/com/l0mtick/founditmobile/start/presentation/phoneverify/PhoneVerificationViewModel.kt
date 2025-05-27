@@ -5,11 +5,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarType
+import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.common.presentation.util.UiText
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
 import com.simon.xmaterialccp.data.utils.checkPhoneNumber
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -20,6 +26,7 @@ import kotlinx.coroutines.launch
 
 class PhoneVerificationViewModel(
     private val authRepository: AuthRepository,
+    private val snackbarManager: SnackbarManager,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,7 +37,8 @@ class PhoneVerificationViewModel(
     private val eventChannel = Channel<PhoneVerificationEvent>()
     val events = eventChannel.receiveAsFlow()
 
-    private val _state = MutableStateFlow<PhoneVerificationState>(PhoneVerificationState.PhoneEnter())
+    private val _state =
+        MutableStateFlow<PhoneVerificationState>(PhoneVerificationState.PhoneEnter())
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
@@ -46,10 +54,19 @@ class PhoneVerificationViewModel(
 
     fun onAction(action: PhoneVerificationAction) {
         when (action) {
-            is PhoneVerificationAction.OnCountryPicked -> countryPicked(action.phoneCode, action.countryLang)
+            is PhoneVerificationAction.OnCountryPicked -> countryPicked(
+                action.phoneCode,
+                action.countryLang
+            )
+
             is PhoneVerificationAction.OnPhoneNumberChanged -> phoneNumberChanged(action.newPhone)
             PhoneVerificationAction.OnOpenTelegramClick -> openTelegramBot()
-            is PhoneVerificationAction.OnMoveToCode -> _state.update { PhoneVerificationState.CodeVerify(action.fullPhoneNumber) }
+            is PhoneVerificationAction.OnMoveToCode -> _state.update {
+                PhoneVerificationState.CodeVerify(
+                    action.fullPhoneNumber
+                )
+            }
+
             PhoneVerificationAction.OnMoveToPhoneNumber -> _state.update { PhoneVerificationState.PhoneEnter() }
             is PhoneVerificationAction.OnOtpChange -> otpChange(action.value, action.isOtpFilled)
         }
@@ -73,17 +90,63 @@ class PhoneVerificationViewModel(
         val current = _state.value
         if (current !is PhoneVerificationState.PhoneEnter) return
 
-        if (phoneNumber < current.phoneNumber || !current.isValidPhone) {
+        if (phoneNumber < current.phoneNumber || !current.isValidPhone || !current.isCheckingPhone) {
             val isValud = checkPhoneNumber(
                 phoneNumber,
                 "${current.phoneCode}${phoneNumber}",
                 current.defaultLang
             )
-            _state.update {
-                current.copy(
-                    phoneNumber = phoneNumber,
-                    isValidPhone = isValud
-                )
+            if (isValud) {
+                viewModelScope.launch {
+                    _state.update {
+                        current.copy(
+                            isCheckingPhone = true,
+                            phoneNumber = phoneNumber
+                        )
+                    }
+                    delay(300)
+                    val fullNumber = "${current.phoneCode}${phoneNumber}".replace("+", "")
+                    val isAvailable = authRepository.checkPhoneAvailability(fullNumber)
+                    Log.d("asasda", isAvailable.toString())
+                    when (isAvailable) {
+                        is Result.Success -> {
+                            _state.update {
+                                current.copy(
+                                    isValidPhone = true,
+                                    isCheckingPhone = false,
+                                    phoneNumber = phoneNumber
+                                )
+                            }
+                        }
+
+                        is Result.Error -> {
+                            _state.update {
+                                current.copy(
+                                    isCheckingPhone = false,
+                                    isValidPhone = false
+                                )
+                            }
+                            when(isAvailable.error) {
+                                DataError.Network.BAD_REQUEST -> snackbarManager.showSnackbar(
+                                    UiText.StringResource(R.string.signup_phone_bad),
+                                    SnackbarType.ERROR
+                                )
+                                DataError.Network.CONFLICT -> snackbarManager.showSnackbar(
+                                    UiText.StringResource(R.string.signup_phone_taken),
+                                    SnackbarType.ERROR
+                                )
+                                else -> snackbarManager.showError(isAvailable.error)
+                            }
+                        }
+                    }
+                }
+            } else {
+                _state.update {
+                    current.copy(
+                        phoneNumber = phoneNumber,
+                        isValidPhone = false
+                    )
+                }
             }
         }
     }
@@ -95,6 +158,7 @@ class PhoneVerificationViewModel(
         if (current.isValidPhone) {
             viewModelScope.launch {
                 val fullPhoneNumber = "${current.phoneCode}${current.phoneNumber}".replace("+", "")
+                Log.w("phone_number", "Full phone: $fullPhoneNumber")
                 eventChannel.send(PhoneVerificationEvent.OpenTelegramBot(fullPhoneNumber))
             }
         }
@@ -119,24 +183,25 @@ class PhoneVerificationViewModel(
                     phone = current.fullPhoneNumber,
                     code = current.otpValue
                 )
-                when(verifyResult) {
-                    is Result.Success<*, *> -> {
-                        Log.d("OTP", "OTP Confirmed")
-                        // Register user after successful phone verification
+                when (verifyResult) {
+                    is Result.Success -> {
                         val registerResult = authRepository.register(
                             username = navArgs.login,
                             email = navArgs.email,
-                            password = navArgs.pass
-                            // phone = current.fullPhoneNumber // Assuming register doesn't need phone again, or API handles it
+                            password = navArgs.pass,
+                            phoneNumber = current.fullPhoneNumber
                         )
                         when (registerResult) {
-                            is Result.Success<*, *> -> {
-                                Log.d("REGISTRATION", "User registered successfully")
+                            is Result.Success -> {
                                 eventChannel.send(PhoneVerificationEvent.OnVerificationSuccess)
                             }
-                            is Result.Error<*, *> -> {
+
+                            is Result.Error -> {
                                 Log.e("REGISTRATION", "Registration error: ${registerResult.error}")
-                                // Optionally send an error event to UI
+                                snackbarManager.showSnackbar(
+                                    UiText.StringResource(R.string.signup_error_register),
+                                    SnackbarType.ERROR
+                                )
                                 _state.update {
                                     current.copy(
                                         isLoading = false
@@ -146,12 +211,16 @@ class PhoneVerificationViewModel(
                             }
                         }
                     }
+
                     is Result.Error<*, *> -> {
                         Log.e("OTP", "OTP confirm error: ${verifyResult.error}")
+                        snackbarManager.showSnackbar(
+                            UiText.StringResource(R.string.signup_error_otp),
+                            SnackbarType.ERROR
+                        )
                         _state.update {
                             current.copy(
                                 isLoading = false
-                                // Potentially add an error message state here
                             )
                         }
                     }
@@ -159,6 +228,4 @@ class PhoneVerificationViewModel(
             }
         }
     }
-
-
 }

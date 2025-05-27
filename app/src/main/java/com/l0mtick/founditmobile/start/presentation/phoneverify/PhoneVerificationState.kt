@@ -6,6 +6,7 @@ sealed class PhoneVerificationState {
         val phoneCode: String = "+375",
         val phoneNumber: String = "",
         val defaultLang: String = "by",
+        val isCheckingPhone: Boolean = false,
         val isValidPhone: Boolean = false
     ) : PhoneVerificationState()
 

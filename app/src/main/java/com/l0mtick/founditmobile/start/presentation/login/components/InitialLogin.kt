@@ -60,7 +60,7 @@ fun InitialLogin(
         )
         Spacer(Modifier.height(24.dp))
         PrimaryButton(
-            text = "Log In",
+            text = stringResource(R.string.log_in),
             onClick = { onAction(LoginAction.OnMoveToLogin) },
             modifier = Modifier.fillMaxWidth()
         )
@@ -68,14 +68,14 @@ fun InitialLogin(
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
-                text = "or",
+                text = stringResource(R.string.or),
                 modifier = Modifier.padding(horizontal = 12.dp)
             )
             HorizontalDivider(modifier = Modifier.weight(1f))
         }
         Spacer(Modifier.height(12.dp))
         SecondaryButton(
-            text = "Sign Up",
+            text = stringResource(R.string.sign_up),
             onClick = { onAction(LoginAction.OnMoveToSignup) },
             modifier = Modifier.fillMaxWidth()
         )

@@ -126,6 +126,15 @@
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
     </plurals>
+    <string name="add_error_no_title">Title is required</string>
+    <string name="add_error_no_description">Description is required</string>
+    <string name="add_error_no_category">Category is required</string>
+    <string name="add_error_no_photo">Please add at least one photo</string>
+    <string name="add_error_no_location">Failed to get location. Please check GPS and permissions</string>
+    <string name="add_error_photo_upload">Failed to upload photo. Item created but some photos may be missing</string>
+    <string name="add_success">Item created successfully!</string>
+    <string name="add_fail">Failed to create item. Please try again later</string>
+    <string name="add_unexpected_error">An unexpected error occurred. Please try again later</string>
 
 
     <string name="about_dialog_title">About Found It</string>
@@ -168,5 +177,20 @@
         <item>You’ve reached the top! Enjoy maximum post time and respect.</item>
     </string-array>
 
-
+    <string name="username">Username</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="or">or</string>
+    <string name="login_error_as_guest">Something went wrong, try again later</string>
+    <string name="login_error_textfileds_state">Text filed must be filled and be correct</string>
+    <string name="login_error_conflict">Email or username is already taken</string>
+    <string name="login_error_wrong_credentials">Wrong username or password</string>
+    <string name="signup_error_register">Something went wrong, try to register one more time</string>
+    <string name="signup_error_otp">OTP is incorrect, try again</string>
+    <string name="signup_phone_taken">This number is already registered</string>
+    <string name="signup_phone_bad">Phone number is empty or incorrect</string>
 </resources>

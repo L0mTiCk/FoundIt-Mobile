@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
-import com.simon.xmaterialccp.component.MaterialCodePicker
+import com.l0mtick.founditmobile.ui.theme.Theme
 import com.simon.xmaterialccp.data.CCPColors
 import com.simon.xmaterialccp.data.CountryData
 import com.simon.xmaterialccp.data.ccpDefaultColors
@@ -77,18 +77,16 @@ fun PhoneTextFieldWithCountry(
             showCountryCodeInDIalog = true,
             showDropDownAfterFlag = true,
             textFieldShapeCornerRadiusInPercentage = 25,
-            searchFieldShapeCornerRadiusInPercentage = 25,
             appbartitleStyle = MaterialTheme.typography.titleLarge,
-            countryItemBgShape = RoundedCornerShape(5.dp),
             showCountryFlag = true,
             showCountryCode = true,
             isEnabled = true,
             colors = ccpDefaultColors(
-                primaryColor = MaterialTheme.colorScheme.primary,
+                primaryColor = Theme.colors.brand,
                 errorColor = MaterialTheme.colorScheme.error,
-                backgroundColor = MaterialTheme.colorScheme.background,
-                surfaceColor = MaterialTheme.colorScheme.surface,
-                outlineColor = MaterialTheme.colorScheme.outline,
+                backgroundColor = Theme.colors.background,
+                surfaceColor = Theme.colors.surface,
+                outlineColor = Theme.colors.brand,
                 disabledOutlineColor = MaterialTheme.colorScheme.outline.copy(0.1f),
                 unfocusedOutlineColor = MaterialTheme.colorScheme.onBackground.copy(0.3f),
                 textColor = MaterialTheme.colorScheme.onBackground.copy(0.7f),
@@ -112,7 +110,7 @@ private fun PhoneTextFieldWithCountryPreview() {
             "+375",
             "",
             "by",
-            false,
+            true,
             { a, b -> },
             {}
         )
@@ -174,12 +172,10 @@ fun ForkedMaterialCountryCodePicker(
     error: Boolean = false,
     showErrorText: Boolean = true,
     flagPadding: PaddingValues = PaddingValues(horizontal = 10.dp),
-    countryItemBgShape: RoundedCornerShape = RoundedCornerShape(0.dp),
     phonenumbertextstyle: TextStyle = MaterialTheme.typography.bodyMedium,
     phonehintnumbertextstyle: TextStyle = MaterialTheme.typography.bodyMedium,
     searchFieldPlaceHolderTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     searchFieldTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    searchFieldShapeCornerRadiusInPercentage: Int = 30,
     textFieldShapeCornerRadiusInPercentage: Int = 30,
     errorTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     appbartitleStyle: TextStyle = MaterialTheme.typography.titleLarge,
@@ -272,9 +268,7 @@ fun ForkedMaterialCountryCodePicker(
                             searchFieldPlaceHolderTextStyle = searchFieldPlaceHolderTextStyle,
                             searchFieldTextStyle = searchFieldTextStyle,
                             showCountryFlag = showCountryFlag,
-                            searchFieldShapeCornerRadiusInPercentage = searchFieldShapeCornerRadiusInPercentage,
                             appbartitleStyle = appbartitleStyle,
-                            countryItemBgShape = countryItemBgShape,
                             countryItemVerticalPadding = countryItemVerticalPadding,
                             countryItemHorizontalPadding = countryItemHorizontalPadding,
                             countrytextstyle = countrytextstyle,

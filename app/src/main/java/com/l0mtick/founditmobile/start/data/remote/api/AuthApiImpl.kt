@@ -49,9 +49,10 @@ class AuthApiImpl(
     override suspend fun register(
         username: String,
         email: String,
-        password: String
+        password: String,
+        phoneNumber: String
     ): Result<Unit, DataError.Network> {
-        val request = UserRegisterRequest(username, password, email)
+        val request = UserRegisterRequest(username, password, email, phoneNumber)
         return post(
             path = "auth/register/user",
             body = request
@@ -77,6 +78,13 @@ class AuthApiImpl(
         return get(
             path = "auth/check-email",
             params = { append("email", email) }
+        )
+    }
+
+    override suspend fun checkPhoneAvailability(fullPhoneNumber: String): Result<Unit, DataError.Network> {
+        return get(
+            path = "auth/check-phone",
+            params = { append("phone", fullPhoneNumber) }
         )
     }
 

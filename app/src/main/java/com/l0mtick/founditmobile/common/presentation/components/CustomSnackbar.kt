@@ -8,7 +8,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +45,8 @@ fun CustomSnackbar(
     val snackbarState by snackbarManager.snackbarState.collectAsState()
     val context = LocalContext.current
 
+    val imeBottomPadding = WindowInsets.ime.asPaddingValues().calculateBottomPadding()
+
     AnimatedVisibility(
         visible = snackbarState != null,
         enter = slideInVertically(
@@ -53,6 +58,7 @@ fun CustomSnackbar(
             animationSpec = tween(300)
         ),
         modifier = modifier
+            .padding(bottom = imeBottomPadding.coerceAtLeast(16.dp))
     ) {
         snackbarState?.let { data ->
             LaunchedEffect(data) {

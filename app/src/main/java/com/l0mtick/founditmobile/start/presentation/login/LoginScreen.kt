@@ -30,7 +30,7 @@ fun LoginRoot(
     val context = LocalContext.current
 
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             is LoginEvent.Error -> {
                 Toast.makeText(
                     context,
@@ -40,9 +40,15 @@ fun LoginRoot(
             }
 
             is LoginEvent.NavigateToPhoneVerification -> {
-                navController.navigate(NavigationRoute.Start.PhoneVerification(event.login, event.email, event.pass))
+                navController.navigate(
+                    NavigationRoute.Start.PhoneVerification(
+                        event.login,
+                        event.email,
+                        event.pass
+                    )
+                )
             }
-                    }
+        }
     }
 
     LoginScreen(

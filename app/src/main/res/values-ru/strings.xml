@@ -129,6 +129,15 @@
         <item quantity="many">%d дней</item>
         <item quantity="other">%d дня</item>
     </plurals>
+    <string name="add_error_no_title">Введите заголовок</string>
+    <string name="add_error_no_description">Введите описание</string>
+    <string name="add_error_no_category">Выберите категорию</string>
+    <string name="add_error_no_photo">Загрузите хотя бы одно фото</string>
+    <string name="add_error_no_location">Не удалось получить местоположение. Проверьте GPS и разрешения</string>
+    <string name="add_error_photo_upload">Не удалось загрузить фото. Метка создана но часть фото может быть пропущена</string>
+    <string name="add_success">Метка создана успешно!</string>
+    <string name="add_fail">Не удалось создать метку. Попробуйте еще раз позже</string>
+    <string name="add_unexpected_error">Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова позже</string>
 
     <string name="about_dialog_title">Про Found It</string>
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>
@@ -177,5 +186,19 @@
         <item>Вы достигли максимума! Максимальное время публикации и уважение обеспечены.</item>
     </string-array>
 
-
+    <string name="username">Имя пользователя</string>
+    <string name="username_or_email">Имя пользователя или Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="log_in">Вход</string>
+    <string name="or">или</string>
+    <string name="login_error_as_guest">Что-то пошло не так, попробуйте позже</string>
+    <string name="login_error_textfileds_state">Текстовые поля должны быть заполнены и без ошибок</string>
+    <string name="login_error_conflict">Данный email или имя пользователя уже заняты</string>
+    <string name="login_error_wrong_credentials">Неверный логин или пароль</string>
+    <string name="signup_error_register">Что-то пошло не так, попробуйте ещё раз позже</string>
+    <string name="signup_error_otp">Код некорректный, попробуйте ещё</string>
+    <string name="signup_phone_taken">Данный номер уже зарегистрирован</string>
+    <string name="signup_phone_bad">Номер телефона пустой или некорректный</string>
 </resources>

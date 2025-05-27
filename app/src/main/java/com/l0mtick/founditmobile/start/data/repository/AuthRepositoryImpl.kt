@@ -56,9 +56,10 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
     override suspend fun register(
         username: String,
         email: String,
-        password: String
+        password: String,
+        phoneNumber: String
     ): Result<Unit, DataError> {
-        return authApi.register(username, email, password)
+        return authApi.register(username, email, password, phoneNumber)
     }
 
     override suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError> {
@@ -77,6 +78,10 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
         }
 
         return Result.Success(Unit)
+    }
+
+    override suspend fun checkPhoneAvailability(fullPhoneNumber: String): Result<Unit, DataError.Network> {
+        return authApi.checkPhoneAvailability(fullPhoneNumber)
     }
 
     override suspend fun checkToken(): Result<Unit, DataError.Network> {

@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.start.presentation.phoneverify
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ import com.l0mtick.founditmobile.start.presentation.phoneverify.components.Phone
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.PhoneConfirmationText
 import com.l0mtick.founditmobile.start.presentation.phoneverify.components.PhoneTextFieldWithCountry
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
+import com.l0mtick.founditmobile.ui.theme.Theme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -103,6 +105,13 @@ fun PhoneVerificationScreen(
 
         when (state) {
             is PhoneVerificationState.PhoneEnter -> {
+                AnimatedVisibility(state.isCheckingPhone) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp),
+                        color = Theme.colors.brand,
+                        strokeWidth = 2.dp
+                    )
+                }
                 PhoneTextFieldWithCountry(
                     phoneNumber = state.phoneNumber,
                     phoneCode = state.phoneCode,
@@ -126,6 +135,11 @@ fun PhoneVerificationScreen(
             }
 
             is PhoneVerificationState.CodeVerify -> {
+                BackHandler(
+                    onBack = {
+                        onAction(PhoneVerificationAction.OnMoveToPhoneNumber)
+                    }
+                )
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
                     keyboardController?.show()
@@ -156,7 +170,9 @@ fun PhoneVerificationScreen(
                 Spacer(Modifier.height(24.dp))
                 AnimatedVisibility(state.isLoading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        color = Theme.colors.brand,
+                        strokeWidth = 2.dp
                     )
                 }
             }

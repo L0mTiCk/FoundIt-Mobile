@@ -4,10 +4,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
 import com.l0mtick.founditmobile.common.data.snackbar.SnackbarType
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
+import com.l0mtick.founditmobile.common.presentation.util.UiText
 import com.l0mtick.founditmobile.common.presentation.util.isValid
 import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateTextFieldInState
 import com.l0mtick.founditmobile.main.domain.model.Category
@@ -43,7 +45,7 @@ class AddItemViewModel(
                             )
                         }
                     }
-                    when(val categories = categoriesRepository.getAllCategories()) {
+                    when (val categories = categoriesRepository.getAllCategories()) {
                         is Result.Success -> {
                             _state.update {
                                 it.copy(
@@ -51,6 +53,7 @@ class AddItemViewModel(
                                 )
                             }
                         }
+
                         is Result.Error -> {
                             Log.e("add_viewmodel", categories.toString())
                         }
@@ -131,54 +134,69 @@ class AddItemViewModel(
 
     private fun submit() {
         val currentState = _state.value
-        
+
         if (!currentState.title.isValid()) {
             viewModelScope.launch {
-                snackbarManager.showSnackbar("Title is required", type = SnackbarType.ERROR)
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.add_error_no_title),
+                    type = SnackbarType.ERROR
+                )
             }
             return
         }
-        
+
         if (!currentState.description.isValid()) {
             viewModelScope.launch {
-                snackbarManager.showSnackbar("Description is required", type = SnackbarType.ERROR)
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.add_error_no_description),
+                    type = SnackbarType.ERROR
+                )
             }
             return
         }
-        
+
         if (currentState.selectedCategory == null) {
             viewModelScope.launch {
-                snackbarManager.showSnackbar("Please select a category", type = SnackbarType.ERROR)
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.add_error_no_category),
+                    type = SnackbarType.ERROR
+                )
             }
             return
         }
-        
+
         if (currentState.selectedPhotos.isEmpty()) {
             viewModelScope.launch {
-                snackbarManager.showSnackbar("Please add at least one photo", type = SnackbarType.ERROR)
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.add_error_no_photo),
+                    type = SnackbarType.ERROR
+                )
             }
             return
         }
-        
+
         _state.update {
             it.copy(isSubmitting = true)
         }
-        
+
         viewModelScope.launch {
             try {
                 val locationResult = locationService.getCurrentLocation()
                 if (locationResult !is Result.Success) {
-                    snackbarManager.showSnackbar("Failed to get location. Please check GPS and permissions.", type = SnackbarType.ERROR)
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.add_error_no_location),
+                        type = SnackbarType.ERROR
+                    )
                     _state.update { it.copy(isSubmitting = false) }
                     return@launch
                 }
-                
+
                 val location = locationResult.data
-                
+
                 val currentTimeMillis = System.currentTimeMillis()
                 val daysToAdd = currentState.publishTime.toLong()
                 val expiresAt = currentTimeMillis + (daysToAdd * 24 * 60 * 60 * 1000)
-                
+
                 val createResult = addItemRepository.createItem(
                     latitude = location.latitude,
                     longitude = location.longitude,
@@ -187,30 +205,35 @@ class AddItemViewModel(
                     expiresAt = expiresAt,
                     categoryIds = listOf(currentState.selectedCategory!!.id.toInt())
                 )
-                
+
                 when (createResult) {
                     is Result.Success -> {
                         val itemId = createResult.data
-                        
+
                         var uploadSuccess = true
                         for (photoUri in currentState.selectedPhotos) {
-                            when (val uploadResult = addItemRepository.uploadItemPhoto(itemId, photoUri)) {
+                            when (val uploadResult =
+                                addItemRepository.uploadItemPhoto(itemId, photoUri)) {
                                 is Result.Success -> {
                                     //TODO
                                     Log.d("add_viewmodel", uploadResult.data)
                                 }
+
                                 is Result.Error -> {
                                     uploadSuccess = false
-                                    snackbarManager.showSnackbar("Failed to upload photo. Item created but some photos may be missing.", type = SnackbarType.ERROR)
+                                    snackbarManager.showSnackbar(
+                                        UiText.StringResource(R.string.add_error_photo_upload),
+                                        type = SnackbarType.ERROR
+                                    )
                                     break
                                 }
                             }
                         }
-                        
+
                         if (uploadSuccess) {
-                            snackbarManager.showSuccess("Item created successfully!")
+                            snackbarManager.showSuccess(UiText.StringResource(R.string.add_success))
                         }
-                        
+
                         _state.update {
                             AddItemState(
                                 publishLimit = it.publishLimit,
@@ -218,15 +241,22 @@ class AddItemViewModel(
                             )
                         }
                     }
+
                     is Result.Error -> {
                         Log.e("add_viewmodel", createResult.toString())
-                        snackbarManager.showSnackbar("Failed to create item. Please try again.", type = SnackbarType.ERROR)
+                        snackbarManager.showSnackbar(
+                            UiText.StringResource(R.string.add_fail),
+                            type = SnackbarType.ERROR
+                        )
                     }
                 }
-                
+
             } catch (e: Exception) {
                 Log.e("add_viewmodel", e.toString())
-                snackbarManager.showSnackbar("An unexpected error occurred. Please try again.", type = SnackbarType.ERROR)
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.add_unexpected_error),
+                    type = SnackbarType.ERROR
+                )
             } finally {
                 _state.update { it.copy(isSubmitting = false) }
             }

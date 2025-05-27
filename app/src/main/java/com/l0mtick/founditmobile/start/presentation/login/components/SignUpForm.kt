@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.LoadingPrimaryButton
 import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
 import com.l0mtick.founditmobile.common.presentation.components.SecondaryButton
@@ -47,7 +49,7 @@ fun SignupForm(
         verticalArrangement = Arrangement.Bottom,
     ) {
         OutlinedAppTextField(
-            label = "Username",
+            label = stringResource(R.string.username),
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
@@ -62,7 +64,7 @@ fun SignupForm(
             errorText = loginState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
         )
         OutlinedAppTextField(
-            label = "Email",
+            label = stringResource(R.string.email),
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
@@ -80,7 +82,7 @@ fun SignupForm(
             errorText = emailState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
         )
         OutlinedAppTextField(
-            label = "Password",
+            label = stringResource(R.string.password),
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
@@ -99,7 +101,7 @@ fun SignupForm(
             visualTransformation = PasswordVisualTransformation()
         )
         OutlinedAppTextField(
-            label = "Confirm password",
+            label = stringResource(R.string.confirm_password),
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
@@ -119,7 +121,7 @@ fun SignupForm(
         )
         Spacer(Modifier.height(24.dp))
         LoadingPrimaryButton(
-            text = "Sign Up",
+            text = stringResource(R.string.sign_up),
             isLoading = isLoading,
             onClick = {
                 onAction(LoginAction.SignupFormAction.OnSubmit)
@@ -130,14 +132,14 @@ fun SignupForm(
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
-                text = "or",
+                text = stringResource(R.string.or),
                 modifier = Modifier.padding(horizontal = 12.dp)
             )
             HorizontalDivider(modifier = Modifier.weight(1f))
         }
         Spacer(Modifier.height(12.dp))
         SecondaryButton(
-            text = "Log In",
+            text = stringResource(R.string.log_in),
             onClick = { onAction(LoginAction.OnMoveToLogin) },
             modifier = Modifier.fillMaxWidth()
         )

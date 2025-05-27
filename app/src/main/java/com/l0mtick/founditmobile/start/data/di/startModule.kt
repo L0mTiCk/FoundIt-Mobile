@@ -21,10 +21,10 @@ val startModule = module {
     single<AuthRepository> { AuthRepositoryImpl(localStorage = get(), authApi = get()) }
 
     viewModel {
-        LoginViewModel(validator = get(), authRepository = get(), userSessionManager = get())
+        LoginViewModel(validator = get(), authRepository = get(), userSessionManager = get(), snackbarManager = get())
     }
 
     viewModel {
-        PhoneVerificationViewModel(authRepository = get(), savedStateHandle = get())
+        PhoneVerificationViewModel(authRepository = get(), snackbarManager = get(), savedStateHandle = get())
     }
 }
