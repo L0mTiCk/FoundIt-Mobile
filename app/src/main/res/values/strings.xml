@@ -80,6 +80,8 @@
 
     <string name="guest_login_title">Guest access</string>
     <string name="guest_login_description">You are about to continue as a guest. Some features may be limited</string>
+    <string name="load_more">Load more</string>
+    <string name="loading_more">Loading more</string>
 
     <!-- Details screen-->
     <string name="details_to_chat">Chat</string>

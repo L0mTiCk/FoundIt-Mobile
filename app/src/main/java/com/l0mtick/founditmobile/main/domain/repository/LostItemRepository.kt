@@ -16,7 +16,8 @@ interface LostItemRepository {
         userLongitude: Double,
         radiusKm: Double?,
         afterId: Int?,
-        limit: Int?
+        limit: Int?,
+        date: Long?
     ): Result<PaginatedData<LostItem>, DataError.Network>
 
     suspend fun getDetailedLostItem(itemId: Int): Result<Pair<LostItem, User>, DataError.Network>

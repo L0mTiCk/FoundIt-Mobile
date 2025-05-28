@@ -13,6 +13,7 @@ import com.l0mtick.founditmobile.main.domain.repository.LocationService
 import com.l0mtick.founditmobile.main.domain.repository.LostItemRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -85,7 +86,8 @@ class SearchViewModel(
                                 userLongitude = location.longitude,
                                 radiusKm = 5000.0,
                                 afterId = null,
-                                limit = null
+                                limit = null,
+                                date = null
                             )
 
                             when (itemsResult) {
@@ -120,6 +122,7 @@ class SearchViewModel(
             is SearchAction.OnListSearchValueChange -> updateListScreenSearch(action.value)
             is SearchAction.OnDateSelected -> updateSelectedDate(action.timestamp)
             SearchAction.OnDateCleared -> clearSelectedDate()
+            SearchAction.OnLoadMoreListItems -> loadMoreListItems()
         }
     }
 
@@ -206,6 +209,25 @@ class SearchViewModel(
             current.copy(
                 selectedDate = null
             )
+        }
+    }
+
+    private fun loadMoreListItems() {
+        val current = state.value
+        if (current !is SearchState.ListScreen) return
+
+        viewModelScope.launch {
+            _state.update {
+                current.copy(
+                    isLoadingMore = true
+                )
+            }
+            delay(1000)
+            _state.update {
+                current.copy(
+                    isLoadingMore = false
+                )
+            }
         }
     }
 }

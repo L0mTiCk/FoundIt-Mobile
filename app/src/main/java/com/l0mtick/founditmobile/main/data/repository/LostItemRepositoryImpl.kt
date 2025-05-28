@@ -19,7 +19,8 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
         userLongitude: Double,
         radiusKm: Double?,
         afterId: Int?,
-        limit: Int?
+        limit: Int?,
+        date: Long?
     ): Result<PaginatedData<LostItem>, DataError.Network> {
         val resultDTO = mainApi.searchLostItems(
             searchQuery = searchQuery,
@@ -28,7 +29,8 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
             userLongitude = userLongitude,
             radiusKm = radiusKm,
             afterId = afterId,
-            limit = limit
+            limit = limit,
+            date = date
         )
 
         return when (resultDTO) {

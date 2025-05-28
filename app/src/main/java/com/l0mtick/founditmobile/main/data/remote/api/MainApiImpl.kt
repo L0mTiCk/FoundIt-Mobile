@@ -77,7 +77,8 @@ class MainApiImpl(
         userLongitude: Double,
         radiusKm: Double?,
         afterId: Int?,
-        limit: Int?
+        limit: Int?,
+        date: Long?
     ): Result<PaginatedResponse<LostItemDTO>, DataError.Network> {
         return getAuth(
             path = "user/items/search",
@@ -92,6 +93,7 @@ class MainApiImpl(
                 radiusKm?.let { append("radiusKm", it.toString()) }
                 afterId?.let { append("afterId", it.toString()) }
                 limit?.let { append("limit", it.toString()) }
+                date?.let { append("date", it.toString()) }
             }
         )
     }

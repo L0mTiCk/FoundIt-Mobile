@@ -17,7 +17,8 @@ sealed class SearchState {
         val categories: List<Category> = emptyList(),
         val selectedCategories: Set<Long> = emptySet(),
         val selectedDate: Long? = null,
-        val items: PaginatedData<LostItem> = PaginatedData(emptyList(), false, null)
+        val items: PaginatedData<LostItem> = PaginatedData(emptyList(), false, null),
+        val isLoadingMore: Boolean = false
     ) : SearchState()
 
     data class MapScreen(

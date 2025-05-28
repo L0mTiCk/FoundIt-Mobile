@@ -7,4 +7,5 @@ sealed interface SearchAction {
     data class OnListSearchValueChange(val value: String) : SearchAction
     data class OnDateSelected(val timestamp: Long) : SearchAction
     data object OnDateCleared : SearchAction
+    data object OnLoadMoreListItems : SearchAction
 }

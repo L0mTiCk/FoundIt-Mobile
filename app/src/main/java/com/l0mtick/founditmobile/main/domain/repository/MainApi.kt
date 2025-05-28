@@ -32,7 +32,8 @@ interface MainApi {
         userLongitude: Double,
         radiusKm: Double?,
         afterId: Int?,
-        limit: Int?
+        limit: Int?,
+        date: Long?
     ): Result<PaginatedResponse<LostItemDTO>, DataError.Network>
     suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network>
 

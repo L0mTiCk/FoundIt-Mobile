@@ -82,6 +82,8 @@
 
     <string name="guest_login_title">Гостевой доступ</string>
     <string name="guest_login_description">Вы собираетесь продолжить как Гость. Функции приложения будут ограничены</string>
+    <string name="load_more">Загрузить еще</string>
+    <string name="loading_more">Загружаем еще...</string>
 
     <!-- Details screen-->
     <string name="details_to_chat">Чат</string>
