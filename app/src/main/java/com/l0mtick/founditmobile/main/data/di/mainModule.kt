@@ -83,6 +83,7 @@ val mainModule = module {
             categoriesRepository = get(),
             lostItemRepository = get(),
             locationService = get(),
+            snackbarManager = get(),
             savedStateHandle = get()
         )
     }

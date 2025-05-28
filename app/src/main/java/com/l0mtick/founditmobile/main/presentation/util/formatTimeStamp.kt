@@ -7,47 +7,69 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
 
-fun formatTimeAgo(
-    timestampMillis: Long,
-    locale: Locale = Locale.getDefault()
-): String {
-    val now = System.currentTimeMillis()
-    val diffMillis = now - timestampMillis
 
+fun formatTimeAgo(timestampMillis: Long): String {
+    val locale = Locale.getDefault()
+
+    val nowInstant = Instant.now()
+    val messageInstant = Instant.ofEpochMilli(timestampMillis)
+
+    val nowDateTime = nowInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+    val messageDateTime = messageInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+    val nowDate = nowDateTime.toLocalDate()
+    val messageDate = messageDateTime.toLocalDate()
+
+    val diffMillis = nowInstant.toEpochMilli() - messageInstant.toEpochMilli()
     val seconds = diffMillis / 1000
     val minutes = seconds / 60
     val hours = minutes / 60
-    val days = hours / 24
+
+    val daysBetween = ChronoUnit.DAYS.between(messageDate, nowDate)
 
     return when {
         seconds < 60 -> {
-            if (locale.language == "ru") "Размещено только что"
-            else "Posted just now"
+            if (locale.language == "ru") "Только что"
+            else "Just now"
         }
         minutes < 60 -> {
             val count = minutes.toInt()
             if (locale.language == "ru") "Размещено ${pluralRu(count, "минуту", "минуты", "минут")} назад"
-            else "Posted ${count}m ago"
+            else "$count min ago"
         }
-        hours < 24 -> {
+        hours < 24 && daysBetween == 0L -> {
             val count = hours.toInt()
             if (locale.language == "ru") "Размещено ${pluralRu(count, "час", "часа", "часов")} назад"
-            else "Posted ${count}h ago"
+            else "$count hr ago"
         }
-        days < 7 -> {
-            val count = days.toInt()
-            if (locale.language == "ru") "Размещено ${pluralRu(count, "день", "дня", "дней")} назад"
-            else "Posted ${count}d ago"
+
+        daysBetween == 1L -> {
+            if (locale.language == "ru") "Вчера"
+            else "Yesterday"
+        }
+        daysBetween == 2L -> {
+            if (locale.language == "ru") "Позавчера"
+            else "2 days ago"
+        }
+        daysBetween < 7L -> {
+            val count = daysBetween.toInt()
+            if (locale.language == "ru") "${pluralRu(count, "день", "дня", "дней")} назад"
+            else "$count days ago"
+        }
+        messageDate.year == nowDate.year -> {
+            val formatter = DateTimeFormatter.ofPattern("d MMMM", locale) // Например, "12 мая"
+            if (locale.language == "ru") "Размещено ${formatter.format(messageDateTime)}"
+            else "Posted ${formatter.format(messageDateTime)}"
         }
         else -> {
-            val date = Date(timestampMillis)
-            val format = if (locale.language == "ru") SimpleDateFormat("dd.MM.yyyy", locale)
-            else SimpleDateFormat("MMM dd, yyyy", locale)
-            if (locale.language == "ru") "Размещено ${format.format(date)}"
-            else "Posted ${format.format(date)}"
+            val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM) // Например, "12 мая 2023 г."
+                .withLocale(locale)
+            if (locale.language == "ru") "Размещено ${formatter.format(messageDateTime)}"
+            else "Posted ${formatter.format(messageDateTime)}"
         }
     }
 }

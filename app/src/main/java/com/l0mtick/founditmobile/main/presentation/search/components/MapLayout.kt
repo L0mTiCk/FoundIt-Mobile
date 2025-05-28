@@ -24,7 +24,6 @@ import com.l0mtick.founditmobile.main.presentation.search.SearchEvent
 import com.l0mtick.founditmobile.main.presentation.search.SearchState
 import com.l0mtick.founditmobile.ui.theme.Theme
 import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
@@ -38,8 +37,6 @@ import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.AnnotationSourceOptions
 import com.mapbox.maps.plugin.annotation.ClusterOptions
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
-import com.mapbox.maps.plugin.gestures.gestures
-import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.flow.Flow
@@ -86,8 +83,6 @@ fun MapLayout(
                     }
                 }
             }
-
-            else -> {}
         }
     }
 
@@ -102,22 +97,18 @@ fun MapLayout(
         ) {
             MapEffect(Unit) { mapView ->
 
-                val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
-                    mapViewportState.flyTo(CameraOptions.Builder().center(it).build())
-                    mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
-                }
-
                 mapView.location.apply {
                     locationPuck = createDefault2DPuck(withBearing = true)
                     enabled = true
                     puckBearing = PuckBearing.COURSE
                     puckBearingEnabled = true
                     pulsingEnabled = true
-                    addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
                 }
+
+                onAction(SearchAction.OnCenterOnUser)
             }
             CircleAnnotationGroup(
-                annotations = state.items.items.map {
+                annotations = state.items.map {
                     CircleAnnotationOptions()
                         .withPoint(Point.fromLngLat(it.longitude, it.latitude))
                         .withData(
@@ -178,7 +169,7 @@ fun MapLayout(
         }
     }
     if (isDropDownOpened) {
-        state.items.items.firstOrNull { it.id == dropDownItemId }?.let { item ->
+        state.items.firstOrNull { it.id == dropDownItemId }?.let { item ->
             MapModalBottomSheet(
                 item = item,
                 onDismissRequest = {

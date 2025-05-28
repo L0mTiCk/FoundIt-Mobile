@@ -23,6 +23,8 @@
     <string name="exit">Exit</string>
     <string name="login_as_guest">Login as Guest</string>
     <string name="no_chats">No chats</string>
+    <string name="retry">Retry</string>
+    <string name="error">Error</string>
 
 
     <!--  Navigation-->
@@ -82,6 +84,15 @@
     <string name="guest_login_description">You are about to continue as a guest. Some features may be limited</string>
     <string name="load_more">Load more</string>
     <string name="loading_more">Loading more</string>
+    <string name="loading_items_location_error">Error while fetching location</string>
+    <string name="loading_items_categories_error">Error while loading categories</string>
+    <string name="loading_items_error">Error while loading items</string>
+    <string name="loading_next_empty_error">No more items found</string>
+    <string name="fetching_location">Getting your location</string>
+    <string name="fetching_categories">Fetching item categories</string>
+    <string name="fetching_items">Fetching lost items</string>
+    <string name="empty_search">Nothing found</string>
+    <string name="empty_search_hint">Try to change filters or search query</string>
 
     <!-- Details screen-->
     <string name="details_to_chat">Chat</string>

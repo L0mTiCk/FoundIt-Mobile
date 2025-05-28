@@ -16,7 +16,7 @@ import com.l0mtick.founditmobile.main.data.remote.responses.UsersResponse
 interface MainApi {
 
     suspend fun getAllCategories(): Result<CategoriesResponse, DataError.Network>
-    suspend fun getPopularCategories():  Result<CategoriesResponse, DataError.Network>
+    suspend fun getPopularCategories(): Result<CategoriesResponse, DataError.Network>
 
     suspend fun getTopLevelUsers(): Result<UsersResponse, DataError.Network>
 
@@ -35,16 +35,23 @@ interface MainApi {
         limit: Int?,
         date: Long?
     ): Result<PaginatedResponse<LostItemDTO>, DataError.Network>
+
+    suspend fun getAllMapItems(
+        userLatitude: Double,
+        userLongitude: Double,
+        radiusKm: Double?
+    ): Result<List<LostItemDTO>, DataError.Network>
+
     suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network>
 
     suspend fun sendUserPushToken(token: String): Result<Unit, DataError.Network>
-    
+
     /**
      * Creates a new lost item without photos
      * @return Result containing the created item ID
      */
     suspend fun createItem(request: CreateItemRequest): Result<Int, DataError.Network>
-    
+
     /**
      * Uploads a photo for a specific lost item
      * @param itemId ID of the lost item to attach the photo to
@@ -52,8 +59,12 @@ interface MainApi {
      * @param fileName Name of the photo file
      * @return Result containing the URL of the uploaded photo
      */
-    suspend fun uploadItemPhoto(itemId: Int, photoData: ByteArray, fileName: String): Result<String, DataError.Network>
-    
+    suspend fun uploadItemPhoto(
+        itemId: Int,
+        photoData: ByteArray,
+        fileName: String
+    ): Result<String, DataError.Network>
+
     /**
      * Sends a message to a chat
      * @param chatId ID of the chat

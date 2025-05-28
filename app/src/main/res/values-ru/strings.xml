@@ -23,6 +23,8 @@
     <string name="exit">Выйти</string>
     <string name="login_as_guest">Войти как Гость</string>
     <string name="no_chats">Чатов нет</string>
+    <string name="retry">Повторить</string>
+    <string name="error">Ошибка</string>
 
     <!--  Navigation-->
     <string name="navigation_home">Главная</string>
@@ -84,6 +86,16 @@
     <string name="guest_login_description">Вы собираетесь продолжить как Гость. Функции приложения будут ограничены</string>
     <string name="load_more">Загрузить еще</string>
     <string name="loading_more">Загружаем еще...</string>
+    <string name="loading_items_location_error">Ошибка при определении местоположения</string>
+    <string name="loading_items_categories_error">Ошибка при загрузке категорий</string>
+    <string name="loading_items_error">Ошибка при загрузке вещей</string>
+    <string name="loading_next_empty_error">Больше меток нет</string>
+    <string name="fetching_location">Получаем местоположение</string>
+    <string name="fetching_categories">Загружаем категории вещей</string>
+    <string name="fetching_items">Загружаем потерянные вещи</string>
+    <string name="empty_search">Ничего не найдено</string>
+    <string name="empty_search_hint">Попробуйте сменить фильтры или поисковой запрос</string>
+
 
     <!-- Details screen-->
     <string name="details_to_chat">Чат</string>

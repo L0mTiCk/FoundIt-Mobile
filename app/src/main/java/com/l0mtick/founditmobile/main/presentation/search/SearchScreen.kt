@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.components.FloatingModeSwitchButton
-import com.l0mtick.founditmobile.main.presentation.search.components.ErrorLayout
+import com.l0mtick.founditmobile.main.presentation.search.components.ErrorDialog
 import com.l0mtick.founditmobile.main.presentation.search.components.ListLayout
-import com.l0mtick.founditmobile.main.presentation.search.components.LoadingLayout
+import com.l0mtick.founditmobile.main.presentation.search.components.LoadingDialog
 import com.l0mtick.founditmobile.main.presentation.search.components.MapLayout
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import kotlinx.coroutines.flow.Flow
@@ -51,38 +51,61 @@ fun SearchScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         when (state) {
-            is SearchState.Loading -> {
-                LoadingLayout(state = state)
+            is SearchState.ListScreen -> {
+                ListLayout(
+                    state = state,
+                    onAction = onAction,
+                    onItemClick = onNavigateToDetails
+                )
+                
+                // Show loading dialog if needed
+                if (state.isLoading && state.loadingStep != null) {
+                    LoadingDialog(step = state.loadingStep)
+                }
+                
+                // Show error dialog if needed
+                if (state.error != null) {
+                    ErrorDialog(
+                        message = state.error,
+                        onRetry = { onAction(SearchAction.OnRetry) },
+                        onDismissRequest = { onAction(SearchAction.OnRemoveError) }
+                    )
+                }
             }
 
-            is SearchState.Error -> {
-                ErrorLayout(state = state)
+            is SearchState.MapScreen -> {
+                MapLayout(
+                    state = state,
+                    events = events,
+                    onNavigateToDetails = onNavigateToDetails,
+                    onAction = onAction
+                )
+                
+                // Show loading dialog if needed
+                if (state.isLoading && state.loadingStep != null) {
+                    LoadingDialog(step = state.loadingStep)
+                }
+                
+                // Show error dialog if needed
+                if (state.error != null) {
+                    ErrorDialog(
+                        message = state.error,
+                        onRetry = { onAction(SearchAction.OnRetry) },
+                        onDismissRequest = { onAction(SearchAction.OnRemoveError) }
+                    )
+                }
             }
-
-            is SearchState.ListScreen -> ListLayout(
-                state = state,
-                onAction = onAction,
-                onItemClick = onNavigateToDetails
-            )
-
-            is SearchState.MapScreen -> MapLayout(
-                state = state,
-                events = events,
-                onNavigateToDetails = onNavigateToDetails,
-                onAction = onAction
-            )
         }
-        if (state is SearchState.MapScreen || state is SearchState.ListScreen) {
-            FloatingModeSwitchButton(
-                text = "Switch mode",
-                onClick = {
-                    onAction(SearchAction.OnModeChange)
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp)
-            )
-        }
+        
+        FloatingModeSwitchButton(
+            text = "Switch mode",
+            onClick = {
+                onAction(SearchAction.OnModeChange)
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 12.dp)
+        )
     }
 }
 

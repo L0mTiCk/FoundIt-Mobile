@@ -2,6 +2,8 @@ package com.l0mtick.founditmobile.main.presentation.search.components
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.animateBounds
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -10,11 +12,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
@@ -23,7 +30,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,18 +42,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.LookaheadScope
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.components.FadeVisibility
 import com.l0mtick.founditmobile.common.presentation.components.OutlinedAppTextField
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.search.SearchAction
@@ -50,6 +66,7 @@ import com.l0mtick.founditmobile.main.presentation.search.SearchState
 import com.l0mtick.founditmobile.main.presentation.util.calculateDistanceBetweenPoints
 import com.l0mtick.founditmobile.ui.theme.Theme
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun ListLayout(
     state: SearchState.ListScreen,
@@ -60,6 +77,34 @@ fun ListLayout(
     val lazyListState = rememberLazyListState()
     var overscrollTrigger by remember { mutableStateOf(false) }
     var isOverscrolling by remember { mutableStateOf(false) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val imeVisible = WindowInsets.isImeVisible
+    val wasImeVisible = remember { mutableStateOf(false) }
+
+    val firstTimeEntering = remember { mutableStateOf(true) }
+    val lastSearchValue = remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { state.searchValue }.collect {
+            firstTimeEntering.value = false
+        }
+    }
+
+    LaunchedEffect(imeVisible) {
+        if (!imeVisible && wasImeVisible.value) {
+            if (!firstTimeEntering.value &&
+                state.searchValue != lastSearchValue.value
+            ) {
+                Log.d("search_screen", "Keyboard dismissed → perform search")
+                lastSearchValue.value = state.searchValue
+                onAction(SearchAction.OnPerformSearch)
+            }
+        }
+
+        wasImeVisible.value = imeVisible
+    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -118,25 +163,58 @@ fun ListLayout(
                             description = null
                         )
                     }
-                    OutlinedAppTextField(
-                        value = state.searchValue,
-                        onValueChange = {
-                            onAction(SearchAction.OnListSearchValueChange(it))
-                        },
-                        label = stringResource(R.string.search_hint),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp, horizontal = 20.dp)
-                            .onFocusChanged { focusState ->
-                                if (!focusState.hasFocus) {
-                                    Log.d("search_screen", "Focus lost, performing search")
-                                }
-                            },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = {
-                            Log.d("search_screen", "On Ime.Done call")
-                        })
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    ) {
+                        LookaheadScope {
+                            OutlinedAppTextField(
+                                value = state.searchValue,
+                                onValueChange = {
+                                    onAction(SearchAction.OnListSearchValueChange(it))
+                                },
+                                label = stringResource(R.string.search_hint),
+                                modifier = Modifier
+                                    .padding(vertical = 4.dp, )
+                                    .weight(1f)
+                                    .animateBounds(this),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                keyboardActions = KeyboardActions(onDone = {
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus(force = true)
+
+                                    if (!firstTimeEntering.value && state.searchValue != lastSearchValue.value) {
+                                        lastSearchValue.value = state.searchValue
+                                        onAction(SearchAction.OnPerformSearch)
+                                    }
+                                })
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        FadeVisibility(
+                            visible = state.searchValue.isNotEmpty(),
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    onAction(SearchAction.OnListSearchValueChange(""))
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus(force = true)
+                                    if (!imeVisible) {
+                                        lastSearchValue.value = state.searchValue
+                                        onAction(SearchAction.OnPerformSearch)
+                                    }
+                                },
+                                modifier = Modifier.requiredSize(32.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Clear",
+                                    tint = Theme.colors.onSurface
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
 
@@ -185,6 +263,32 @@ fun ListLayout(
                     modifier = Modifier.padding(horizontal = 14.dp),
                     onClick = onItemClick
                 )
+            }
+            if (state.items.items.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillParentMaxHeight(.8f)
+                            .fillMaxWidth()
+                            .padding(40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.empty_search),
+                            style = Theme.typography.title,
+                            color = Theme.colors.onSurface
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(R.string.empty_search_hint),
+                            style = Theme.typography.body,
+                            color = Theme.colors.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
             }
             item {
                 AnimatedVisibility(

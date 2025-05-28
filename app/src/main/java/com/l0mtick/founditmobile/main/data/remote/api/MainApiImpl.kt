@@ -98,6 +98,21 @@ class MainApiImpl(
         )
     }
 
+    override suspend fun getAllMapItems(
+        userLatitude: Double,
+        userLongitude: Double,
+        radiusKm: Double?
+    ): Result<List<LostItemDTO>, DataError.Network> {
+        return getAuth(
+            path = "user/items/map",
+            params = {
+                append("latitude", userLatitude.toString())
+                append("longitude", userLongitude.toString())
+                radiusKm?.let { append("radiusKm", it.toString()) }
+            }
+        )
+    }
+
     override suspend fun getDetailedLostItem(itemId: Int): Result<DetailedLostItemResponse, DataError.Network> {
         return getAuth(
             path = "user/item",

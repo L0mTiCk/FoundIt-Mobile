@@ -45,6 +45,28 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
         }
     }
 
+    override suspend fun getItemsForMap(
+        userLatitude: Double,
+        userLongitude: Double,
+        radiusKm: Double?
+    ): Result<List<LostItem>, DataError.Network> {
+        val result = mainApi.getAllMapItems(
+            userLatitude = userLatitude,
+            userLongitude = userLongitude,
+            radiusKm = radiusKm
+        )
+        return when(result) {
+            is Result.Success -> {
+               Result.Success(
+                   data = result.data.map { it.toModel() }
+               )
+            }
+            is Result.Error -> {
+                Result.Error(result.error)
+            }
+        }
+    }
+
     override suspend fun getDetailedLostItem(itemId: Int): Result<Pair<LostItem, User>, DataError.Network> {
         val resultDTO = mainApi.getDetailedLostItem(itemId = itemId)
 
@@ -63,32 +85,35 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
     }
 
     override suspend fun getFavoriteLostItems(): Result<List<LostItem>, DataError.Network> {
-        return when(val result = mainApi.getFavoriteLostItems()) {
+        return when (val result = mainApi.getFavoriteLostItems()) {
             is Result.Success -> {
                 Result.Success(
                     data = result.data.map { it.toModel() }
                 )
             }
+
             is Result.Error -> Result.Error(result.error)
         }
     }
 
     override suspend fun getUserCreatedLostItems(): Result<List<LostItem>, DataError.Network> {
-        return when(val result = mainApi.getUserCreatedLostItems()) {
+        return when (val result = mainApi.getUserCreatedLostItems()) {
             is Result.Success -> {
                 Result.Success(
                     data = result.data.map { it.toModel() }
                 )
             }
+
             is Result.Error -> Result.Error(result.error)
-        }    }
+        }
+    }
 
     override suspend fun addItemToFavorites(itemId: Int): Result<Unit, DataError.Network> {
         return mainApi.addItemToFavorites(itemId)
     }
 
     override suspend fun removeItemFromFavorites(itemId: Int): Result<Unit, DataError.Network> {
-        return  mainApi.removeItemFromFavorites(itemId)
+        return mainApi.removeItemFromFavorites(itemId)
     }
 
     override suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network> {
@@ -106,6 +131,7 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
                     data = result.data.toModel()
                 )
             }
+
             is Result.Error -> Result.Error(result.error)
         }
     }
