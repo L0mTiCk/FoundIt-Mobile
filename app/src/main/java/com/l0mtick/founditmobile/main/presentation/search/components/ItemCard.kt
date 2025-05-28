@@ -1,5 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.search.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.FilterChip
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
 import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
+import com.l0mtick.founditmobile.main.domain.model.LostItemStatus
 import com.l0mtick.founditmobile.main.presentation.util.formatTimeAgo
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
 import com.l0mtick.founditmobile.ui.theme.Theme
@@ -147,10 +151,12 @@ fun CompactItemCard(
     description: String,
     postedTimestamp: Long,
     modifier: Modifier = Modifier,
+    status: LostItemStatus = LostItemStatus.ACTIVE,
     imageUrl: String? = null,
     isUserCreated: Boolean = true,
     onClick: (Int) -> Unit,
-    onActionClick: (Int) -> Unit
+    onActionClick: (Int) -> Unit,
+    onMarkAsReturned: (Int) -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -168,7 +174,7 @@ fun CompactItemCard(
             shape = RoundedCornerShape(8.dp),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(80.dp)
+                .size(90.dp)
         )
         
         Spacer(Modifier.width(12.dp))
@@ -202,8 +208,22 @@ fun CompactItemCard(
                 style = Theme.typography.description,
                 color = Theme.colors.onSurfaceVariant
             )
+
+            Spacer(Modifier.height(4.dp))
+
+            StatusChip(status = status)
         }
-        
+        if (isUserCreated) {
+            IconButton(
+                onClick = { onMarkAsReturned(id) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Mark as returned",
+                    tint = Theme.colors.brand
+                )
+            }
+        }
         // Action button
         IconButton(
             onClick = { onActionClick(id) }
@@ -228,7 +248,46 @@ private fun CompactItemCardPreview() {
             postedTimestamp = System.currentTimeMillis() - 24 * 60 * 60 * 1000,
             isUserCreated = true,
             onClick = {},
-            onActionClick = {}
+            onActionClick = {},
         )
     }
+}
+
+@Composable
+fun StatusChip(
+    status: LostItemStatus,
+    modifier: Modifier = Modifier
+) {
+    val backgroundColor: Color
+    val statusText: String
+    val textColor: Color = Color.White
+
+    when (status) {
+        LostItemStatus.PENDING -> {
+            backgroundColor = Theme.colors.statusPending
+            statusText = stringResource(id = R.string.item_status_pending)
+        }
+        LostItemStatus.ACTIVE -> {
+            backgroundColor = Theme.colors.brand
+            statusText = stringResource(id = R.string.item_status_active)
+        }
+        LostItemStatus.EXPIRED -> {
+            backgroundColor = Theme.colors.statusExpired
+            statusText = stringResource(id = R.string.item_status_expired)
+        }
+        LostItemStatus.FOUND -> {
+            backgroundColor = Theme.colors.statusFound
+            statusText = stringResource(id = R.string.item_status_found)
+        }
+    }
+
+
+    Text(
+        text = statusText,
+        color = textColor,
+        style = Theme.typography.description,
+        modifier = modifier
+            .background(backgroundColor, RoundedCornerShape(12.dp))
+            .padding(horizontal = 12.dp, vertical = 3.dp)
+    )
 }

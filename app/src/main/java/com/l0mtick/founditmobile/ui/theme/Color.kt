@@ -13,5 +13,8 @@ data class FoundItColors (
     val surface: Color,
     val onSurface: Color,
     val onSurfaceVariant: Color,
-    val text: Color
+    val text: Color,
+    val statusPending: Color,
+    val statusExpired: Color,
+    val statusFound: Color
 )

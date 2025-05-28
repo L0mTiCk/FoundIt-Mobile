@@ -25,7 +25,10 @@ val baseLightColors = FoundItColors(
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF171A1F),
     onSurfaceVariant = Color(0xFF5F6877),
-    text = Color(0xFF0D141C)
+    text = Color(0xFF0D141C),
+    statusPending = Color(0xFFD3A42B),
+    statusExpired = Color(0xFFB00020).copy(alpha = 0.7f),
+    statusFound = Color(0xFF2196F3).copy(alpha = 0.6f)
 )
 
 //TODO: replace with actual dark theme
@@ -35,7 +38,10 @@ val baseDarkColors = baseLightColors.copy(
     surface = Color(0xFF1D2026),
     onSurface = Color(0xFFFFFFFF),
     onSurfaceVariant = Color(0xFF9A9FB2),
-    )
+    statusPending = Color(0xFFE6C25F),
+    statusExpired = Color(0xFFCF6679),
+    statusFound = Color(0xFF8AB4F8)
+)
 
 val baseTypography = FoundItTypography(
     headline = TextStyle(

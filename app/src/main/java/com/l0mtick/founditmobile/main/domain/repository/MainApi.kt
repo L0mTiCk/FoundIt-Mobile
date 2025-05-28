@@ -79,6 +79,7 @@ interface MainApi {
     suspend fun getUserCreatedLostItems(): Result<List<LostItemDTO>, DataError.Network>
     suspend fun addItemToFavorites(itemId: Int): Result<Unit, DataError.Network>
     suspend fun removeItemFromFavorites(itemId: Int): Result<Unit, DataError.Network>
+    suspend fun markItemAsReturned(itemId: Int): Result<Unit,DataError.Network>
 
     suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network>
 

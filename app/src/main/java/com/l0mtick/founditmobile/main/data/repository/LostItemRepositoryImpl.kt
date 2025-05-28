@@ -116,6 +116,10 @@ class LostItemRepositoryImpl(private val mainApi: MainApi) : LostItemRepository 
         return mainApi.removeItemFromFavorites(itemId)
     }
 
+    override suspend fun markItemAsReturned(itemId: Int): Result<Unit, DataError.Network> {
+        return mainApi.markItemAsReturned(itemId)
+    }
+
     override suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network> {
         return mainApi.deleteUserCreatedItem(itemId)
     }

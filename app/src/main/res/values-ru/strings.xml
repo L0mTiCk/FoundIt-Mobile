@@ -72,7 +72,6 @@
     </plurals>
 
 
-
     <!--  Search screen-->
     <string name="search_hint">Введите запрос...</string>
     <string name="lost_items">Потерянные вещи</string>
@@ -140,7 +139,11 @@
     <string name="dialog_delete_item_message">Это действие необратимо. Метка будет удалена навсегда.</string>
     <string name="dialog_delete_item_confirm">Удалить</string>
     <string name="dialog_delete_item_cancel">Отмена</string>
-
+    <string name="dialog_return_item_title">Отметить как возвращенную?</string>
+    <string name="dialog_return_item_message">Эта вещь будет отмечена как возвращенная и больше не будет отображаться остальным пользователям.</string>
+    <string name="dialog_return_item_confirm">Отметить</string>
+    <string name="mark_as_returned_item_success">Статус вещи изменен</string>
+    <string name="marl_as_returned_item_error">Ошибка при изменении статуса вещи</string>
 
     <!--  Notifications-->
     <string name="new_message_notification_title">%1$s для "%2$s"</string>
@@ -253,4 +256,9 @@
     <string name="signup_error_otp">Код некорректный, попробуйте ещё</string>
     <string name="signup_phone_taken">Данный номер уже зарегистрирован</string>
     <string name="signup_phone_bad">Номер телефона пустой или некорректный</string>
+
+    <string name="item_status_pending">Ожидает</string>
+    <string name="item_status_active">Активно</string>
+    <string name="item_status_expired">Истек срок</string>
+    <string name="item_status_found">Найдена</string>
 </resources>

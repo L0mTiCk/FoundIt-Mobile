@@ -187,6 +187,13 @@ class MainApiImpl(
         )
     }
 
+    override suspend fun markItemAsReturned(itemId: Int): Result<Unit, DataError.Network> {
+        return getAuth(
+            path = "user/item/return",
+            params = { append("itemId", itemId.toString()) }
+        )
+    }
+
     override suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network> {
         return getAuth(
             path = "user/item/delete",

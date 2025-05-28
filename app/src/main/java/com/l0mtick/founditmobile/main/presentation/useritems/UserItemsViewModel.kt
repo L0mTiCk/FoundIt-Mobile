@@ -1,6 +1,5 @@
 package com.l0mtick.founditmobile.main.presentation.useritems
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,13 +33,14 @@ class UserItemsViewModel(
     val state = _state.asStateFlow()
 
     init {
-        loadMockData()
+        loadData()
     }
 
     fun onAction(action: UserItemsAction) {
         when (action) {
             is UserItemsAction.DeleteItem -> handleDeleteItem(action.itemId)
             is UserItemsAction.RemoveFromFavorites -> handleRemoveFromFavorites(action.itemId)
+            is UserItemsAction.MarkAsReturned -> handleMarkAsReturned(action.itemId)
         }
     }
 
@@ -52,7 +52,7 @@ class UserItemsViewModel(
                         UiText.StringResource(R.string.delete_user_item_success),
                         SnackbarType.SUCCESS
                     )
-                    loadMockData()
+                    loadData()
                 }
 
                 is Result.Error -> {
@@ -73,7 +73,7 @@ class UserItemsViewModel(
                         UiText.StringResource(R.string.delete_favorite_item_success),
                         SnackbarType.SUCCESS
                     )
-                    loadMockData()
+                    loadData()
                 }
 
                 is Result.Error -> {
@@ -86,7 +86,27 @@ class UserItemsViewModel(
         }
     }
 
-    private fun loadMockData() {
+    private fun handleMarkAsReturned(itemId: Int) {
+        viewModelScope.launch {
+            when(lostItemRepository.markItemAsReturned(itemId)) {
+                is Result.Success -> {
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.mark_as_returned_item_success),
+                        SnackbarType.SUCCESS
+                    )
+                    loadData()
+                }
+                is Result.Error -> {
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.marl_as_returned_item_error),
+                        SnackbarType.ERROR
+                    )
+                }
+            }
+        }
+    }
+
+    private fun loadData() {
         viewModelScope.launch {
             when (val current = _state.value) {
                 is UserItemsState.UserFavoriteItemsState -> {
@@ -108,7 +128,6 @@ class UserItemsViewModel(
                 is UserItemsState.UserCreatedItemsState -> {
                     when (val result = lostItemRepository.getUserCreatedLostItems()) {
                         is Result.Success -> {
-                            Log.d("asdasd", result.toString())
                             _state.update {
                                 current.copy(
                                     items = result.data

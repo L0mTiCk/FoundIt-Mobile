@@ -1,8 +1,8 @@
 package com.l0mtick.founditmobile.main.presentation.useritems
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -64,6 +64,7 @@ fun UserItemsScreen(
             .fillMaxSize()
     ) {
         var isConfirmationShown by remember { mutableStateOf(false) }
+        var isMarkAsReturnedConfirmationShown by remember { mutableStateOf(false) }
         var itemIdToOperate by remember { mutableStateOf<Int?>(null) }
 
         // Header with back button
@@ -121,6 +122,10 @@ fun UserItemsScreen(
                         onActionClick = { itemId ->
                             itemIdToOperate = itemId
                             isConfirmationShown = true
+                        },
+                        onMarkAsReturned = { itemId ->
+                            itemIdToOperate = itemId
+                            isMarkAsReturnedConfirmationShown = true
                         }
                     )
                 }
@@ -133,9 +138,7 @@ fun UserItemsScreen(
                         onConfirm = {
                             itemIdToOperate?.let {
                                 onAction(
-                                    UserItemsAction.DeleteItem(
-                                        it
-                                    )
+                                    UserItemsAction.DeleteItem(it)
                                 )
                             }
                             itemIdToOperate = null
@@ -144,6 +147,27 @@ fun UserItemsScreen(
                         onDismiss = {
                             itemIdToOperate = null
                             isConfirmationShown = false
+                        }
+                    )
+                }
+                if (isMarkAsReturnedConfirmationShown) {
+                    ConfirmationDialog(
+                        title = stringResource(R.string.dialog_return_item_title),
+                        message = stringResource(R.string.dialog_return_item_message),
+                        confirmButtonText = stringResource(R.string.dialog_return_item_confirm),
+                        dismissButtonText = stringResource(R.string.cancel),
+                        onConfirm = {
+                            itemIdToOperate?.let {
+                                onAction(
+                                    UserItemsAction.MarkAsReturned(it)
+                                )
+                            }
+                            itemIdToOperate = null
+                            isMarkAsReturnedConfirmationShown = false
+                        },
+                        onDismiss = {
+                            itemIdToOperate = null
+                            isMarkAsReturnedConfirmationShown = false
                         }
                     )
                 }
@@ -203,15 +227,16 @@ private fun ItemsList(
     items: List<LostItem>,
     isUserCreated: Boolean,
     onItemClick: (Int) -> Unit,
-    onActionClick: (Int) -> Unit
+    onActionClick: (Int) -> Unit,
+    onMarkAsReturned: (Int) -> Unit = {}
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         items(items) { item ->
             CompactItemCard(
-                id = item.id.toInt(),
+                id = item.id,
                 title = item.title,
                 description = item.description ?: "",
                 postedTimestamp = item.createdAt,
@@ -219,7 +244,9 @@ private fun ItemsList(
                 isUserCreated = isUserCreated,
                 onClick = { onItemClick(item.id) },
                 onActionClick = { onActionClick(item.id) },
-                modifier = Modifier.padding(vertical = 4.dp)
+                status = item.status,
+                onMarkAsReturned = { onMarkAsReturned(item.id) },
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp)
             )
         }
     }
