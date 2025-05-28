@@ -109,6 +109,7 @@
     <string name="details_add_fav_error">Ошибка при добавлении в избранное</string>
     <string name="details_not_loaded_error">Подождите загрузки данных</string>
     <string name="details_not_created_chat_error">Ошибка при создании чата</string>
+    <string name="details_not_created_chat_conflict_error">Вы не можете создать чат сами с собой</string>
     <string name="details_created_chat_error">Чат с пользователем создан</string>
 
     <!--  Settings-->
@@ -158,6 +159,13 @@
     <string name="notification_channel_chat_description">Уведомления для новых сообщений в ваших чатах</string>
     <string name="notification_channel_moderation_name">Обновления публикаций</string>
     <string name="notification_channel_moderation_description">Уведомления при обновлении ваших публикаций (одобрение, удалиени и т.д)</string>
+    <string name="item_updates_channel_name">Обновления вещей</string>
+    <string name="item_updates_channel_description">Уведомления при удалении ваших веще и смене статуса избранных.</string>
+    <string name="item_deleted_notification_title">Метка удалена</string>
+    <string name="item_deleted_by_admin_notification_body">Ваша метка \"%1$s\" была удалена модератором.</string>
+    <string name="item_deleted_generic_notification_body">Ваша метка \"%1$s\" была удалена.</string>
+    <string name="favorite_item_found_notification_title">Вещь из избранных возвращена!</string>
+    <string name="favorite_item_found_notification_body">Вещь \"%1$s\", которую вы добавили в избранное, была возвращена владельцу.</string>
 
     <!-- Add Item-->
     <string name="add_item_title">Добавить Метку</string>

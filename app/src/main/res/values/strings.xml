@@ -107,6 +107,7 @@
     <string name="details_add_fav_error">Error occurred while adding to favorites</string>
     <string name="details_not_loaded_error">Wait until data loaded</string>
     <string name="details_not_created_chat_error">Error while creating chat</string>
+    <string name="details_not_created_chat_conflict_error">You can\'t create chat with yourself</string>
     <string name="details_created_chat_error">Chat created!</string>
     <string name="dialog_return_item_title">Mark item as returned?</string>
     <string name="dialog_return_item_message">This item will be marked as returned and will not be show to other users anymore.</string>
@@ -161,6 +162,13 @@
     <string name="notification_channel_chat_description">Notifications for new messages in your chats.</string>
     <string name="notification_channel_moderation_name">Item Updates</string>
     <string name="notification_channel_moderation_description">Notifications about the status of your items (e.g., approval).</string>
+    <string name="item_deleted_notification_title">Item Deleted</string>
+    <string name="item_updates_channel_name">Item Updates</string>
+    <string name="item_updates_channel_description">Notifications about items deletion and found favorites.</string>
+    <string name="item_deleted_by_admin_notification_body">Your item \"%1$s\" was removed by a moderator.</string>
+    <string name="item_deleted_generic_notification_body">Your item \"%1$s\" has been removed.</string>
+    <string name="favorite_item_found_notification_title">Item returned!</string>
+    <string name="favorite_item_found_notification_body">The item \"%1$s\" you favorited has been marked as returned.</string>
 
     <!-- Add item-->
     <string name="add_item_title">Add Item</string>

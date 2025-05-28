@@ -41,6 +41,8 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         when (notificationType) {
             "NEW_CHAT_MESSAGE" -> handleNewChatMessage(data)
             "MODERATION_SUCCESS" -> handleModerationSuccess(data)
+            "ITEM_DELETED" -> handleItemDeleted(data) // Новый обработчик
+            "FAVORITE_ITEM_FOUND" -> handleFavoriteItemFound(data) // Новый обработчик
             else -> Log.w(TAG, "Received unknown notification type: $notificationType or type is missing.")
         }
     }
@@ -92,6 +94,60 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
             body = body,
             pendingIntent = pendingIntent,
             channelId = NotificationHelper.CHANNEL_ID_MODERATION
+        )
+    }
+
+    private fun handleItemDeleted(data: Map<String, String>) {
+        val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
+        val body = getLocalizedBody(data["body_loc_key"], data["body_loc_args"], null)
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("notification_type", "ITEM_DELETED")
+            // Можно добавить item_title, если он нужен в Activity
+            // data["item_title"]?.let { putExtra("item_title", it) }
+        }
+        val notificationId = System.currentTimeMillis().toInt()
+        val pendingIntent = PendingIntent.getActivity(
+            this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        showNotification(
+            notificationId = notificationId,
+            title = title,
+            body = body,
+            pendingIntent = pendingIntent,
+            channelId = NotificationHelper.CHANNEL_ID_ITEM_UPDATES
+        )
+    }
+
+    private fun handleFavoriteItemFound(data: Map<String, String>) {
+        val itemId = data["item_id"]?.toIntOrNull()
+
+        val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
+        val body = getLocalizedBody(data["body_loc_key"], data["body_loc_args"], null)
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("notification_type", "FAVORITE_ITEM_FOUND")
+            if (itemId != null) {
+                putExtra("item_id", itemId) // Для навигации на экран метки
+            }
+        }
+        // Используем itemId (или его хеш) + префикс, чтобы ID уведомления был связан с меткой,
+        // либо System.currentTimeMillis() для полностью нового уведомления.
+        // Для простоты пока System.currentTimeMillis()
+        val notificationId = itemId ?: System.currentTimeMillis().toInt()
+        val pendingIntent = PendingIntent.getActivity(
+            this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        showNotification(
+            notificationId = notificationId,
+            title = title,
+            body = body,
+            pendingIntent = pendingIntent,
+            channelId = NotificationHelper.CHANNEL_ID_ITEM_UPDATES // Новый канал
         )
     }
 
@@ -164,6 +220,8 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         val titleResId = when (key) {
             "new_message_notification_title" -> R.string.new_message_notification_title
             "moderation_success_notification_title" -> R.string.moderation_success_notification_title
+            "item_deleted_notification_title" -> R.string.item_deleted_notification_title // Новый ключ
+            "favorite_item_found_notification_title" -> R.string.favorite_item_found_notification_title // Новый ключ
             else -> {
                 Log.w(TAG, "Unknown title_loc_key: '$key'")
                 R.string.default_notification_title
@@ -195,6 +253,9 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
 
         val bodyResId = when (key) {
             "moderation_success_notification_body" -> R.string.moderation_success_notification_body
+            "item_deleted_by_admin_notification_body" -> R.string.item_deleted_by_admin_notification_body
+            "item_deleted_generic_notification_body" -> R.string.item_deleted_generic_notification_body
+            "favorite_item_found_notification_body" -> R.string.favorite_item_found_notification_body
             else -> {
                 Log.w(TAG, "Unknown body_loc_key: '$key', and no direct_body provided.")
                 R.string.default_notification_body

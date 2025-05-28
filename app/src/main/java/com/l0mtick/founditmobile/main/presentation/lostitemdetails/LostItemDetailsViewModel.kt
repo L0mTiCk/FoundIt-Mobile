@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
 import com.l0mtick.founditmobile.common.data.snackbar.SnackbarType
+import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
@@ -128,10 +129,20 @@ class LostItemDetailsViewModel(
                     }
 
                     is Result.Error -> {
-                        snackbarManager.showSnackbar(
-                            UiText.StringResource(R.string.details_not_created_chat_error),
-                            SnackbarType.ERROR
-                        )
+                        when(result.error) {
+                            DataError.Network.CONFLICT -> {
+                                snackbarManager.showSnackbar(
+                                    UiText.StringResource(R.string.details_not_created_chat_conflict_error),
+                                    SnackbarType.ERROR
+                                )
+                            }
+                            else -> {
+                                snackbarManager.showSnackbar(
+                                    UiText.StringResource(R.string.details_not_created_chat_error),
+                                    SnackbarType.ERROR
+                                )
+                            }
+                        }
                         _state.update {
                             it.copy(
                                 isChatLoading = false
