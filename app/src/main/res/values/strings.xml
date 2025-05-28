@@ -210,6 +210,12 @@
     <string name="profile_my_items">My items</string>
     <string name="profile_settings">Settings</string>
     <string name="profile_about">About</string>
+    <string name="change_profile_picture">Update profile picture</string>
+    <string name="delete_profile_picture">Delete picture</string>
+    <string name="profile_picture_change_success">Profile picture changed successfully</string>
+    <string name="profile_picture_change_error">Error occurred while changing profile picture</string>
+    <string name="profile_loading_error">Can\'t load user profile</string>
+
 
     <string-array name="level_titles">
         <item>Level 1: Novice</item>

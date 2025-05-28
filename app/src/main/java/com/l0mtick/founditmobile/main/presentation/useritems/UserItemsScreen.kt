@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.domain.model.LostItem
 import com.l0mtick.founditmobile.main.presentation.components.ConfirmationDialog
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
@@ -49,6 +50,9 @@ fun UserItemsRoot(
         onAction = viewModel::onAction,
         onNavBack = {
             navController.navigateUp()
+        },
+        onNavToItem = { itemId ->
+            navController.navigate(NavigationRoute.Main.ItemDetails(itemId))
         }
     )
 }
@@ -57,7 +61,8 @@ fun UserItemsRoot(
 fun UserItemsScreen(
     state: UserItemsState,
     onAction: (UserItemsAction) -> Unit,
-    onNavBack: () -> Unit
+    onNavBack: () -> Unit,
+    onNavToItem: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -118,7 +123,7 @@ fun UserItemsScreen(
                     ItemsList(
                         items = state.items,
                         isUserCreated = true,
-                        onItemClick = { /* Navigate to item details */ },
+                        onItemClick = onNavToItem,
                         onActionClick = { itemId ->
                             itemIdToOperate = itemId
                             isConfirmationShown = true
@@ -187,7 +192,7 @@ fun UserItemsScreen(
                     ItemsList(
                         items = state.items,
                         isUserCreated = false,
-                        onItemClick = { /* Navigate to item details */ },
+                        onItemClick = onNavToItem,
                         onActionClick = { itemId ->
                             itemIdToOperate = itemId
                             isConfirmationShown = true
@@ -259,7 +264,8 @@ private fun Preview() {
         UserItemsScreen(
             state = UserItemsState.UserFavoriteItemsState(),
             onAction = {},
-            onNavBack = {}
+            onNavBack = {},
+            onNavToItem = {}
         )
     }
 }

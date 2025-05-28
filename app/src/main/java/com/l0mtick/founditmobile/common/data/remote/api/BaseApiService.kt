@@ -132,6 +132,7 @@ abstract class BaseApiService(
         noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
     ): Result<T, DataError.Network> = request(HttpMethod.Post, path, body, {}, true, onUnauthorized)
 
+
     /**
      * General-purpose request method that wraps the Ktor call,
      * applies headers, handles body and parameters, and maps known errors.
@@ -166,6 +167,39 @@ abstract class BaseApiService(
             refreshTokenHandler = refreshTokenHandler
         )
     }
+
+    /**
+     * Performs an authenticated DELETE request.
+     *
+     * @param T The expected type of the response body.
+     * @param Body The type of the request body.
+     * @param path The endpoint path relative to the base URL.
+     * @param body Optional request body to send.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
+    suspend inline fun <reified T, reified Body> deleteAuthWithBody(
+        path: String,
+        body: Body? = null,
+        noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
+    ): Result<T, DataError.Network> =
+        request(HttpMethod.Delete, path, body, {}, true, onUnauthorized)
+
+    /**
+     * Performs an authenticated DELETE request.
+     *
+     * @param T The expected type of the response body.
+     * @param path The endpoint path relative to the base URL.
+     * @param params Optional query parameters.
+     * @param onUnauthorized Custom handler for 401 responses.
+     * @return A [Result] containing either the decoded data or a [DataError].
+     */
+    suspend inline fun <reified T> deleteAuth(
+        path: String,
+        noinline params: ParametersBuilder.() -> Unit = {},
+        noinline onUnauthorized: () -> Unit = defaultUnauthorizedHandler
+    ): Result<T, DataError.Network> =
+        request(HttpMethod.Delete, path, EmptyBody, params, true, onUnauthorized)
 
     @PublishedApi
     internal suspend fun <T : Any, Body> internalRequest(

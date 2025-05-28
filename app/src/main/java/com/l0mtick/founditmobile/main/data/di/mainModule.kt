@@ -42,7 +42,7 @@ val mainModule = module {
 
     single<CategoriesRepository> { CategoriesRepositoryImpl(api = get(), localStorage = get()) }
 
-    single<UsersRepository> { UsersRepositoryImpl(mainApi = get(), localStorage = get()) }
+    single<UsersRepository> { UsersRepositoryImpl(mainApi = get(), localStorage = get(), context = get()) }
 
     single<ChatRepository> { ChatRepositoryImpl(mainApi = get(), chatWebSocketClient = get()) }
 
@@ -75,7 +75,7 @@ val mainModule = module {
     }
 
     viewModel {
-        ProfileViewModel(usersRepository = get())
+        ProfileViewModel(usersRepository = get(), snackbarManager = get())
     }
 
     viewModel {

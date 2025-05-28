@@ -65,6 +65,11 @@ interface MainApi {
         fileName: String
     ): Result<String, DataError.Network>
 
+    suspend fun uploadUserProfilePicture(
+        photoData: ByteArray,
+        fileName: String
+    ): Result<Unit, DataError.Network>
+
     /**
      * Sends a message to a chat
      * @param chatId ID of the chat
@@ -82,6 +87,7 @@ interface MainApi {
     suspend fun markItemAsReturned(itemId: Int): Result<Unit,DataError.Network>
 
     suspend fun deleteUserCreatedItem(itemId: Int): Result<Unit, DataError.Network>
+    suspend fun deleteUserProfilePicture(): Result<Unit, DataError.Network>
 
     suspend fun createChatForItem(userId: Int, itemId: Int): Result<ChatDTO, DataError.Network>
 

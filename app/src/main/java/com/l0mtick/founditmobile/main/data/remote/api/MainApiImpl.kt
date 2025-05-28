@@ -147,6 +147,18 @@ class MainApiImpl(
             additionalFields = mapOf("itemId" to itemId.toString())
         )
     }
+
+    override suspend fun uploadUserProfilePicture(
+        photoData: ByteArray,
+        fileName: String
+    ): Result<Unit, DataError.Network> {
+        return uploadFileAuth(
+            type = typeInfo<String>(),
+            path = "image/user-logo",
+            fileData = photoData,
+            fileName = fileName
+        )
+    }
     
     override suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network> {
         return postAuth(
@@ -198,6 +210,12 @@ class MainApiImpl(
         return getAuth(
             path = "user/item/delete",
             params = { append("itemId", itemId.toString()) }
+        )
+    }
+
+    override suspend fun deleteUserProfilePicture(): Result<Unit, DataError.Network> {
+        return deleteAuth(
+            path = "image/user-logo",
         )
     }
 
