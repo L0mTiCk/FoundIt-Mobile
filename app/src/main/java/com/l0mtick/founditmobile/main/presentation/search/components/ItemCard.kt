@@ -5,10 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,7 +73,8 @@ fun BigItemCard(
             shape = RoundedCornerShape(12.dp),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .sizeIn(minHeight = 150.dp, maxHeight = 200.dp)
+                .aspectRatio(4f / 3f)
+                .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
         )
         Spacer(Modifier.height(18.dp))
@@ -174,7 +175,8 @@ fun CompactItemCard(
             shape = RoundedCornerShape(8.dp),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(90.dp)
+                .sizeIn(maxWidth = 100.dp)
+                .aspectRatio(4f / 3f)
         )
         
         Spacer(Modifier.width(12.dp))

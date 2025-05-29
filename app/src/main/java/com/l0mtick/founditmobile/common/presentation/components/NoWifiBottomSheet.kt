@@ -66,14 +66,16 @@ fun NoWifiBottomSheet(
             Spacer(Modifier.height(24.dp))
             Text(
                 text = stringResource(R.string.no_internet_header),
-                style = Theme.typography.headline
+                style = Theme.typography.headline,
+                color = Theme.colors.onSurface
             )
             Spacer(Modifier.height(12.dp))
             Text(
                 text = stringResource(R.string.no_internet_description),
                 style = Theme.typography.body,
                 textAlign = TextAlign.Center,
-                lineHeight = 22.sp
+                lineHeight = 22.sp,
+                color = Theme.colors.onSurface
             )
         }
     }

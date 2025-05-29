@@ -26,6 +26,7 @@ google-services = "4.4.2"
 firebase = "33.13.0"
 firebase-crashlytics-plugin = "3.0.3"
 firebase-performance-plugin = "1.4.2"
+image-cropper = "4.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -75,6 +76,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-performance = { module = "com.google.firebase:firebase-perf" }
 firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
+image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "image-cropper" }
 
 #Jitpack
 xmaterial-ccp = { module = "com.github.TuleSimon:xMaterialccp", version.ref = "xmaterial-ccp"}

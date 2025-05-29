@@ -126,11 +126,11 @@ fun AddItemScreen(
         Spacer(Modifier.height(16.dp))
 
         EditableImagesPager(
-            imagesUri = state.selectedPhotos,
-            onImageAdd = {
+            selectedPhotos = state.selectedPhotos,
+            onAddPhoto = {
                 onAction(AddItemAction.AddPhoto(it))
             },
-            onImageRemove = {
+            onRemovePhoto = {
                 onAction(AddItemAction.RemovePhoto(it))
             },
             modifier = Modifier.padding(horizontal = 24.dp)
@@ -187,6 +187,7 @@ fun AddItemScreen(
                 focusedBorderColor = Theme.colors.brand,
                 focusedLabelColor = Theme.colors.brand,
                 unfocusedLabelColor = Theme.colors.onSurfaceVariant,
+                errorTextColor = Theme.colors.onSurface,
                 cursorColor = Theme.colors.brand,
                 selectionColors = TextSelectionColors(
                     handleColor = Theme.colors.brand,

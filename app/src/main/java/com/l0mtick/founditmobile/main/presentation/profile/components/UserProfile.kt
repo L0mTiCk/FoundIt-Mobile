@@ -1,8 +1,5 @@
 package com.l0mtick.founditmobile.main.presentation.profile.components
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateBounds
 import androidx.compose.foundation.background
@@ -38,7 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
+import com.l0mtick.founditmobile.common.presentation.components.createCropImageOptions
 import com.l0mtick.founditmobile.common.presentation.components.defaultPlaceholder
+import com.l0mtick.founditmobile.common.presentation.components.rememberImageCropperLauncher
 import com.l0mtick.founditmobile.main.domain.model.User
 import com.l0mtick.founditmobile.main.presentation.profile.ProfileAction
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
@@ -54,13 +53,14 @@ fun UserProfile(
 
     var showImageActionsMenu by remember { mutableStateOf(false) }
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            onAction(ProfileAction.ProfilePictureSelected(it))
-        }
-    }
+    // Используем новый компонент для выбора и редактирования изображений профиля с заданной рамкой
+    val imagePickerLauncher = rememberImageCropperLauncher(
+        onImageSelected = { uri ->
+            onAction(ProfileAction.ProfilePictureSelected(uri))
+        },
+        aspectRatioX = 1, // Соотношение сторон 1:1 для фото профиля
+        aspectRatioY = 1
+    )
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -78,7 +78,7 @@ fun UserProfile(
                 imageUrl = user?.profilePictureUrl,
                 shape = CircleShape,
                 contentDescription = "User Profile Picture",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().aspectRatio(1f),
                 isPlaceholderVisible = user == null,
             )
 
@@ -118,7 +118,11 @@ fun UserProfile(
                             )
                         },
                         onClick = {
-                            imagePickerLauncher.launch("image/*")
+                            imagePickerLauncher.launch(createCropImageOptions(
+                                aspectRatioX = 1,
+                                aspectRatioY = 1,
+                                circleShape = true // Используем круглую рамку для фото профиля
+                            ))
                             showImageActionsMenu = false
                         }
                     )

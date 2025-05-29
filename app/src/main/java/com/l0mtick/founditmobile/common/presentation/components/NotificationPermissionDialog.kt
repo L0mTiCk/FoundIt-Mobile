@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -69,7 +66,8 @@ fun NotificationPermissionDialog(
                 Text(
                     text = stringResource(R.string.permission_dialog_title),
                     style = Theme.typography.title,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Theme.colors.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -78,7 +76,7 @@ fun NotificationPermissionDialog(
                     text = stringResource(R.string.permission_dialog_description),
                     style = Theme.typography.body,
                     textAlign = TextAlign.Center,
-                    color = Color.Gray
+                    color = Theme.colors.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -98,18 +96,11 @@ fun NotificationPermissionDialog(
                         )
                     }
 
-                    Button(
+                    PrimaryButton(
+                        text = stringResource(R.string.allow),
                         onClick = onAllowClick,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Theme.colors.brand
-                        ),
                         modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.allow),
-                            style = Theme.typography.body,
-                        )
-                    }
+                    )
                 }
             }
         }

@@ -1,8 +1,6 @@
 package com.l0mtick.founditmobile.main.presentation.additem.components
 
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateBounds
@@ -16,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,22 +38,25 @@ import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.FadeVisibility
 import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.common.presentation.components.SecondaryButton
+import com.l0mtick.founditmobile.common.presentation.components.createCropImageOptions
+import com.l0mtick.founditmobile.common.presentation.components.rememberImageCropperLauncher
 import com.l0mtick.founditmobile.ui.theme.Theme
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun EditableImagesPager(
-    imagesUri: List<Uri>,
-    onImageAdd: (Uri) -> Unit,
-    onImageRemove: (Uri) -> Unit,
+    selectedPhotos: List<Uri>,
+    onAddPhoto: (Uri) -> Unit,
+    onRemovePhoto: (Uri) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val photoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { onImageAdd(it) }
-    }
-    val pagerState = remember(imagesUri.size) { PagerState(pageCount = { imagesUri.size }) }
+    // Используем новый компонент для выбора и редактирования изображений с заданной рамкой
+    val photoPickerLauncher = rememberImageCropperLauncher(
+        onImageSelected = { uri -> onAddPhoto(uri) },
+        aspectRatioX = 4, // Соотношение сторон 4:3 для фотографий товаров
+        aspectRatioY = 3
+    )
+    val pagerState = remember(selectedPhotos.size) { PagerState(pageCount = { selectedPhotos.size }) }
 
     Column(
         modifier = modifier
@@ -64,7 +66,7 @@ fun EditableImagesPager(
                     .fillMaxWidth()
             ) {
                 AnimatedContent(
-                    targetState = imagesUri.isEmpty(),
+                    targetState = selectedPhotos.isEmpty(),
                     transitionSpec = {
                         fadeIn() togetherWith fadeOut()
                     }
@@ -73,7 +75,7 @@ fun EditableImagesPager(
                         Column(
                             modifier = Modifier
                                 .align(Alignment.Center)
-                                .height(200.dp)
+                                .aspectRatio(4f / 3f)
                                 .fillMaxWidth()
                                 .border(
                                     1.dp,
@@ -99,7 +101,10 @@ fun EditableImagesPager(
                             PrimaryButton(
                                 text = stringResource(R.string.add_image),
                                 onClick = {
-                                    photoPickerLauncher.launch("image/*")
+                                    photoPickerLauncher.launch(createCropImageOptions(
+                                        aspectRatioX = 4,
+                                        aspectRatioY = 3
+                                    ))
                                 },
                                 buttonColors = ButtonDefaults.buttonColors(
                                     containerColor = Theme.colors.brand,
@@ -111,19 +116,22 @@ fun EditableImagesPager(
                         HorizontalPager(
                             state = pagerState,
                             modifier = Modifier
-                                .height(200.dp)
                                 .fillMaxWidth(),
                             pageSpacing = 8.dp
                         ) { page ->
                             AsyncImage(
-                                model = imagesUri[page],
+                                model = selectedPhotos[page],
                                 contentDescription = "Item image",
                                 contentScale = ContentScale.FillBounds,
-                                modifier = Modifier.clip(RoundedCornerShape(8.dp))
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .aspectRatio(4f / 3f)
+                                    .fillMaxWidth()
+
                             )
                         }
                         Text(
-                            text = "${pagerState.currentPage + 1}/${imagesUri.size}",
+                            text = "${pagerState.currentPage + 1}/${selectedPhotos.size}",
                             style = Theme.typography.body,
                             color = Theme.colors.surface,
                             modifier = Modifier
@@ -142,7 +150,7 @@ fun EditableImagesPager(
 
         LookaheadScope {
             FadeVisibility(
-                imagesUri.isNotEmpty(),
+                selectedPhotos.isNotEmpty(),
                 modifier = Modifier.animateBounds(this)
             ) {
                 Row(
@@ -151,14 +159,17 @@ fun EditableImagesPager(
                     PrimaryButton(
                         text = stringResource(R.string.add_image),
                         onClick = {
-                            photoPickerLauncher.launch("image/*")
+                            photoPickerLauncher.launch(createCropImageOptions(
+                                aspectRatioX = 4,
+                                aspectRatioY = 3
+                            ))
                         }
                     )
                     Spacer(Modifier.weight(1f))
                     SecondaryButton(
                         text = stringResource(R.string.remove_image),
                         onClick = {
-                            onImageRemove(imagesUri[pagerState.currentPage])
+                            onRemovePhoto(selectedPhotos[pagerState.currentPage])
                         },
                     )
                 }

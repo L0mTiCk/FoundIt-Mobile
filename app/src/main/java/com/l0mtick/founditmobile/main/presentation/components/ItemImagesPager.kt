@@ -3,9 +3,9 @@ package com.l0mtick.founditmobile.main.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +37,9 @@ fun ItemImagesPager(
                 imageUrl = imageUrls[page],
                 contentDescription = "Item image",
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.sizeIn(minHeight = 150.dp, maxHeight = 200.dp).align(Alignment.Center),
+                modifier = Modifier
+                    .aspectRatio(4f / 3f)
+                    .align(Alignment.Center),
                 contentScale = ContentScale.FillBounds
             )
         }

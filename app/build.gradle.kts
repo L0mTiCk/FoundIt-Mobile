@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.firebase.cloud.messaging)
 
     implementation(libs.xmaterial.ccp)
+    implementation(libs.image.cropper)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
