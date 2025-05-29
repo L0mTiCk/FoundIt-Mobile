@@ -25,6 +25,7 @@
     <string name="no_chats">Чатов нет</string>
     <string name="retry">Повторить</string>
     <string name="error">Ошибка</string>
+    <string name="guest">Гость</string>
 
     <!--  Navigation-->
     <string name="navigation_home">Главная</string>
@@ -78,6 +79,9 @@
     <string name="select_date">Выберите дату</string>
     <string name="clear_date">Очистить выбор</string>
     <string name="selected_date">Дата: %1$s</string>
+    <string name="switch_mode">Переключить режим</string>
+
+
     <string name="no_internet_header">Упс!</string>
     <string name="no_internet_description">Интернет-соединение не найдено\nПроверьте подключение, чтобы продолжить</string>
 
@@ -275,4 +279,25 @@
     <string name="item_status_active">Активно</string>
     <string name="item_status_expired">Истек срок</string>
     <string name="item_status_found">Найдена</string>
+
+    <string name="dialog_play_services_unavailable_title">Play cервисы недоступны</string>
+    <string name="dialog_play_services_unavailable_text">Для функций определения местоположения требуются Сервисы Google Play. Убедитесь, что они установлены и обновлены.</string>
+    <string name="dialog_play_services_unavailable_button_text">ОК</string>
+
+    <string name="dialog_location_permission_required_title">Требуется разрешение на местоположение</string>
+    <string name="dialog_location_permission_required_text">Этому приложению требуется доступ к вашему местоположению для работы. Пожалуйста, предоставьте разрешение.</string>
+    <string name="dialog_location_permission_required_button_text">Предоставить разрешение</string>
+
+    <string name="dialog_location_permission_permanently_denied_title">Разрешение отклонено навсегда</string>
+    <string name="dialog_location_permission_permanently_denied_text">Доступ к местоположению навсегда отклонен. Пожалуйста, включите его в настройках приложения.</string>
+    <string name="dialog_location_permission_permanently_denied_button_text">Открыть настройки</string>
+
+
+    <string name="dialog_gps_disabled_title">GPS отключен</string>
+    <string name="dialog_gps_disabled_text">Пожалуйста, включите GPS или службы геолокации в настройках вашего устройства, чтобы приложение могло определить ваше местоположение.</string>
+    <string name="dialog_gps_disabled_button_text">Включить GPS</string>
+
+    <string name="dialog_location_unavailable_title">Местоположение недоступно</string>
+    <string name="dialog_location_unavailable_text">Не удалось получить доступ к службам определения местоположения.</string>
+    <string name="dialog_location_unavailable_button_text">ОК</string>
 </resources>

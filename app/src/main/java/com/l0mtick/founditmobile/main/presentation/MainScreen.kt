@@ -104,7 +104,10 @@ fun MainRoot(
         modifier = Modifier.fillMaxSize()
     ) {
         MainScreen(
-            onNavigateToLogin = onNavigateToLogin
+            onNavigateToLogin = {
+                onNavigateToLogin()
+                viewModel.endGuestSession()
+            }
         )
 
         if (uiState.showLocationDialog) {
@@ -206,6 +209,8 @@ fun MainScreen(
             ) {
                 composable<NavigationRoute.Main.Home> {
                     HomeRoot(
+                        isGuest = isGuestUser,
+                        onMoveToLogin = onNavigateToLogin,
                         navController = localNavController
                     )
                 }
@@ -215,8 +220,6 @@ fun MainScreen(
                         navController = localNavController
                     )
                 }
-
-                composable<NavigationRoute.Main.Add> { }
 
                 composable<NavigationRoute.Main.Inbox> {
                     InboxRoot(localNavController)
@@ -270,9 +273,8 @@ fun LocationBlockerDialog(
     availabilityState: LocationAvailabilityState,
     onGrantPermissionClick: () -> Unit,
     onEnableGpsClick: () -> Unit,
-    onCheckPlayServicesClick: () -> Unit // Add callback for Play Services issue
+    onCheckPlayServicesClick: () -> Unit
 ) {
-    // Determine the primary issue to display
     val title: String
     val text: String
     val buttonText: String
@@ -282,38 +284,45 @@ fun LocationBlockerDialog(
 
     when {
         !availabilityState.arePlayServicesAvailable -> {
-            title = "Play Services Unavailable" // Replace with stringResource
-            text =
-                "Google Play Services are required for location features. Please ensure they are installed and updated."
-            buttonText = "OK" // Or "Update" if you add deep linking
+            title = stringResource(R.string.dialog_play_services_unavailable_title)
+            text = stringResource(R.string.dialog_play_services_unavailable_text)
+            buttonText = stringResource(R.string.dialog_play_services_unavailable_button_text)
             onButtonClick = onCheckPlayServicesClick
         }
+//        !availabilityState.hasLocationPermission &&
+//                activity != null &&
+//                !ActivityCompat.shouldShowRequestPermissionRationale(
+//                    activity,
+//                    Manifest.permission.ACCESS_FINE_LOCATION
+//                ) -> {
+//            title = stringResource(R.string.dialog_location_permission_permanently_denied_title)
+//            text = stringResource(R.string.dialog_location_permission_permanently_denied_text)
+//            buttonText = stringResource(R.string.dialog_location_permission_permanently_denied_button_text)
+//            onButtonClick = {
+//                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+//                    data = Uri.fromParts("package", context.packageName, null)
+//                }
+//                context.startActivity(intent)
+//            }
+//        }
 
         !availabilityState.hasLocationPermission -> {
-            title = "Location Permission Required" // Replace with stringResource
-            text =
-                "This app needs access to your location to function. Please grant location permission."
-            // TODO: Add check for permanent denial (requires Activity context or callback knowledge)
-            // If permanently denied, change text/button to guide user to settings.
-            buttonText = "Grant Permission" // Replace with stringResource
+            title = stringResource(R.string.dialog_location_permission_required_title)
+            text = stringResource(R.string.dialog_location_permission_required_text)
+            buttonText = stringResource(R.string.dialog_location_permission_required_button_text)
             onButtonClick = onGrantPermissionClick
         }
-
         !availabilityState.isGpsEnabled -> {
-            title = "GPS Disabled" // Replace with stringResource
-            text =
-                "Please enable GPS or Location Services in your device settings to allow the app to find your location."
-            buttonText = "Enable GPS" // Replace with stringResource
+            title = stringResource(R.string.dialog_gps_disabled_title)
+            text = stringResource(R.string.dialog_gps_disabled_text)
+            buttonText = stringResource(R.string.dialog_gps_disabled_button_text)
             onButtonClick = onEnableGpsClick
         }
-
         else -> {
-            // Should not happen if dialog is shown based on !isLocationAvailable
-            // But provide a fallback state.
-            title = "Location Unavailable"
-            text = "Could not access location services."
-            buttonText = "OK"
-            onButtonClick = {} // No specific action
+            title = stringResource(R.string.dialog_location_unavailable_title)
+            text = stringResource(R.string.dialog_location_unavailable_text)
+            buttonText = stringResource(R.string.dialog_location_unavailable_button_text)
+            onButtonClick = {}
         }
     }
 
@@ -334,9 +343,17 @@ fun LocationBlockerDialog(
                     .padding(20.dp)
                     .fillMaxWidth()
             ) {
-                Text(title, style = Theme.typography.title)
+                Text(
+                    text = title,
+                    style = Theme.typography.title,
+                    color = Theme.colors.onSurface
+                )
                 Spacer(Modifier.height(8.dp))
-                Text(text, style = Theme.typography.body)
+                Text(
+                    text = text,
+                    style = Theme.typography.body,
+                    color = Theme.colors.onSurface
+                )
                 Spacer(Modifier.height(16.dp))
                 PrimaryButton(
                     onClick = onButtonClick,

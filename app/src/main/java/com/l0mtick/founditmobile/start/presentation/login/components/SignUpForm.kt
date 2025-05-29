@@ -1,5 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.login.components
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.animateBounds
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
@@ -32,6 +35,7 @@ import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.start.presentation.login.LoginAction
 import com.l0mtick.founditmobile.ui.theme.Theme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SignupForm(
     onAction: (LoginAction) -> Unit,
@@ -49,77 +53,83 @@ fun SignupForm(
             .then(modifier),
         verticalArrangement = Arrangement.Bottom,
     ) {
-        OutlinedAppTextField(
-            label = stringResource(R.string.username),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.NewUsername
+        LookaheadScope {
+            OutlinedAppTextField(
+                label = stringResource(R.string.username),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.NewUsername
+                    }
+                    .animateBounds(this),
+                value = loginState.value,
+                onValueChange = {
+                    onAction(LoginAction.SignupFormAction.OnUsernameChanged(it))
                 },
-            value = loginState.value,
-            onValueChange = {
-                onAction(LoginAction.SignupFormAction.OnUsernameChanged(it))
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            isError = loginState.isError,
-            errorText = loginState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
-        )
-        OutlinedAppTextField(
-            label = stringResource(R.string.email),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.EmailAddress
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                isError = loginState.isError,
+                errorText = loginState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
+            )
+            OutlinedAppTextField(
+                label = stringResource(R.string.email),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.EmailAddress
+                    }
+                    .animateBounds(this),
+                value = emailState.value,
+                onValueChange = {
+                    onAction(LoginAction.SignupFormAction.OnEmailChanged(it))
                 },
-            value = emailState.value,
-            onValueChange = {
-                onAction(LoginAction.SignupFormAction.OnEmailChanged(it))
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Email
-            ),
-            isError = emailState.isError,
-            errorText = emailState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
-        )
-        OutlinedAppTextField(
-            label = stringResource(R.string.password),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.NewPassword
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Email
+                ),
+                isError = emailState.isError,
+                errorText = emailState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
+            )
+            OutlinedAppTextField(
+                label = stringResource(R.string.password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.NewPassword
+                    }
+                    .animateBounds(this),
+                value = passwordState.value,
+                onValueChange = {
+                    onAction(LoginAction.SignupFormAction.OnPasswordChanged(it))
                 },
-            value = passwordState.value,
-            onValueChange = {
-                onAction(LoginAction.SignupFormAction.OnPasswordChanged(it))
-            },
-            isError = passwordState.isError,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Password
-            ),
-            errorText = passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
-            visualTransformation = PasswordVisualTransformation()
-        )
-        OutlinedAppTextField(
-            label = stringResource(R.string.confirm_password),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.NewPassword
+                isError = passwordState.isError,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Password
+                ),
+                errorText = passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
+                visualTransformation = PasswordVisualTransformation()
+            )
+            OutlinedAppTextField(
+                label = stringResource(R.string.confirm_password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.NewPassword
+                    }
+                    .animateBounds(this),
+                value = confirmPasswordState.value,
+                onValueChange = {
+                    onAction(LoginAction.SignupFormAction.OnConfirmPasswordChanged(it))
                 },
-            value = confirmPasswordState.value,
-            onValueChange = {
-                onAction(LoginAction.SignupFormAction.OnConfirmPasswordChanged(it))
-            },
-            isError = confirmPasswordState.isError,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            errorText = confirmPasswordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
-            visualTransformation = PasswordVisualTransformation()
-        )
+                isError = confirmPasswordState.isError,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                errorText = confirmPasswordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
+                visualTransformation = PasswordVisualTransformation()
+            )
+        }
         Spacer(Modifier.height(24.dp))
         LoadingPrimaryButton(
             text = stringResource(R.string.sign_up),

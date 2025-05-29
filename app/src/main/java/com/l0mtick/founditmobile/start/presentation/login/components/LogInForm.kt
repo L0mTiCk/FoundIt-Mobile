@@ -1,5 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.login.components
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.animateBounds
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
@@ -32,6 +35,7 @@ import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.start.presentation.login.LoginAction
 import com.l0mtick.founditmobile.ui.theme.Theme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun LogInForm(
     onAction: (LoginAction) -> Unit,
@@ -47,40 +51,44 @@ fun LogInForm(
             .then(modifier),
         verticalArrangement = Arrangement.Bottom,
     ) {
-        OutlinedAppTextField(
-            label = stringResource(R.string.username_or_email),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.Username + ContentType.EmailAddress
+        LookaheadScope {
+            OutlinedAppTextField(
+                label = stringResource(R.string.username_or_email),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.Username + ContentType.EmailAddress
+                    }
+                    .animateBounds(this),
+                value = loginState.value,
+                onValueChange = {
+                    onAction(LoginAction.LoginFormAction.OnLoginChanged(it))
                 },
-            value = loginState.value,
-            onValueChange = {
-                onAction(LoginAction.LoginFormAction.OnLoginChanged(it))
-            },
-            isError = loginState.isError,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            errorText = loginState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
-        )
-        OutlinedAppTextField(
-            label = stringResource(R.string.password),
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentType = ContentType.Password
+                isError = loginState.isError,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                errorText = loginState.errors.firstOrNull()?.asUiText()?.asString() ?: ""
+            )
+            OutlinedAppTextField(
+                label = stringResource(R.string.password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentType = ContentType.Password
+                    }
+                    .animateBounds(this),
+                value = passwordState.value,
+                onValueChange = {
+                    onAction(LoginAction.LoginFormAction.OnPasswordChanged(it))
                 },
-            value = passwordState.value,
-            onValueChange = {
-                onAction(LoginAction.LoginFormAction.OnPasswordChanged(it))
-            },
-            isError = passwordState.isError,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            errorText = passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
-            visualTransformation = PasswordVisualTransformation()
-        )
+                isError = passwordState.isError,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                errorText = passwordState.errors.firstOrNull()?.asUiText()?.asString() ?: "",
+                visualTransformation = PasswordVisualTransformation()
+            )
+        }
         Spacer(Modifier.height(24.dp))
         LoadingPrimaryButton(
             text = stringResource(R.string.log_in),

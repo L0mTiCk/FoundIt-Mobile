@@ -100,8 +100,9 @@ class ProfileViewModel(
                     init()
                 }
                 is Result.Error -> {
-                    snackbarManager.showSuccess(
-                        UiText.StringResource(R.string.profile_picture_change_error)
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.profile_picture_change_error),
+                        SnackbarType.ERROR
                     )
                 }
             }
@@ -123,12 +124,12 @@ class ProfileViewModel(
                     init()
                 }
                 is Result.Error -> {
-                    snackbarManager.showSuccess(
-                        UiText.StringResource(R.string.profile_picture_change_error)
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.profile_picture_change_error),
+                        SnackbarType.ERROR
                     )
                 }
             }
         }
     }
-
 }

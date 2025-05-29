@@ -34,6 +34,7 @@ class UsersRepositoryImpl(
         val result = mainApi.getCurrentUserProfile()
         return when (result) {
             is Result.Success -> {
+                localStorage.setProfilePictureUrl(result.data.logoUrl)
                 Result.Success(
                     data = result.data.toModel()
                 )
@@ -69,7 +70,13 @@ class UsersRepositoryImpl(
     }
 
     override suspend fun deleteUserProfilePicture(): Result<Unit, DataError.Network> {
-        return mainApi.deleteUserProfilePicture()
+        return when(val result = mainApi.deleteUserProfilePicture()) {
+            is Result.Success<*, *> -> {
+                localStorage.setProfilePictureUrl(null)
+                result
+            }
+            is Result.Error<*, *> -> result
+        }
     }
 
     override suspend fun updateUserProfilePicture(logoUri: Uri): Result<Unit, DataError.Network> {
@@ -89,7 +96,10 @@ class UsersRepositoryImpl(
                 val fileName = "photo_${System.currentTimeMillis()}.jpg"
                 val result = mainApi.uploadUserProfilePicture(byteArray, fileName)
                 return when(result) {
-                    is Result.Success -> Result.Success(data = Unit)
+                    is Result.Success -> {
+                        localStorage.setProfilePictureUrl(result.data)
+                        Result.Success(data = Unit)
+                    }
                     is Result.Error -> Result.Error(result.error)
                 }
             } else {

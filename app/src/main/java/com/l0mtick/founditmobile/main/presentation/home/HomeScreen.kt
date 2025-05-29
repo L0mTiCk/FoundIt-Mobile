@@ -26,12 +26,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeRoot(
     navController: NavController,
+    isGuest: Boolean,
+    onMoveToLogin: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
+        isGuest = isGuest,
+        onMoveToLogin = onMoveToLogin,
         onAction = viewModel::onAction,
         onCategoryClick = { id ->
             navController.navigate(NavigationRoute.Main.Search(listOf(id)))
@@ -42,6 +46,8 @@ fun HomeRoot(
 @Composable
 fun HomeScreen(
     state: HomeState,
+    isGuest: Boolean,
+    onMoveToLogin: () -> Unit,
     onAction: (HomeAction) -> Unit,
     onCategoryClick: (Long) -> Unit
 ) {
@@ -52,6 +58,8 @@ fun HomeScreen(
     ) {
         item {
             UserHeaderCard(
+                isGuest = isGuest,
+                onMoveToLogin = onMoveToLogin,
                 username = state.localUser.username,
                 profilePictureUrl = state.localUser.profilePictureUrl,
                 modifier = Modifier.padding(horizontal = 24.dp).systemBarsPadding()
@@ -97,6 +105,8 @@ private fun Preview() {
         HomeScreen(
             state = HomeState(),
             onAction = {},
+            isGuest = false,
+            onMoveToLogin = {},
             onCategoryClick = {}
         )
     }

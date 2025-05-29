@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,10 +17,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.PlaceholderImage
+import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.ui.theme.Theme
 
 @Composable
 fun UserHeaderCard(
+    isGuest: Boolean,
+    onMoveToLogin: () -> Unit,
     modifier: Modifier = Modifier,
     username: String = "L0mTiCk",
     profilePictureUrl: String? = null
@@ -39,13 +43,20 @@ fun UserHeaderCard(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = username,
+                text = if (isGuest) stringResource(R.string.guest) else username,
                 style = Theme.typography.body,
                 color = Theme.colors.onSurface,
                 fontWeight = FontWeight.Medium
             )
         }
         Spacer(Modifier.weight(1f))
+        if (isGuest) {
+            PrimaryButton(
+                text = stringResource(R.string.log_in),
+                onClick = onMoveToLogin
+            )
+            Spacer(Modifier.width(12.dp))
+        }
         PlaceholderImage(
             imageUrl = profilePictureUrl,
             contentDescription = "Profile picture",

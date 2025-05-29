@@ -64,6 +64,12 @@ class LoginViewModel(
                 }
             }
 
+            LoginAction.OnMoveToInitial -> {
+                _state.update {
+                    LoginState.Initial
+                }
+            }
+
             LoginAction.OnGuestLogin -> loginAsGuest()
 
             is LoginAction.LoginFormAction -> handleLoginFormAction(action)

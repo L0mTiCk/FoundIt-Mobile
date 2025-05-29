@@ -4,6 +4,7 @@ sealed interface LoginAction {
     data object OnMoveToLogin : LoginAction
     data object OnMoveToSignup : LoginAction
     data object OnGuestLogin : LoginAction
+    data object OnMoveToInitial : LoginAction
 
     sealed interface LoginFormAction : LoginAction {
         data class OnLoginChanged(val value: String) : LoginFormAction

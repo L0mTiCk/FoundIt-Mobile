@@ -220,7 +220,8 @@ class PhoneVerificationViewModel(
                         )
                         _state.update {
                             current.copy(
-                                isLoading = false
+                                isLoading = false,
+                                otpValue = ""
                             )
                         }
                     }

@@ -110,32 +110,54 @@ class UserItemsViewModel(
         viewModelScope.launch {
             when (val current = _state.value) {
                 is UserItemsState.UserFavoriteItemsState -> {
+                    _state.update {
+                        current.copy(
+                            isLoading = true
+                        )
+                    }
                     when (val result = lostItemRepository.getFavoriteLostItems()) {
                         is Result.Success -> {
                             _state.update {
                                 current.copy(
+                                    isLoading = false,
                                     items = result.data
                                 )
                             }
                         }
 
                         is Result.Error -> {
+                            _state.update {
+                                current.copy(
+                                    isLoading = true
+                                )
+                            }
                             snackbarManager.showError(result.error)
                         }
                     }
                 }
 
                 is UserItemsState.UserCreatedItemsState -> {
+                    _state.update {
+                        current.copy(
+                            isLoading = true
+                        )
+                    }
                     when (val result = lostItemRepository.getUserCreatedLostItems()) {
                         is Result.Success -> {
                             _state.update {
                                 current.copy(
+                                    isLoading = false,
                                     items = result.data
                                 )
                             }
                         }
 
                         is Result.Error -> {
+                            _state.update {
+                                current.copy(
+                                    isLoading = true
+                                )
+                            }
                             snackbarManager.showError(result.error)
                         }
                     }

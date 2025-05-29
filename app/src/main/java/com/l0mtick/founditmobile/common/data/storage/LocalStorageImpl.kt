@@ -64,8 +64,12 @@ class LocalStorageImpl(
     }
 
     override suspend fun setProfilePictureUrl(url: String?) {
-        url?.let {
-            context.dataStore.edit { it[PreferencesKeys.PROFILE_PICTURE_URL] = url }
+        context.dataStore.edit { preferences ->
+            if (url == null) {
+                preferences.remove(PreferencesKeys.PROFILE_PICTURE_URL)
+            } else {
+                preferences[PreferencesKeys.PROFILE_PICTURE_URL] = url
+            }
         }
     }
 

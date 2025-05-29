@@ -151,7 +151,7 @@ class MainApiImpl(
     override suspend fun uploadUserProfilePicture(
         photoData: ByteArray,
         fileName: String
-    ): Result<Unit, DataError.Network> {
+    ): Result<String, DataError.Network> {
         return uploadFileAuth(
             type = typeInfo<String>(),
             path = "image/user-logo",

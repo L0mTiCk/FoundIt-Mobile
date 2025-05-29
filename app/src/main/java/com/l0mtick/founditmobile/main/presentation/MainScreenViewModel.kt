@@ -145,4 +145,8 @@ class MainScreenViewModel(
             }
         }
     }
+
+    fun endGuestSession() {
+        userSessionManager.clearSession()
+    }
 }

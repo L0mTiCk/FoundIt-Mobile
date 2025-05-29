@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -109,8 +111,15 @@ fun UserItemsScreen(
         when (state) {
 
             is UserItemsState.UserCreatedItemsState -> {
-                if (state.items.isEmpty()) {
-                    // Show empty state
+                if (state.isLoading) {
+                    Box {
+                        CircularProgressIndicator(
+                            color = Theme.colors.brand,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                } else if (state.items.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = stringResource(R.string.no_items_created),
@@ -179,7 +188,17 @@ fun UserItemsScreen(
             }
 
             is UserItemsState.UserFavoriteItemsState -> {
-                if (state.items.isEmpty()) {
+                if (state.isLoading) {
+                    Box(
+                        Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator(
+                            color = Theme.colors.brand,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(48.dp).align(Alignment.Center)
+                        )
+                    }
+                } else if (state.items.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = stringResource(R.string.no_favorite_items),

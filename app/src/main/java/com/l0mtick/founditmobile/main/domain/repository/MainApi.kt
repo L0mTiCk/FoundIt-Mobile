@@ -68,7 +68,7 @@ interface MainApi {
     suspend fun uploadUserProfilePicture(
         photoData: ByteArray,
         fileName: String
-    ): Result<Unit, DataError.Network>
+    ): Result<String, DataError.Network>
 
     /**
      * Sends a message to a chat
