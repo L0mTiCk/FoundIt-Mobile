@@ -44,7 +44,8 @@ fun ItemWithOwnerImage(
                 contentDescription = "User logo",
                 modifier = Modifier
                     .size(40.dp),
-                shape = CircleShape
+                shape = CircleShape,
+                disableCache = true
             )
         }
     }

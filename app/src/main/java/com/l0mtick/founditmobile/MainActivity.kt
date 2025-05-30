@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.l0mtick.founditmobile.common.data.notification.NotificationHelper
 import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.presentation.components.CustomSnackbar
 import com.l0mtick.founditmobile.common.presentation.components.NoWifiBottomSheet
 import com.l0mtick.founditmobile.common.presentation.components.NotificationPermissionDialog
@@ -39,6 +40,7 @@ class MainActivity : ComponentActivity() {
     private val snackbarManager by inject<SnackbarManager>()
     private val locationService by inject<LocationService>()
     private lateinit var notificationHelper: NotificationHelper
+    private val userSessionManager by inject<UserSessionManager>()
     
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -148,8 +150,9 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         locationService.onCleared()
+        userSessionManager.clearSession()
+        super.onDestroy()
     }
     
     private fun handleNotificationIntent(intent: Intent?) {

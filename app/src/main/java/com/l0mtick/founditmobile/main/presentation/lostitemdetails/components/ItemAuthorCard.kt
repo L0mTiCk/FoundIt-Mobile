@@ -35,7 +35,8 @@ fun ItemAuthorCard(
             imageUrl = user.profilePictureUrl,
             contentDescription = "User logo",
             shape = CircleShape,
-            modifier = Modifier.requiredSize(56.dp)
+            modifier = Modifier.requiredSize(56.dp),
+            disableCache = true
         )
         Spacer(Modifier.width(16.dp))
         Column {

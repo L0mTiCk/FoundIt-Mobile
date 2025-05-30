@@ -2,6 +2,7 @@ package com.l0mtick.founditmobile.common.data.notification
 
 import android.Manifest
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,11 +10,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.l0mtick.founditmobile.MainActivity
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.domain.repository.NotificationRepository
+import com.l0mtick.founditmobile.common.presentation.util.DeepLinkConstants.baseUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,14 +38,13 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val data = message.data
-        Log.d(TAG, "Received FCM data: $data")
         val notificationType = data["notification_type"]
 
         when (notificationType) {
             "NEW_CHAT_MESSAGE" -> handleNewChatMessage(data)
             "MODERATION_SUCCESS" -> handleModerationSuccess(data)
-            "ITEM_DELETED" -> handleItemDeleted(data) // Новый обработчик
-            "FAVORITE_ITEM_FOUND" -> handleFavoriteItemFound(data) // Новый обработчик
+            "ITEM_DELETED" -> handleItemDeleted(data)
+            "FAVORITE_ITEM_FOUND" -> handleFavoriteItemFound(data)
             else -> Log.w(TAG, "Received unknown notification type: $notificationType or type is missing.")
         }
     }
@@ -56,14 +58,16 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
         val body = getLocalizedBody(null, null, data["body_text"])
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("chat_id", chatId)
-            putExtra("notification_type", "NEW_CHAT_MESSAGE")
+        val deepLinkIntent = Intent(Intent.ACTION_VIEW,
+            "${baseUri}/chat/$chatId".toUri()).apply {
+            setPackage(packageName)
         }
-        val pendingIntent = PendingIntent.getActivity(
-            this, chatId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
+        val pendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(Intent(this@FoundItFirebaseMessagingService, MainActivity::class.java))
+            addNextIntent(deepLinkIntent)
+            getPendingIntent(chatId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         showNotification(
             notificationId = chatId,
@@ -78,15 +82,17 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
         val body = getLocalizedBody(data["body_loc_key"], null, null)
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("notification_type", "MODERATION_SUCCESS")
+        val deepLinkIntent = Intent(Intent.ACTION_VIEW,
+            "$baseUri/useritems?isFavorite=false".toUri()).apply {
+            setPackage(packageName)
         }
+
         val notificationId = System.currentTimeMillis().toInt()
-        val requestCode = notificationId
-        val pendingIntent = PendingIntent.getActivity(
-            this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(Intent(this@FoundItFirebaseMessagingService, MainActivity::class.java))
+            addNextIntent(deepLinkIntent)
+            getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         showNotification(
             notificationId = notificationId,
@@ -101,16 +107,17 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
         val body = getLocalizedBody(data["body_loc_key"], data["body_loc_args"], null)
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("notification_type", "ITEM_DELETED")
-            // Можно добавить item_title, если он нужен в Activity
-            // data["item_title"]?.let { putExtra("item_title", it) }
+        val deepLinkIntent = Intent(Intent.ACTION_VIEW,
+            "$baseUri/useritems?isFavorite=false".toUri()).apply {
+            setPackage(packageName)
         }
+
         val notificationId = System.currentTimeMillis().toInt()
-        val pendingIntent = PendingIntent.getActivity(
-            this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(Intent(this@FoundItFirebaseMessagingService, MainActivity::class.java))
+            addNextIntent(deepLinkIntent)
+            getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         showNotification(
             notificationId = notificationId,
@@ -127,20 +134,16 @@ class FoundItFirebaseMessagingService : FirebaseMessagingService() {
         val title = getLocalizedTitle(data["title_loc_key"], data["title_loc_args"])
         val body = getLocalizedBody(data["body_loc_key"], data["body_loc_args"], null)
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("notification_type", "FAVORITE_ITEM_FOUND")
-            if (itemId != null) {
-                putExtra("item_id", itemId) // Для навигации на экран метки
-            }
+        val deepLinkIntent = Intent(Intent.ACTION_VIEW, "$baseUri/useritems?isFavorite=true".toUri()).apply {
+            setPackage(packageName)
         }
-        // Используем itemId (или его хеш) + префикс, чтобы ID уведомления был связан с меткой,
-        // либо System.currentTimeMillis() для полностью нового уведомления.
-        // Для простоты пока System.currentTimeMillis()
+
         val notificationId = itemId ?: System.currentTimeMillis().toInt()
-        val pendingIntent = PendingIntent.getActivity(
-            this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(Intent(this@FoundItFirebaseMessagingService, MainActivity::class.java))
+            addNextIntent(deepLinkIntent)
+            getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         showNotification(
             notificationId = notificationId,

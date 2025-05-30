@@ -36,7 +36,7 @@ class SearchViewModel(
 
     val route = savedStateHandle.toRoute<NavigationRoute.Main.Search>()
 
-    private val searchRadius = 5000.0
+    private val searchRadius = 500.0
 
     private val _state = MutableStateFlow<SearchState>(
         SearchState.ListScreen(

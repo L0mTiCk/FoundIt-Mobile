@@ -46,7 +46,8 @@ fun ChatHeader(
             imageUrl = logoUrl,
             contentDescription = "User logo",
             shape = CircleShape,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(48.dp),
+            disableCache = true
         )
         Spacer(Modifier.width(12.dp))
         Text(

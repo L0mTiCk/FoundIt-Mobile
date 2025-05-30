@@ -131,8 +131,8 @@ fun MapLayout(
                     )
                 )
             ) {
-                circleRadius = 10.0
-                circleColor = androidx.compose.ui.graphics.Color.Magenta
+                circleRadius = 15.0
+                circleColor = androidx.compose.ui.graphics.Color(122, 21, 21)
                 circleBlur = .6
                 circleStrokeColor = androidx.compose.ui.graphics.Color.Yellow
                 circleStrokeWidth = 1.0

@@ -69,7 +69,7 @@ fun InboxScreen(
         if (state.isLoading) {
             item {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillParentMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
@@ -81,7 +81,7 @@ fun InboxScreen(
             if (state.chats.isNullOrEmpty()) {
                 item {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillParentMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(

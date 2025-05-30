@@ -53,12 +53,11 @@ fun UserProfile(
 
     var showImageActionsMenu by remember { mutableStateOf(false) }
 
-    // Используем новый компонент для выбора и редактирования изображений профиля с заданной рамкой
     val imagePickerLauncher = rememberImageCropperLauncher(
         onImageSelected = { uri ->
             onAction(ProfileAction.ProfilePictureSelected(uri))
         },
-        aspectRatioX = 1, // Соотношение сторон 1:1 для фото профиля
+        aspectRatioX = 1,
         aspectRatioY = 1
     )
 
@@ -80,6 +79,7 @@ fun UserProfile(
                 contentDescription = "User Profile Picture",
                 modifier = Modifier.fillMaxSize().aspectRatio(1f),
                 isPlaceholderVisible = user == null,
+                disableCache = true
             )
 
             Box(

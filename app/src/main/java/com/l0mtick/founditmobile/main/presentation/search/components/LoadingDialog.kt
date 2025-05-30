@@ -1,7 +1,5 @@
 package com.l0mtick.founditmobile.main.presentation.search.components
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.animateBounds
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,7 +24,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.l0mtick.founditmobile.main.presentation.search.LoadingStep
 import com.l0mtick.founditmobile.ui.theme.Theme
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun LoadingDialog(
     step: LoadingStep,
@@ -37,12 +33,10 @@ fun LoadingDialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
     ) {
-        LookaheadScope {
             Card(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
-                    .clip(RoundedCornerShape(16.dp))
-                    .animateBounds(this),
+                    .clip(RoundedCornerShape(16.dp)),
                 colors = CardDefaults.cardColors(
                     containerColor = Theme.colors.surface
                 )
@@ -68,8 +62,6 @@ fun LoadingDialog(
                         color = Theme.colors.onSurface
                     )
                 }
-            }
-
         }
     }
 }

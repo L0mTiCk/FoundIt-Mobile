@@ -89,7 +89,8 @@ private fun UserLevelCard(
             modifier = Modifier
                 .requiredSizeIn(minHeight = 100.dp, minWidth = 170.dp)
                 .aspectRatio(1f),
-            isPlaceholderVisible = isPlaceholderVisible
+            isPlaceholderVisible = isPlaceholderVisible,
+            disableCache = true
         )
         Spacer(Modifier.height(12.dp))
         Text(

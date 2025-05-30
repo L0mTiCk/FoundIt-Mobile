@@ -61,7 +61,8 @@ fun UserHeaderCard(
             imageUrl = profilePictureUrl,
             contentDescription = "Profile picture",
             modifier = Modifier.requiredSize(44.dp),
-            shape = CircleShape
+            shape = CircleShape,
+            disableCache = true
         )
     }
 }

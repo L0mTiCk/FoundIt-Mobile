@@ -98,7 +98,8 @@ fun ProfileScreen(
             Text(
                 text = stringResource(R.string.profile_your_account),
                 style = Theme.typography.headline,
-                modifier = Modifier.padding(horizontal = 24.dp)
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = Theme.colors.onSurface
             )
         }
         item {

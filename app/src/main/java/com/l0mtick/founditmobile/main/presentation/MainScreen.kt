@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
+import androidx.annotation.Keep
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,9 +38,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import com.l0mtick.founditmobile.R
 import com.l0mtick.founditmobile.common.presentation.components.PrimaryButton
 import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.common.presentation.util.DeepLinkConstants.baseUri
 import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.main.domain.model.LocationAvailabilityState
 import com.l0mtick.founditmobile.main.presentation.additem.AddItemRoot
@@ -128,15 +131,24 @@ fun MainRoot(
     }
 }
 
+@Keep
 private enum class MainScreenNavigationItem(
+    @Keep
     @StringRes val label: Int,
+    @Keep
     @DrawableRes val icon: Int,
+    @Keep
     val route: NavigationRoute.Main
 ) {
+    @Keep
     HOME(R.string.navigation_home, R.drawable.home, NavigationRoute.Main.Home),
+    @Keep
     SEARCH(R.string.navigation_search, R.drawable.search, NavigationRoute.Main.Search()),
+    @Keep
     ADD(R.string.navigation_add, R.drawable.add, NavigationRoute.Main.Add),
+    @Keep
     INBOX(R.string.navigation_inbox, R.drawable.inbox, NavigationRoute.Main.Inbox),
+    @Keep
     PROFILE(R.string.navigation_profile, R.drawable.profile, NavigationRoute.Main.Profile),
 }
 
@@ -237,7 +249,13 @@ fun MainScreen(
                     )
                 }
 
-                composable<NavigationRoute.Main.Chat> {
+                composable<NavigationRoute.Main.Chat>(
+                    deepLinks = listOf(
+                        navDeepLink<NavigationRoute.Main.Chat>(
+                            basePath = "$baseUri/chat/{chatId}"
+                        )
+                    )
+                ) {
                     ChatRoot(
                         navController = localNavController
                     )
@@ -258,7 +276,13 @@ fun MainScreen(
                     )
                 }
 
-                composable<NavigationRoute.Main.UserItems> {
+                composable<NavigationRoute.Main.UserItems>(
+                    deepLinks = listOf(
+                        navDeepLink<NavigationRoute.Main.UserItems>(
+                            basePath = "$baseUri/useritems?isFavorite={isFavorite}"
+                        )
+                    )
+                ) {
                     UserItemsRoot(
                         navController = localNavController
                     )
