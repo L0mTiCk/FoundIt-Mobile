@@ -36,7 +36,6 @@ fun HomeRoot(
         state = state,
         isGuest = isGuest,
         onMoveToLogin = onMoveToLogin,
-        onAction = viewModel::onAction,
         onCategoryClick = { id ->
             navController.navigate(NavigationRoute.Main.Search(listOf(id)))
         }
@@ -48,7 +47,6 @@ fun HomeScreen(
     state: HomeState,
     isGuest: Boolean,
     onMoveToLogin: () -> Unit,
-    onAction: (HomeAction) -> Unit,
     onCategoryClick: (Long) -> Unit
 ) {
     LazyColumn (
@@ -89,7 +87,6 @@ fun HomeScreen(
         item {
             TopLevelUsersRow(
                 users = state.topLevelUsers,
-                onUserCardClick = { /*TODO*/ }
             )
         }
         item {
@@ -104,7 +101,6 @@ private fun Preview() {
     FoundItMobileTheme {
         HomeScreen(
             state = HomeState(),
-            onAction = {},
             isGuest = false,
             onMoveToLogin = {},
             onCategoryClick = {}

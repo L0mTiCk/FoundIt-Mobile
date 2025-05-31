@@ -1,6 +1,5 @@
 package com.l0mtick.founditmobile.main.presentation.search.components
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateBounds
@@ -33,14 +32,19 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -65,8 +69,11 @@ import com.l0mtick.founditmobile.main.presentation.search.SearchAction
 import com.l0mtick.founditmobile.main.presentation.search.SearchState
 import com.l0mtick.founditmobile.main.presentation.util.calculateDistanceBetweenPoints
 import com.l0mtick.founditmobile.ui.theme.Theme
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalSharedTransitionApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun ListLayout(
     state: SearchState.ListScreen,
@@ -77,6 +84,8 @@ fun ListLayout(
     val lazyListState = rememberLazyListState()
     var overscrollTrigger by remember { mutableStateOf(false) }
     var isOverscrolling by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val pullToRefreshState = rememberPullToRefreshState()
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -97,7 +106,6 @@ fun ListLayout(
             if (!firstTimeEntering.value &&
                 state.searchValue != lastSearchValue.value
             ) {
-                Log.d("search_screen", "Keyboard dismissed → perform search")
                 lastSearchValue.value = state.searchValue
                 onAction(SearchAction.OnPerformSearch)
             }
@@ -127,7 +135,6 @@ fun ListLayout(
 
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
                 if (overscrollTrigger && !state.isLoadingMore) {
-                    Log.d("ListLayout", "OVERSCROLL AT BOTTOM (SIMPLER HEADER): Trigger Load More")
                     onAction(SearchAction.OnLoadMoreListItems)
                 }
                 isOverscrolling = false
@@ -138,185 +145,205 @@ fun ListLayout(
         }
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection)
+    PullToRefreshBox(
+        isRefreshing = false,
+        state = pullToRefreshState,
+        onRefresh = {
+            coroutineScope.launch {
+                pullToRefreshState.animateToHidden()
+                onAction(SearchAction.OnPerformSearch)
+            }
+        },
+        indicator = {
+            PullToRefreshDefaults.Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = pullToRefreshState,
+                isRefreshing = state.isLoading,
+                containerColor = Theme.colors.brandMuted,
+                color = Theme.colors.brand
+            )
+        }
     ) {
-        LazyColumn(
-            state = lazyListState,
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection)
         ) {
-            stickyHeader {
-                Column(
-                    modifier = Modifier.background(Theme.colors.surface)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .systemBarsPadding()
-                            .padding(bottom = 12.dp)
+            LazyColumn(
+                state = lazyListState,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                stickyHeader {
+                    Column(
+                        modifier = Modifier.background(Theme.colors.surface)
                     ) {
-                        SectionHeader(
-                            header = R.string.lost_items,
-                            description = null
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    ) {
-                        LookaheadScope {
-                            OutlinedAppTextField(
-                                value = state.searchValue,
-                                onValueChange = {
-                                    onAction(SearchAction.OnListSearchValueChange(it))
-                                },
-                                label = stringResource(R.string.search_hint),
-                                modifier = Modifier
-                                    .padding(vertical = 4.dp, )
-                                    .weight(1f)
-                                    .animateBounds(this),
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions = KeyboardActions(onDone = {
-                                    keyboardController?.hide()
-                                    focusManager.clearFocus(force = true)
-
-                                    if (!firstTimeEntering.value && state.searchValue != lastSearchValue.value) {
-                                        lastSearchValue.value = state.searchValue
-                                        onAction(SearchAction.OnPerformSearch)
-                                    }
-                                })
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .systemBarsPadding()
+                                .padding(bottom = 12.dp)
+                        ) {
+                            SectionHeader(
+                                header = R.string.lost_items,
+                                description = null
                             )
                         }
-                        Spacer(Modifier.width(12.dp))
-                        FadeVisibility(
-                            visible = state.searchValue.isNotEmpty(),
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 20.dp)
                         ) {
-                            IconButton(
-                                onClick = {
-                                    onAction(SearchAction.OnListSearchValueChange(""))
-                                    keyboardController?.hide()
-                                    focusManager.clearFocus(force = true)
-                                    if (!imeVisible) {
-                                        lastSearchValue.value = state.searchValue
-                                        onAction(SearchAction.OnPerformSearch)
-                                    }
-                                },
-                                modifier = Modifier.requiredSize(32.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = "Clear",
-                                    tint = Theme.colors.onSurface
+                            LookaheadScope {
+                                OutlinedAppTextField(
+                                    value = state.searchValue,
+                                    onValueChange = {
+                                        onAction(SearchAction.OnListSearchValueChange(it))
+                                    },
+                                    label = stringResource(R.string.search_hint),
+                                    modifier = Modifier
+                                        .padding(vertical = 4.dp,)
+                                        .weight(1f)
+                                        .animateBounds(this),
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                    keyboardActions = KeyboardActions(onDone = {
+                                        keyboardController?.hide()
+                                        focusManager.clearFocus(force = true)
+
+                                        if (!firstTimeEntering.value && state.searchValue != lastSearchValue.value) {
+                                            lastSearchValue.value = state.searchValue
+                                            onAction(SearchAction.OnPerformSearch)
+                                        }
+                                    })
                                 )
                             }
+                            Spacer(Modifier.width(12.dp))
+                            FadeVisibility(
+                                visible = state.searchValue.isNotEmpty(),
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        onAction(SearchAction.OnListSearchValueChange(""))
+                                        keyboardController?.hide()
+                                        focusManager.clearFocus(force = true)
+                                        if (!imeVisible) {
+                                            lastSearchValue.value = state.searchValue
+                                            onAction(SearchAction.OnPerformSearch)
+                                        }
+                                    },
+                                    modifier = Modifier.requiredSize(32.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Clear",
+                                        tint = Theme.colors.onSurface
+                                    )
+                                }
+                            }
                         }
+
                     }
-
                 }
-            }
 
-            item {
-                CategoriesFilterRow(
-                    categories = state.categories,
-                    selectedCategories = state.selectedCategories,
-                    onCategoryClick = {
-                        onAction(SearchAction.OnCategorySelect(it))
-                    },
-                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 20.dp)
-                )
-                DatePickerChip(
-                    selectedDate = state.selectedDate,
-                    onDateSelected = { timestamp ->
-                        onAction(SearchAction.OnDateSelected(timestamp))
-                    },
-                    onDateCleared = {
-                        onAction(SearchAction.OnDateCleared)
-                    },
-                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 20.dp)
-                )
-            }
-
-            items(state.items.items, key = { it.id }) { item ->
-                var distanceInMeters by remember(
-                    item.id,
-                    state.userLocation
-                ) { mutableStateOf<Float?>(null) }
-
-                LaunchedEffect(state.userLocation, item.id) {
-                    distanceInMeters = calculateDistanceBetweenPoints(
-                        userLocation = state.userLocation,
-                        itemLat = item.latitude,
-                        itemLon = item.longitude
+                item {
+                    CategoriesFilterRow(
+                        categories = state.categories,
+                        selectedCategories = state.selectedCategories,
+                        onCategoryClick = {
+                            onAction(SearchAction.OnCategorySelect(it))
+                        },
+                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 20.dp)
+                    )
+                    DatePickerChip(
+                        selectedDate = state.selectedDate,
+                        onDateSelected = { timestamp ->
+                            onAction(SearchAction.OnDateSelected(timestamp))
+                        },
+                        onDateCleared = {
+                            onAction(SearchAction.OnDateCleared)
+                        },
+                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 20.dp)
                     )
                 }
 
-                BigItemCard(
-                    id = item.id,
-                    title = item.title,
-                    description = item.description ?: "No description",
-                    postedTimestamp = item.createdAt,
-                    imageUrl = item.photoUrls.firstOrNull(),
-                    distance = distanceInMeters,
-                    modifier = Modifier.padding(horizontal = 14.dp),
-                    onClick = onItemClick
-                )
-            }
-            if (state.items.items.isEmpty()) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillParentMaxHeight(.8f)
-                            .fillMaxWidth()
-                            .padding(40.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.empty_search),
-                            style = Theme.typography.title,
-                            color = Theme.colors.onSurface
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text(
-                            text = stringResource(R.string.empty_search_hint),
-                            style = Theme.typography.body,
-                            color = Theme.colors.onSurfaceVariant,
-                            textAlign = TextAlign.Center
+                items(state.items.items, key = { it.id }) { item ->
+                    var distanceInMeters by remember(
+                        item.id,
+                        state.userLocation
+                    ) { mutableStateOf<Float?>(null) }
+
+                    LaunchedEffect(state.userLocation, item.id) {
+                        distanceInMeters = calculateDistanceBetweenPoints(
+                            userLocation = state.userLocation,
+                            itemLat = item.latitude,
+                            itemLon = item.longitude
                         )
                     }
+
+                    BigItemCard(
+                        id = item.id,
+                        title = item.title,
+                        description = item.description ?: "No description",
+                        postedTimestamp = item.createdAt,
+                        imageUrl = item.photoUrls.firstOrNull(),
+                        distance = distanceInMeters,
+                        modifier = Modifier.padding(horizontal = 14.dp),
+                        onClick = onItemClick
+                    )
                 }
-            }
-            item {
-                AnimatedVisibility(
-                    visible = isOverscrolling || state.isLoadingMore,
-                    enter = fadeIn() + slideInVertically { it / 2 },
-                    exit = fadeOut() + slideOutVertically { it / 2 },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Row(
+                if (state.items.items.isEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillParentMaxHeight(.8f)
+                                .fillMaxWidth()
+                                .padding(40.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.empty_search),
+                                style = Theme.typography.title,
+                                color = Theme.colors.onSurface
+                            )
+                            Spacer(Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(R.string.empty_search_hint),
+                                style = Theme.typography.body,
+                                color = Theme.colors.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+                item {
+                    AnimatedVisibility(
+                        visible = isOverscrolling || state.isLoadingMore,
+                        enter = fadeIn() + slideInVertically { it / 2 },
+                        exit = fadeOut() + slideOutVertically { it / 2 },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 56.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(16.dp)
                     ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp,
-                            color = Theme.colors.brand
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            stringResource(if (state.isLoadingMore) R.string.loading_more else R.string.load_more),
-                            style = Theme.typography.body,
-                            color = Theme.colors.onSurface
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 56.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = Theme.colors.brand
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                stringResource(if (state.isLoadingMore) R.string.loading_more else R.string.load_more),
+                                style = Theme.typography.body,
+                                color = Theme.colors.onSurface
+                            )
+                        }
                     }
                 }
             }

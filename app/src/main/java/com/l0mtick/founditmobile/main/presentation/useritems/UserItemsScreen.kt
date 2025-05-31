@@ -112,11 +112,15 @@ fun UserItemsScreen(
 
             is UserItemsState.UserCreatedItemsState -> {
                 if (state.isLoading) {
-                    Box {
+                    Box(
+                        Modifier.fillMaxSize()
+                    ) {
                         CircularProgressIndicator(
                             color = Theme.colors.brand,
                             strokeWidth = 2.dp,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier
+                                .size(48.dp)
+                                .align(Alignment.Center)
                         )
                     }
                 } else if (state.items.isEmpty()) {

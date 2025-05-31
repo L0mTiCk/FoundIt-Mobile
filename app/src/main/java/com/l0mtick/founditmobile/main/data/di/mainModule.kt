@@ -98,7 +98,7 @@ val mainModule = module {
     }
 
     viewModel {
-        InboxViewModel(chatRepository = get())
+        InboxViewModel(chatRepository = get(), snackbarManager = get())
     }
 
     viewModel {

@@ -194,6 +194,9 @@ class PhoneVerificationViewModel(
                         when (registerResult) {
                             is Result.Success -> {
                                 eventChannel.send(PhoneVerificationEvent.OnVerificationSuccess)
+                                snackbarManager.showSuccess(
+                                    UiText.StringResource(R.string.signup_success)
+                                )
                             }
 
                             is Result.Error -> {

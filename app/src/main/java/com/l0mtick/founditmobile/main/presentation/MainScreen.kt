@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -142,12 +143,16 @@ private enum class MainScreenNavigationItem(
 ) {
     @Keep
     HOME(R.string.navigation_home, R.drawable.home, NavigationRoute.Main.Home),
+
     @Keep
     SEARCH(R.string.navigation_search, R.drawable.search, NavigationRoute.Main.Search()),
+
     @Keep
     ADD(R.string.navigation_add, R.drawable.add, NavigationRoute.Main.Add),
+
     @Keep
     INBOX(R.string.navigation_inbox, R.drawable.inbox, NavigationRoute.Main.Inbox),
+
     @Keep
     PROFILE(R.string.navigation_profile, R.drawable.profile, NavigationRoute.Main.Profile),
 }
@@ -161,10 +166,10 @@ fun MainScreen(
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val currentDestination = state?.destination?.route
     Log.d("destination", currentDestination.toString())
-    
+
     val viewModel: MainScreenViewModel = koinViewModel()
     val isGuestUser = viewModel.isGuestUser.collectAsState().value
-    
+
     val navigationItems = if (isGuestUser) {
         listOf(MainScreenNavigationItem.HOME, MainScreenNavigationItem.SEARCH)
     } else {
@@ -172,7 +177,11 @@ fun MainScreen(
     }
 
     val customNavSuiteType = with(adaptiveInfo) {
-        if (MainScreenNavigationItem.entries.any { currentDestination?.startsWith(it.route::class.qualifiedName ?: "null") ?: false} ) {
+        if (MainScreenNavigationItem.entries.any {
+                currentDestination?.startsWith(
+                    it.route::class.qualifiedName ?: "null"
+                ) ?: false
+            }) {
             NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
         } else {
             NavigationSuiteType.None
@@ -189,14 +198,23 @@ fun MainScreen(
         navigationSuiteItems = {
             navigationItems.forEach { route ->
                 item(
-                    label = { Text(stringResource(route.label), style = Theme.typography.small) },
+                    label = {
+                        Text(
+                            stringResource(route.label),
+                            style = Theme.typography.small,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
                     onClick = {
                         localNavController.navigate(route.route) {
                             launchSingleTop = true
                         }
                     },
                     icon = { Icon(painterResource(route.icon), contentDescription = "") },
-                    selected = currentDestination?.startsWith(route.route::class.qualifiedName ?: "null")
+                    selected = currentDestination?.startsWith(
+                        route.route::class.qualifiedName ?: "null"
+                    )
                         ?: false,
                     colors = NavigationSuiteItemColors(
                         navigationBarItemColors = barColors,
@@ -260,7 +278,7 @@ fun MainScreen(
                         navController = localNavController
                     )
                 }
-                
+
                 composable<NavigationRoute.Main.Settings> {
                     SettingsRoot(
                         navController = localNavController,
@@ -336,12 +354,14 @@ fun LocationBlockerDialog(
             buttonText = stringResource(R.string.dialog_location_permission_required_button_text)
             onButtonClick = onGrantPermissionClick
         }
+
         !availabilityState.isGpsEnabled -> {
             title = stringResource(R.string.dialog_gps_disabled_title)
             text = stringResource(R.string.dialog_gps_disabled_text)
             buttonText = stringResource(R.string.dialog_gps_disabled_button_text)
             onButtonClick = onEnableGpsClick
         }
+
         else -> {
             title = stringResource(R.string.dialog_location_unavailable_title)
             text = stringResource(R.string.dialog_location_unavailable_text)

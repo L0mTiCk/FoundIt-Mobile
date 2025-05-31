@@ -210,6 +210,7 @@
     <string name="about_dialog_description">Found It helps people reconnect with lost belongings.\n\nYou can add lost items on map so others can find them easily.\n\nTogether, we make it easier to return what\'s been lost.</string>
     
     <!--  Chat-->
+    <string name="inbox_load_error">Error occurred while fetching chats, try again later</string>
     <string name="empty_chat_title">Chat is empty</string>
     <string name="empty_chat_description">There is no messages here, try to send it first!</string>
     <string name="send_message_placeholder">Enter your message...</string>
@@ -268,6 +269,7 @@
     <string name="signup_error_otp">OTP is incorrect, try again</string>
     <string name="signup_phone_taken">This number is already registered</string>
     <string name="signup_phone_bad">Phone number is empty or incorrect</string>
+    <string name="signup_success">Signed Up successfully, Log In now</string>
 
     <string name="item_status_pending">Pending</string>
     <string name="item_status_active">Active</string>

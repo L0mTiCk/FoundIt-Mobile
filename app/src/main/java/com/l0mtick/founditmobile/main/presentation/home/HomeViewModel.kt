@@ -71,11 +71,4 @@ class HomeViewModel(
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = HomeState()
         )
-
-    fun onAction(action: HomeAction) {
-        when (action) {
-            else -> TODO("Handle actions")
-        }
     }
-
-}

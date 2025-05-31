@@ -210,6 +210,7 @@
     <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>
 
     <!--  Chat-->
+    <string name="inbox_load_error">Ошибка при получении чатов, попробуйте позже</string>
     <string name="empty_chat_title">Чат пустой</string>
     <string name="empty_chat_description">Здесь еще нет сообщений, попробуйте отправить первое</string>
     <string name="send_message_placeholder">Введите сообщение...</string>
@@ -274,6 +275,8 @@
     <string name="signup_error_otp">Код некорректный, попробуйте ещё</string>
     <string name="signup_phone_taken">Данный номер уже зарегистрирован</string>
     <string name="signup_phone_bad">Номер телефона пустой или некорректный</string>
+    <string name="signup_success">Успешная регистрация, теперь войдите в аккаунт</string>
+
 
     <string name="item_status_pending">Ожидает</string>
     <string name="item_status_active">Активно</string>

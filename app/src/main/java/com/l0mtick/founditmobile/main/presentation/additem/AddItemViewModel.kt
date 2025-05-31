@@ -203,7 +203,7 @@ class AddItemViewModel(
                     title = currentState.title.value,
                     description = currentState.description.value,
                     expiresAt = expiresAt,
-                    categoryIds = listOf(currentState.selectedCategory!!.id.toInt())
+                    categoryIds = listOf(currentState.selectedCategory.id.toInt())
                 )
 
                 when (createResult) {
@@ -214,10 +214,7 @@ class AddItemViewModel(
                         for (photoUri in currentState.selectedPhotos) {
                             when (val uploadResult =
                                 addItemRepository.uploadItemPhoto(itemId, photoUri)) {
-                                is Result.Success -> {
-                                    //TODO
-                                    Log.d("add_viewmodel", uploadResult.data)
-                                }
+                                is Result.Success -> { }
 
                                 is Result.Error -> {
                                     uploadSuccess = false
