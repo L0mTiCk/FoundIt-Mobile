@@ -31,7 +31,6 @@ val baseLightColors = FoundItColors(
     statusFound = Color(0xFF2196F3).copy(alpha = 0.6f)
 )
 
-//TODO: replace with actual dark theme
 val baseDarkColors = baseLightColors.copy(
     background = Color(0xFF171A1F),
     brandMuted = Color(0xFFD7E4DD),

@@ -26,6 +26,7 @@
     <string name="retry">Retry</string>
     <string name="error">Error</string>
     <string name="guest">Guest</string>
+    <string name="delete">Delete</string>
 
 
     <!--  Navigation-->
@@ -214,6 +215,14 @@
     <string name="empty_chat_title">Chat is empty</string>
     <string name="empty_chat_description">There is no messages here, try to send it first!</string>
     <string name="send_message_placeholder">Enter your message...</string>
+    <string name="delete_chat_dropdown_item">Delete chat</string>
+    <string name="delete_chat_confirm_header">Delete this conversation?</string>
+    <string name="delete_chat_confirm_description">This conversation will be permanently deleted for both of you, along with all messages</string>
+    <string name="delete_chat_success">Chat deleted</string>
+    <string name="delete_chat_error">Error occurred while deleting chat</string>
+    <string name="chat_send_error">Error occurred while sending message</string>
+
+
 
     <!-- Profile-->
     <string name="profile_your_account">Your account</string>

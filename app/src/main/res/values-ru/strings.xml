@@ -26,6 +26,7 @@
     <string name="retry">Повторить</string>
     <string name="error">Ошибка</string>
     <string name="guest">Гость</string>
+    <string name="delete">Удалить</string>
 
     <!--  Navigation-->
     <string name="navigation_home">Главная</string>
@@ -214,6 +215,12 @@
     <string name="empty_chat_title">Чат пустой</string>
     <string name="empty_chat_description">Здесь еще нет сообщений, попробуйте отправить первое</string>
     <string name="send_message_placeholder">Введите сообщение...</string>
+    <string name="delete_chat_dropdown_item">Удалить чат</string>
+    <string name="delete_chat_confirm_header">Удалить этот чат?</string>
+    <string name="delete_chat_confirm_description">Этот чат будет безвозвратно удален для вас обоих вместе со всеми сообщениями</string>
+    <string name="delete_chat_success">Чат удалён</string>
+    <string name="delete_chat_error">Ошибка при удалении чата</string>
+    <string name="chat_send_error">Ошибка при отправке сообщения, попробуйте позже</string>
 
     <!--  Profile-->
     <string name="profile_your_account">Ваш аккаунт</string>

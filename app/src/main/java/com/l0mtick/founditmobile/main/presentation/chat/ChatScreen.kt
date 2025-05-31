@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
+import com.l0mtick.founditmobile.common.presentation.util.ObserveAsEvents
 import com.l0mtick.founditmobile.main.presentation.chat.components.ChatHeader
 import com.l0mtick.founditmobile.main.presentation.chat.components.ChatMessage
 import com.l0mtick.founditmobile.main.presentation.chat.components.ItemChatHeader
@@ -44,6 +46,21 @@ fun ChatRoot(
     viewModel: ChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(
+        viewModel.events
+    ) { event ->
+        when(event) {
+            ChatEvent.NavigateToInbox -> {
+                navController.navigate(NavigationRoute.Main.Inbox) {
+                    popUpTo(NavigationRoute.Main.Inbox) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+        }
+    }
 
     ChatScreen(
         state = state,
@@ -92,7 +109,10 @@ fun ChatScreen(
                         ChatHeader(
                             username = state.interlocutor?.username ?: "",
                             logoUrl = state.interlocutor?.profilePictureUrl,
-                            onBackPressed = onBackPressed
+                            onBackPressed = onBackPressed,
+                            onDeleteChat = {
+                                onAction(ChatAction.DeleteChat)
+                            }
                         )
                         ItemChatHeader(
                             imageUrl = state.itemPictureUrl,

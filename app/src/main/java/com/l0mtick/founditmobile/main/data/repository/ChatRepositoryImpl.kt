@@ -44,6 +44,10 @@ class ChatRepositoryImpl(
         chatWebSocketClient.sendMessage(chatId, content)
         return Result.Success(Unit)
     }
+
+    override suspend fun deleteChat(chatId: Int): Result<Unit, DataError.Network> {
+        return mainApi.deleteChat(chatId)
+    }
     
     override suspend fun connectToWebSocket() {
         chatWebSocketClient.connect()

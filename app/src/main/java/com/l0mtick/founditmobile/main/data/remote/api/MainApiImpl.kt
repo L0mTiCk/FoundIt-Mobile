@@ -219,6 +219,13 @@ class MainApiImpl(
         )
     }
 
+    override suspend fun deleteChat(chatId: Int): Result<Unit, DataError.Network> {
+        return deleteAuth(
+            path = "user/chat",
+            params = { append("chatId", chatId.toString()) }
+        )
+    }
+
     override suspend fun createChatForItem(
         userId: Int,
         itemId: Int

@@ -13,5 +13,5 @@ data class ChatState(
     val messageInput: String = "",
     val isLoading: Boolean = false,
     val isSending: Boolean = false,
-    val isConnected: Boolean = false // Добавлено поле для отслеживания состояния WebSocket
+    val isConnected: Boolean = false
 )

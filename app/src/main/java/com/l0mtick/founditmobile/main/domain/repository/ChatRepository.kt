@@ -13,6 +13,7 @@ interface ChatRepository {
     suspend fun getAllCurrentUserChats(): Result<List<Chat>?, DataError.Network>
     suspend fun getChatData(chatId: Int): Result<ChatData, DataError.Network>
     suspend fun sendMessage(chatId: Int, content: String): Result<Unit, DataError.Network>
+    suspend fun deleteChat(chatId: Int): Result<Unit, DataError.Network>
     
     /**
      * Подключение к WebSocket серверу
