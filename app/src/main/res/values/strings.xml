@@ -1,3 +1,309 @@
 <resources>
-    <string name="app_name">FoundItMobile</string>
+    <string name="app_name" translatable="false">Found It</string>
+    <string name="app_description">An application to simplify the search for lost items around the world</string>
+    <string name="the_request_timed_out">Your request timed out</string>
+    <string name="bad_request">Request data is incorrect</string>
+    <string name="request_conflict">A conflict occurred while processing the request</string>
+    <string name="youve_hit_your_rate_limit">You\'ve hit your rate limit</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="file_too_large">File too large</string>
+    <string name="server_error">Server error, try again later</string>
+    <string name="error_serialization">Serialization error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="error_disk_full">Disk space is full</string>
+    <string name="error_too_much_symbols">Too many characters</string>
+    <string name="error_invalid_characters">Invalid characters</string>
+
+    <string name="allow">Allow</string>
+    <string name="later">Later</string>
+    <string name="ok">OK</string>
+    <string name="next">Next</string>
+    <string name="proceed">Proceed</string>
+    <string name="cancel">Cancel</string>
+    <string name="exit">Exit</string>
+    <string name="login_as_guest">Login as Guest</string>
+    <string name="no_chats">No chats</string>
+    <string name="retry">Retry</string>
+    <string name="error">Error</string>
+    <string name="guest">Guest</string>
+    <string name="delete">Delete</string>
+
+
+    <!--  Navigation-->
+    <string name="navigation_home">Home</string>
+    <string name="navigation_search">Explore</string>
+    <string name="navigation_add">Add</string>
+    <string name="navigation_inbox">Inbox</string>
+    <string name="navigation_profile">Profile</string>
+
+    <!--  Validation errors  -->
+    <string name="email_empty">Email cannot be empty</string>
+    <string name="invalid_email">Invalid email address</string>
+
+    <string name="password_empty">Password cannot be empty</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+
+    <string name="username_empty">Username cannot be empty</string>
+    <string name="username_too_short">Username is too short</string>
+    <string name="password_no_uppercase">Pasword must contain uppercase symbol</string>
+    <string name="password_no_special">Password must contain special symbol !@#$^%%&amp;*()</string>
+    <string name="username_wrong_symbols">Username must contain only a–zA–Z, 0–9, \'_\'</string>
+    <string name="empty_field">Field can\'t be empy</string>
+
+    <!--  Phone confirmation-->
+    <string name="phone_confirmation_title">Phone Number Confirmation</string>
+    <string name="phone_confirmation_description">To confirm your phone number, you will be redirected to the Telegram app and asked to share your contact. After that, you will receive a confirmation code to enter here.</string>
+    <string name="phone_confirmation_note">Make sure Telegram is installed on your device.</string>
+    <string name="phone_confirmation_continue">Continue</string>
+    <string name="phone_confirmation_short">For verification send code obtained in Telegram.</string>
+    <string name="more_info">Details</string>
+    <string name="enter_code_from_telegram">Enter code from Telegram</string>
+
+    <!--  Home screen-->
+    <string name="user_greeting">Welcome</string>
+    <string name="popular_category">Popular Category</string>
+    <string name="user_level_with_count">Level %d (%d pcs)</string>
+    <string name="top_level_users">Top users</string>
+    <string name="top_level_users_description">Help others to level up</string>
+
+    <plurals name="items_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+
+    <!--  Search screen-->
+    <string name="search_hint">Enter query...</string>
+    <string name="lost_items">Lost items</string>
+    <string name="select_date">Select date</string>
+    <string name="clear_date">Clear date</string>
+    <string name="selected_date">Date: %1$s</string>
+    <string name="switch_mode">Switch mode</string>
+
+    <string name="no_internet_header">Whooops!</string>
+    <string name="no_internet_description">No Internet connection found\nCheck your connection to continue</string>
+
+    <string name="guest_login_title">Guest access</string>
+    <string name="guest_login_description">You are about to continue as a guest. Some features may be limited</string>
+    <string name="load_more">Load more</string>
+    <string name="loading_more">Loading more</string>
+    <string name="loading_items_location_error">Error while fetching location</string>
+    <string name="loading_items_categories_error">Error while loading categories</string>
+    <string name="loading_items_error">Error while loading items</string>
+    <string name="loading_next_empty_error">No more items found</string>
+    <string name="fetching_location">Getting your location</string>
+    <string name="fetching_categories">Fetching item categories</string>
+    <string name="fetching_items">Fetching lost items</string>
+    <string name="empty_search">Nothing found</string>
+    <string name="empty_search_hint">Try to change filters or search query</string>
+
+    <!-- Details screen-->
+    <string name="details_to_chat">Chat</string>
+    <string name="details_add_favorite">Favorite</string>
+    <string name="details_details">Details</string>
+    <string name="details_category">Category</string>
+    <string name="details_publish_date">Publish date</string>
+    <string name="details_expire_date">Expire date</string>
+    <string name="details_location">Location</string>
+    <string name="details_report">Report item</string>
+    <string name="details_add_fav_succeess">Added to favorites</string>
+    <string name="details_add_fav_error">Error occurred while adding to favorites</string>
+    <string name="details_not_loaded_error">Wait until data loaded</string>
+    <string name="details_not_created_chat_error">Error while creating chat</string>
+    <string name="details_not_created_chat_conflict_error">You can\'t create chat with yourself</string>
+    <string name="details_created_chat_error">Chat created!</string>
+    <string name="dialog_return_item_title">Mark item as returned?</string>
+    <string name="dialog_return_item_message">This item will be marked as returned and will not be show to other users anymore.</string>
+    <string name="dialog_return_item_confirm">Mark</string>
+
+
+    <!-- Settings-->
+    <string name="settings_title">Settings</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_dark_theme_header">Dark Theme</string>
+    <string name="settings_dark_theme_description">Switch between light and dark theme</string>
+    <string name="settings_notifications_header">Notifications</string>
+    <string name="settings_notifications_description">Enable push notifications</string>
+    <string name="settings_sign_out_header">Sign Out</string>
+    <string name="settings_sign_out_description">Sign Out from your account</string>
+    <string name="settings_sign_out_confirmation">Are you sure you want to sign out?</string>
+
+    <!-- User Items Screen -->
+    <string name="my_items">My Items</string>
+    <string name="favorite_items">Favorite Items</string>
+    <string name="no_items_created">You haven\'t created any items yet</string>
+    <string name="no_favorite_items">You haven\'t added any items to favorites yet</string>
+    <string name="delete_user_item_success">Item deleted</string>
+    <string name="delete_user_item_error">Error while deleting item</string>
+    <string name="delete_favorite_item_success">Item removed from favorites</string>
+    <string name="delete_favorite_item_error">Error while removing from favorites</string>
+    <string name="dialog_remove_from_favorites_title">Remove from favorites?</string>
+    <string name="dialog_remove_from_favorites_message">This item will no longer appear in your favorites list.</string>
+    <string name="dialog_remove_from_favorites_confirm">Remove</string>
+    <string name="dialog_remove_from_favorites_cancel">Cancel</string>
+    <string name="dialog_delete_item_title">Delete item?</string>
+    <string name="dialog_delete_item_message">This action is irreversible. The item will be permanently deleted.</string>
+    <string name="dialog_delete_item_confirm">Delete</string>
+    <string name="dialog_delete_item_cancel">Cancel</string>
+    <string name="mark_as_returned_item_success">Item status changed</string>
+    <string name="marl_as_returned_item_error">Error while changing item status</string>
+
+
+
+    <!--  Notifications-->
+    <string name="new_message_notification_title">%1$s for "%2$s"</string>
+    <string name="new_message_fallback_title">New message</string>
+    <string name="default_notification_title">New notification</string>
+    <string name="default_notification_body">New notification</string>
+    <string name="moderation_success_notification_title">Item Approved: %1$s</string>
+    <string name="moderation_success_notification_body">Your item is now live and visible to others!</string>
+    <string name="chat_notification_channel" translatable="false">chat_channel</string>
+    <string name="permission_dialog_title">Allow notifications</string>
+    <string name="permission_dialog_description">To receive updates about items and messages from other users, please allow notifications</string>
+    <string name="notification_channel_chat_name">Chat Messages</string>
+    <string name="notification_channel_chat_description">Notifications for new messages in your chats.</string>
+    <string name="notification_channel_moderation_name">Item Updates</string>
+    <string name="notification_channel_moderation_description">Notifications about the status of your items (e.g., approval).</string>
+    <string name="item_deleted_notification_title">Item Deleted</string>
+    <string name="item_updates_channel_name">Item Updates</string>
+    <string name="item_updates_channel_description">Notifications about items deletion and found favorites.</string>
+    <string name="item_deleted_by_admin_notification_body">Your item \"%1$s\" was removed by a moderator.</string>
+    <string name="item_deleted_generic_notification_body">Your item \"%1$s\" has been removed.</string>
+    <string name="favorite_item_found_notification_title">Item returned!</string>
+    <string name="favorite_item_found_notification_body">The item \"%1$s\" you favorited has been marked as returned.</string>
+
+    <!-- Add item-->
+    <string name="add_item_title">Add Item</string>
+    <string name="images">Images</string>
+    <string name="no_images_added">Upload Photo</string>
+    <string name="no_images_added_description">Add photo of item to help identify it</string>
+    <string name="add_image">Upload</string>
+    <string name="remove_image">Remove image</string>
+    <string name="information">Information</string>
+    <string name="photos">Photos</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
+    <string name="select_category">Select category</string>
+    <string name="location">Location</string>
+    <string name="submit_item">Submit item</string>
+    <string name="publication_duration">Publication Duration</string>
+    <string name="days">Days</string>
+    <string name="publication_duration_info_title">How the limit is calculated</string>
+    <string name="publication_duration_info_text">Your maximum publication time is based on your level. The formula is: level × 3.\nFor example, level 1 allows up to 3 days, level 2 allows up to 6 days, and so on.</string>
+    <plurals name="days_count">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <string name="add_error_no_title">Title is required</string>
+    <string name="add_error_no_description">Description is required</string>
+    <string name="add_error_no_category">Category is required</string>
+    <string name="add_error_no_photo">Please add at least one photo</string>
+    <string name="add_error_no_location">Failed to get location. Please check GPS and permissions</string>
+    <string name="add_error_photo_upload">Failed to upload photo. Item created but some photos may be missing</string>
+    <string name="add_success">Item created successfully!</string>
+    <string name="add_fail">Failed to create item. Please try again later</string>
+    <string name="add_unexpected_error">An unexpected error occurred. Please try again later</string>
+
+
+    <string name="about_dialog_title">About Found It</string>
+    <string name="about_dialog_description">Found It helps people reconnect with lost belongings.\n\nYou can add lost items on map so others can find them easily.\n\nTogether, we make it easier to return what\'s been lost.</string>
+    
+    <!--  Chat-->
+    <string name="inbox_load_error">Error occurred while fetching chats, try again later</string>
+    <string name="empty_chat_title">Chat is empty</string>
+    <string name="empty_chat_description">There is no messages here, try to send it first!</string>
+    <string name="send_message_placeholder">Enter your message...</string>
+    <string name="delete_chat_dropdown_item">Delete chat</string>
+    <string name="delete_chat_confirm_header">Delete this conversation?</string>
+    <string name="delete_chat_confirm_description">This conversation will be permanently deleted for both of you, along with all messages</string>
+    <string name="delete_chat_success">Chat deleted</string>
+    <string name="delete_chat_error">Error occurred while deleting chat</string>
+    <string name="chat_send_error">Error occurred while sending message</string>
+    <string name="chat_deleted_by_other_user">This chat has been deleted by the other user</string>
+
+
+
+    <!-- Profile-->
+    <string name="profile_your_account">Your account</string>
+    <string name="profile_favorites">Favorites</string>
+    <string name="profile_my_items">My items</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_about">About</string>
+    <string name="change_profile_picture">Update profile picture</string>
+    <string name="delete_profile_picture">Delete picture</string>
+    <string name="profile_picture_change_success">Profile picture changed successfully</string>
+    <string name="profile_picture_change_error">Error occurred while changing profile picture</string>
+    <string name="profile_loading_error">Can\'t load user profile</string>
+
+
+    <string-array name="level_titles">
+        <item>Level 1: Novice</item>
+        <item>Level 2: Beginner</item>
+        <item>Level 3: Explorer</item>
+        <item>Level 4: Seeker</item>
+        <item>Level 5: Contributor</item>
+        <item>Level 6: Finder</item>
+        <item>Level 7: Trusted</item>
+        <item>Level 8: Hero</item>
+        <item>Level 9: Expert</item>
+        <item>Level 10: Master</item>
+    </string-array>
+    <string-array name="level_descriptions">
+        <item>You\'re just starting out. Publish more items to level up!</item>
+        <item>You\'re on your way. Keep sharing items to grow!</item>
+        <item>You\'re becoming experienced. More posts = faster growth!</item>
+        <item>You\'re gaining trust. Keep going!</item>
+        <item>People rely on your posts. Publish consistently!</item>
+        <item>You’re building a reputation. Great work!</item>
+        <item>Others count on your contributions. Stay active!</item>
+        <item>You’re a pillar of the community. Keep helping out!</item>
+        <item>You’ve come far. Just one step from mastery!</item>
+        <item>You’ve reached the top! Enjoy maximum post time and respect.</item>
+    </string-array>
+
+    <string name="username">Username</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="or">or</string>
+    <string name="login_error_as_guest">Something went wrong, try again later</string>
+    <string name="login_error_textfileds_state">Text filed must be filled and be correct</string>
+    <string name="login_error_conflict">Email or username is already taken</string>
+    <string name="login_error_wrong_credentials">Wrong username or password</string>
+    <string name="signup_error_register">Something went wrong, try to register one more time</string>
+    <string name="signup_error_otp">OTP is incorrect, try again</string>
+    <string name="signup_phone_taken">This number is already registered</string>
+    <string name="signup_phone_bad">Phone number is empty or incorrect</string>
+    <string name="signup_success">Signed Up successfully, Log In now</string>
+
+    <string name="item_status_pending">Pending</string>
+    <string name="item_status_active">Active</string>
+    <string name="item_status_expired">Expired</string>
+    <string name="item_status_found">Found</string>
+
+    <string name="dialog_play_services_unavailable_title">Play Services Unavailable</string>
+    <string name="dialog_play_services_unavailable_text">Google Play Services are required for location features. Please ensure they are installed and updated.</string>
+    <string name="dialog_play_services_unavailable_button_text">OK</string>
+
+    <string name="dialog_location_permission_required_title">Location Permission Required</string>
+    <string name="dialog_location_permission_required_text">This app needs access to your location to function. Please grant location permission.</string>
+    <string name="dialog_location_permission_required_button_text">Grant Permission</string>
+
+    <string name="dialog_location_permission_permanently_denied_title">Permission Denied Permanently</string>
+    <string name="dialog_location_permission_permanently_denied_text">Location access is permanently denied. Please enable it in the app settings.</string>
+    <string name="dialog_location_permission_permanently_denied_button_text">Open Settings</string>
+
+    <string name="dialog_gps_disabled_title">GPS Disabled</string>
+    <string name="dialog_gps_disabled_text">Please enable GPS or Location Services in your device settings to allow the app to find your location.</string>
+    <string name="dialog_gps_disabled_button_text">Enable GPS</string>
+
+    <string name="dialog_location_unavailable_title">Location Unavailable</string>
+    <string name="dialog_location_unavailable_text">Could not access location services.</string>
+    <string name="dialog_location_unavailable_button_text">OK</string>
+
 </resources>

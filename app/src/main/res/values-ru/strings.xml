@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_description">Приложение для облегчения поиска потерянных вещей по всему миру</string>
+    <string name="the_request_timed_out">Время ожидания запроса превышено</string>
+    <string name="bad_request">Некорректные данные запроса</string>
+    <string name="request_conflict">Произошел конфликт при обработке запроса</string>
+    <string name="youve_hit_your_rate_limit">Вы превысили лимит запросов</string>
+    <string name="no_internet">Нет подключения к интернету</string>
+    <string name="file_too_large">Файл слишком большой</string>
+    <string name="server_error">Ошибка сервера, попробуйте позже</string>
+    <string name="error_serialization">Ошибка преобразования данных</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="error_disk_full">Недостаточно места на диске</string>
+    <string name="error_too_much_symbols">Слишком много символов</string>
+    <string name="error_invalid_characters">Недопустимые символы</string>
+
+    <string name="allow">Разрешить</string>
+    <string name="later">Позже</string>
+    <string name="ok">Ок</string>
+    <string name="next">Далее</string>
+    <string name="proceed">Продолжить</string>
+    <string name="cancel">Отмена</string>
+    <string name="exit">Выйти</string>
+    <string name="login_as_guest">Войти как Гость</string>
+    <string name="no_chats">Чатов нет</string>
+    <string name="retry">Повторить</string>
+    <string name="error">Ошибка</string>
+    <string name="guest">Гость</string>
+    <string name="delete">Удалить</string>
+
+    <!--  Navigation-->
+    <string name="navigation_home">Главная</string>
+    <string name="navigation_search">Объявления</string>
+    <string name="navigation_add">Добавить</string>
+    <string name="navigation_inbox">Сообщения</string>
+    <string name="navigation_profile">Профиль</string>
+
+    <!--  Обработка ошибок-->
+    <string name="email_empty">E-mail не может быть пустым</string>
+    <string name="invalid_email">Неверный адрес электронной почты</string>
+
+    <string name="password_empty">Пароль не может быть пустым</string>
+    <string name="password_too_short">Пароль слишком короткий</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+
+    <string name="username_empty">Имя пользователя не может быть пустым</string>
+    <string name="username_too_short">Имя пользователя слишком короткое</string>
+    <string name="password_no_uppercase">Пароль должен содержать заглавный символ</string>
+    <string name="password_no_special">Пароль должен содержать спец. символ !@#$%%^&amp;*()</string>
+    <string name="username_wrong_symbols">Имя пользователя может содержать только a–zA–Z, 0–9, \'_\'</string>
+    <string name="empty_field">Поле не должно быть пустым</string>
+
+    <!--  Подтверждение номера-->
+    <string name="phone_confirmation_title">Подтверждение номера</string>
+    <string name="phone_confirmation_description">Для подтверждения номера телефона вы перейдете в приложение Telegram и отправите нам свой контакт. После этого вы получите код подтверждения, который нужно ввести здесь.</string>
+    <string name="phone_confirmation_note">Убедитесь, что Telegram установлен на вашем устройстве.</string>
+    <string name="phone_confirmation_continue">Продолжить</string>
+    <string name="phone_confirmation_short">Чтобы подтвердить номер, отправьте контакт через Telegram.</string>
+    <string name="more_info">Подробнее</string>
+    <string name="enter_code_from_telegram">Введите код из Telegram</string>
+
+    <!--  Home screen-->
+    <string name="user_greeting">Добро пожаловать</string>
+    <string name="popular_category">Популярные Категории</string>
+    <string name="user_level_with_count">Уровень %d (%d шт)</string>
+    <string name="top_level_users">Лучшие пользователи</string>
+    <string name="top_level_users_description">Помогайте другим чтобы увеличивать уровень</string>
+
+    <plurals name="items_count">
+        <item quantity="one">%d вещь</item>    <!-- 1 -->
+        <item quantity="few">%d вещи</item>    <!-- 2-4 -->
+        <item quantity="many">%d вещей</item>  <!-- 5+ -->
+        <item quantity="other">%d вещей</item> <!-- fallback -->
+    </plurals>
+
+
+    <!--  Search screen-->
+    <string name="search_hint">Введите запрос...</string>
+    <string name="lost_items">Потерянные вещи</string>
+    <string name="select_date">Выберите дату</string>
+    <string name="clear_date">Очистить выбор</string>
+    <string name="selected_date">Дата: %1$s</string>
+    <string name="switch_mode">Переключить режим</string>
+
+
+    <string name="no_internet_header">Упс!</string>
+    <string name="no_internet_description">Интернет-соединение не найдено\nПроверьте подключение, чтобы продолжить</string>
+
+    <string name="guest_login_title">Гостевой доступ</string>
+    <string name="guest_login_description">Вы собираетесь продолжить как Гость. Функции приложения будут ограничены</string>
+    <string name="load_more">Загрузить еще</string>
+    <string name="loading_more">Загружаем еще...</string>
+    <string name="loading_items_location_error">Ошибка при определении местоположения</string>
+    <string name="loading_items_categories_error">Ошибка при загрузке категорий</string>
+    <string name="loading_items_error">Ошибка при загрузке вещей</string>
+    <string name="loading_next_empty_error">Больше меток нет</string>
+    <string name="fetching_location">Получаем местоположение</string>
+    <string name="fetching_categories">Загружаем категории вещей</string>
+    <string name="fetching_items">Загружаем потерянные вещи</string>
+    <string name="empty_search">Ничего не найдено</string>
+    <string name="empty_search_hint">Попробуйте сменить фильтры или поисковой запрос</string>
+
+
+    <!-- Details screen-->
+    <string name="details_to_chat">Чат</string>
+    <string name="details_add_favorite">В избранное</string>
+    <string name="details_details">Подробности</string>
+    <string name="details_category">Категория</string>
+    <string name="details_publish_date">Дата публикации</string>
+    <string name="details_expire_date">Срок действия</string>
+    <string name="details_location">Местоположение</string>
+    <string name="details_report">Пожаловаться</string>
+    <string name="details_add_fav_succeess">Добавлено в избранное</string>
+    <string name="details_add_fav_error">Ошибка при добавлении в избранное</string>
+    <string name="details_not_loaded_error">Подождите загрузки данных</string>
+    <string name="details_not_created_chat_error">Ошибка при создании чата</string>
+    <string name="details_not_created_chat_conflict_error">Вы не можете создать чат сами с собой</string>
+    <string name="details_created_chat_error">Чат с пользователем создан</string>
+
+    <!--  Settings-->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_preferences">Параметры</string>
+    <string name="settings_account">Аккаунт</string>
+    <string name="settings_dark_theme_header">Темная тема</string>
+    <string name="settings_dark_theme_description">Переключает тему приложения на темную</string>
+    <string name="settings_notifications_header">Уведомления</string>
+    <string name="settings_notifications_description">Включает push-уведомления</string>
+    <string name="settings_sign_out_header">Выход</string>
+    <string name="settings_sign_out_description">Выход из аккаунта на устройстве</string>
+    <string name="settings_sign_out_confirmation">Вы уверены, что хотите выйти из аккаунта?</string>
+
+    <string name="my_items">Мои вещи</string>
+    <string name="favorite_items">Избранные вещи</string>
+    <string name="no_items_created">Вы ещё не создали ни 1 метки</string>
+    <string name="no_favorite_items">Вы ещё не добавили ничего в избранное</string>
+    <string name="delete_user_item_success">Вещь удалена</string>
+    <string name="delete_user_item_error">Ошибка при удалении вещи</string>
+    <string name="delete_favorite_item_success">Вещь была убрана из избранных</string>
+    <string name="delete_favorite_item_error">Ошибка при удалении из избранных</string>
+    <string name="dialog_remove_from_favorites_title">Удалить из избранного?</string>
+    <string name="dialog_remove_from_favorites_message">Эта вещь больше не будет отображаться в вашем списке избранного.</string>
+    <string name="dialog_remove_from_favorites_confirm">Удалить</string>
+    <string name="dialog_remove_from_favorites_cancel">Отмена</string>
+    <string name="dialog_delete_item_title">Удалить метку?</string>
+    <string name="dialog_delete_item_message">Это действие необратимо. Метка будет удалена навсегда.</string>
+    <string name="dialog_delete_item_confirm">Удалить</string>
+    <string name="dialog_delete_item_cancel">Отмена</string>
+    <string name="dialog_return_item_title">Отметить как возвращенную?</string>
+    <string name="dialog_return_item_message">Эта вещь будет отмечена как возвращенная и больше не будет отображаться остальным пользователям.</string>
+    <string name="dialog_return_item_confirm">Отметить</string>
+    <string name="mark_as_returned_item_success">Статус вещи изменен</string>
+    <string name="marl_as_returned_item_error">Ошибка при изменении статуса вещи</string>
+
+    <!--  Notifications-->
+    <string name="new_message_notification_title">%1$s для "%2$s"</string>
+    <string name="new_message_fallback_title">Новое сообщение</string>
+    <string name="default_notification_title">Новое уведомление</string>
+    <string name="default_notification_body">Новое уведомление</string>
+    <string name="moderation_success_notification_title">Вещь опубликована: %1$s</string>
+    <string name="moderation_success_notification_body">Ваша публикация одобрена и видна остальным!</string>
+    <string name="permission_dialog_title">Разрешите уведомлений</string>
+    <string name="permission_dialog_description">Чтобы получать уведомления об изменениях статуса меток, сообщениях от других пользователей и других событиях, разрешите отправку уведомлений</string>
+    <string name="notification_channel_chat_name">Сообщения в чате</string>
+    <string name="notification_channel_chat_description">Уведомления для новых сообщений в ваших чатах</string>
+    <string name="notification_channel_moderation_name">Обновления публикаций</string>
+    <string name="notification_channel_moderation_description">Уведомления при обновлении ваших публикаций (одобрение, удалиени и т.д)</string>
+    <string name="item_updates_channel_name">Обновления вещей</string>
+    <string name="item_updates_channel_description">Уведомления при удалении ваших веще и смене статуса избранных.</string>
+    <string name="item_deleted_notification_title">Метка удалена</string>
+    <string name="item_deleted_by_admin_notification_body">Ваша метка \"%1$s\" была удалена модератором.</string>
+    <string name="item_deleted_generic_notification_body">Ваша метка \"%1$s\" была удалена.</string>
+    <string name="favorite_item_found_notification_title">Вещь из избранных возвращена!</string>
+    <string name="favorite_item_found_notification_body">Вещь \"%1$s\", которую вы добавили в избранное, была возвращена владельцу.</string>
+
+    <!-- Add Item-->
+    <string name="add_item_title">Добавить Метку</string>
+    <string name="no_images_added">Загрузите Фото</string>
+    <string name="no_images_added_description">Добавьте фото вещи что ее было легче опознать</string>
+    <string name="images">Фотографии</string>
+    <string name="add_image">Загрузить</string>
+    <string name="remove_image">Удалить текущее</string>
+    <string name="information">Информация</string>
+    <string name="photos">Фотографии</string>
+    <string name="title">Заголовок</string>
+    <string name="description">Описание</string>
+    <string name="category">Категория</string>
+    <string name="select_category">Выберите категорию</string>
+    <string name="location">Местоположение</string>
+    <string name="submit_item">Добавить метку</string>
+    <string name="publication_duration">Срок Публикации</string>
+    <string name="days">Дней</string>
+    <string name="publication_duration_info_title">Как рассчитывается лимит</string>
+    <string name="publication_duration_info_text">Максимальный срок размещения зависит от вашего уровня. Формула: уровень × 3.\nНапример, на 1 уровне можно выбрать до 3 дней, на 2 — до 6, и так далее.</string>
+    <plurals name="days_count">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="other">%d дня</item>
+    </plurals>
+    <string name="add_error_no_title">Введите заголовок</string>
+    <string name="add_error_no_description">Введите описание</string>
+    <string name="add_error_no_category">Выберите категорию</string>
+    <string name="add_error_no_photo">Загрузите хотя бы одно фото</string>
+    <string name="add_error_no_location">Не удалось получить местоположение. Проверьте GPS и разрешения</string>
+    <string name="add_error_photo_upload">Не удалось загрузить фото. Метка создана но часть фото может быть пропущена</string>
+    <string name="add_success">Метка создана успешно!</string>
+    <string name="add_fail">Не удалось создать метку. Попробуйте еще раз позже</string>
+    <string name="add_unexpected_error">Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова позже</string>
+
+    <string name="about_dialog_title">Про Found It</string>
+    <string name="about_dialog_description">Found It помогает людям находить потерянные вещи.\n\nВы можете добавить потерянную вещь на карту чтобы ее легче было найти.\n\nВместе мы возвращаем потерянное.</string>
+
+    <!--  Chat-->
+    <string name="inbox_load_error">Ошибка при получении чатов, попробуйте позже</string>
+    <string name="empty_chat_title">Чат пустой</string>
+    <string name="empty_chat_description">Здесь еще нет сообщений, попробуйте отправить первое</string>
+    <string name="send_message_placeholder">Введите сообщение...</string>
+    <string name="delete_chat_dropdown_item">Удалить чат</string>
+    <string name="delete_chat_confirm_header">Удалить этот чат?</string>
+    <string name="delete_chat_confirm_description">Этот чат будет безвозвратно удален для вас обоих вместе со всеми сообщениями</string>
+    <string name="delete_chat_success">Чат удалён</string>
+    <string name="delete_chat_error">Ошибка при удалении чата</string>
+    <string name="chat_send_error">Ошибка при отправке сообщения, попробуйте позже</string>
+    <string name="chat_deleted_by_other_user">Чат был удален другим пользователем</string>
+
+    <!--  Profile-->
+    <string name="profile_your_account">Ваш аккаунт</string>
+    <string name="profile_favorites">Избранные</string>
+    <string name="profile_my_items">Ваши вещи</string>
+    <string name="profile_settings">Настройки</string>
+    <string name="profile_about">О приложении</string>
+    <string name="change_profile_picture">Обновить изображение профиля</string>
+    <string name="delete_profile_picture">Удалить изображение</string>
+    <string name="profile_picture_change_success">Изображение профиля успешно изменено</string>
+    <string name="profile_picture_change_error">Ошибка при изменении изображения профиля</string>
+    <string name="profile_loading_error">Не удается загрузить профиль пользователя</string>
+
+
+    <string-array name="level_titles">
+        <item>Уровень 1: Новичок</item>
+        <item>Уровень 2: Начинающий</item>
+        <item>Уровень 3: Исследователь</item>
+        <item>Уровень 4: Искатель</item>
+        <item>Уровень 5: Помощник</item>
+        <item>Уровень 6: Искренний</item>
+        <item>Уровень 7: Надёжный</item>
+        <item>Уровень 8: Герой</item>
+        <item>Уровень 9: Эксперт</item>
+        <item>Уровень 10: Мастер</item>
+    </string-array>
+
+    <string-array name="level_descriptions">
+        <item>Вы только начинаете. Размещайте находки, чтобы повышать уровень!</item>
+        <item>Вы на верном пути. Делитесь находками, чтобы расти!</item>
+        <item>Вы уже с опытом. Больше публикаций — выше уровень!</item>
+        <item>Вы заслуживаете доверие. Продолжайте!</item>
+
+        <item>Люди полагаются на ваши находки. Будьте активны!</item>
+
+        <item>Вы строите репутацию. Отличная работа!</item>
+
+        <item>Ваш вклад важен. Не останавливайтесь!</item>
+
+        <item>Вы опора сообщества. Спасибо за помощь!</item>
+
+        <item>Вы почти у вершины. Последний шаг!</item>
+
+        <item>Вы достигли максимума! Максимальное время публикации и уважение обеспечены.</item>
+    </string-array>
+
+    <string name="username">Имя пользователя</string>
+    <string name="username_or_email">Имя пользователя или Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="log_in">Вход</string>
+    <string name="or">или</string>
+    <string name="login_error_as_guest">Что-то пошло не так, попробуйте позже</string>
+    <string name="login_error_textfileds_state">Текстовые поля должны быть заполнены и без ошибок</string>
+    <string name="login_error_conflict">Данный email или имя пользователя уже заняты</string>
+    <string name="login_error_wrong_credentials">Неверный логин или пароль</string>
+    <string name="signup_error_register">Что-то пошло не так, попробуйте ещё раз позже</string>
+    <string name="signup_error_otp">Код некорректный, попробуйте ещё</string>
+    <string name="signup_phone_taken">Данный номер уже зарегистрирован</string>
+    <string name="signup_phone_bad">Номер телефона пустой или некорректный</string>
+    <string name="signup_success">Успешная регистрация, теперь войдите в аккаунт</string>
+
+
+    <string name="item_status_pending">Ожидает</string>
+    <string name="item_status_active">Активно</string>
+    <string name="item_status_expired">Истек срок</string>
+    <string name="item_status_found">Найдена</string>
+
+    <string name="dialog_play_services_unavailable_title">Play cервисы недоступны</string>
+    <string name="dialog_play_services_unavailable_text">Для функций определения местоположения требуются Сервисы Google Play. Убедитесь, что они установлены и обновлены.</string>
+    <string name="dialog_play_services_unavailable_button_text">ОК</string>
+
+    <string name="dialog_location_permission_required_title">Требуется разрешение на местоположение</string>
+    <string name="dialog_location_permission_required_text">Этому приложению требуется доступ к вашему местоположению для работы. Пожалуйста, предоставьте разрешение.</string>
+    <string name="dialog_location_permission_required_button_text">Предоставить разрешение</string>
+
+    <string name="dialog_location_permission_permanently_denied_title">Разрешение отклонено навсегда</string>
+    <string name="dialog_location_permission_permanently_denied_text">Доступ к местоположению навсегда отклонен. Пожалуйста, включите его в настройках приложения.</string>
+    <string name="dialog_location_permission_permanently_denied_button_text">Открыть настройки</string>
+
+
+    <string name="dialog_gps_disabled_title">GPS отключен</string>
+    <string name="dialog_gps_disabled_text">Пожалуйста, включите GPS или службы геолокации в настройках вашего устройства, чтобы приложение могло определить ваше местоположение.</string>
+    <string name="dialog_gps_disabled_button_text">Включить GPS</string>
+
+    <string name="dialog_location_unavailable_title">Местоположение недоступно</string>
+    <string name="dialog_location_unavailable_text">Не удалось получить доступ к службам определения местоположения.</string>
+    <string name="dialog_location_unavailable_button_text">ОК</string>
+</resources>
