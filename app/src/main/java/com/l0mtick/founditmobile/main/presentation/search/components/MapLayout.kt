@@ -30,7 +30,6 @@ import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.maps.extension.compose.annotation.generated.CircleAnnotationGroup
 import com.mapbox.maps.extension.compose.style.MapStyle
-import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
@@ -120,21 +119,15 @@ fun MapLayout(
                         clusterOptions = ClusterOptions(
                             textColor = Color.WHITE,
                             textSize = 20.0,
-                            circleRadiusExpression = literal(25.0),
-                            colorLevels = listOf(
-                                Pair(50, Color.RED),
-                                Pair(20, Color.CYAN),
-                                Pair(5, Color.YELLOW),
-                                Pair(1, Color.MAGENTA),
-                            )
+                            circleRadius = 25.0,
                         )
                     )
                 )
             ) {
                 circleRadius = 15.0
-                circleColor = androidx.compose.ui.graphics.Color(122, 21, 21)
+                circleColor = androidx.compose.ui.graphics.Color(255, 191, 0)
                 circleBlur = .6
-                circleStrokeColor = androidx.compose.ui.graphics.Color.Yellow
+                circleStrokeColor = androidx.compose.ui.graphics.Color.Red.copy(alpha = .7f)
                 circleStrokeWidth = 1.0
                 interactionsState.onClicked {
                     val originalId = it.getData()?.asJsonObject?.get("lostItemId")?.asInt
