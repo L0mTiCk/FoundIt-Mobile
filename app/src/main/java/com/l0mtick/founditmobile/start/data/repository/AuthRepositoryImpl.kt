@@ -1,10 +1,14 @@
 package com.l0mtick.founditmobile.start.data.repository
 
+import android.util.Log
 import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
 import com.l0mtick.founditmobile.common.domain.repository.LocalStorage
 import com.l0mtick.founditmobile.start.domain.repository.AuthApi
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AuthRepositoryImpl(private val localStorage: LocalStorage, private val authApi: AuthApi): AuthRepository {
 
@@ -22,19 +26,40 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
                 localStorage.setRefreshToken(result.data.refreshToken)
                 localStorage.setEmail(result.data.email)
                 localStorage.setUsername(result.data.username)
+                localStorage.setProfilePictureUrl(result.data.logoUrl)
+                localStorage.setLevel(result.data.level)
                 localStorage.setIsLoggedIn(true)
+                CoroutineScope(Dispatchers.IO).launch {
+                    localStorage.getPushToken()?.let {
+                        authApi.sendUserPushToken(it)
+                    } ?: Log.e("push_service", "Error while sending push token after login")
+                }
                 return Result.Success(Unit)
             }
             is Result.Error -> return Result.Error(result.error)
         }
     }
 
+    override suspend fun loginAsGuest(): Result<Unit, DataError> {
+        val result = authApi.loginAsGuest()
+        when(result){
+            is Result.Success -> {
+                localStorage.setToken(result.data.token)
+                return Result.Success(Unit)
+            }
+            is Result.Error -> {
+                return Result.Error(result.error)
+            }
+        }
+    }
+
     override suspend fun register(
         username: String,
         email: String,
-        password: String
+        password: String,
+        phoneNumber: String
     ): Result<Unit, DataError> {
-        return authApi.register(username, email, password)
+        return authApi.register(username, email, password, phoneNumber)
     }
 
     override suspend fun verifyPhone(phone: String, code: String): Result<Unit, DataError> {
@@ -53,5 +78,13 @@ class AuthRepositoryImpl(private val localStorage: LocalStorage, private val aut
         }
 
         return Result.Success(Unit)
+    }
+
+    override suspend fun checkPhoneAvailability(fullPhoneNumber: String): Result<Unit, DataError.Network> {
+        return authApi.checkPhoneAvailability(fullPhoneNumber)
+    }
+
+    override suspend fun checkToken(): Result<Unit, DataError.Network> {
+        return authApi.checkToken()
     }
 }

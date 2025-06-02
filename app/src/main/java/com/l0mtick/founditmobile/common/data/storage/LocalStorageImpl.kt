@@ -31,6 +31,14 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.REFRESH_TOKEN]
     }
 
+    override suspend fun setPushToken(token: String) {
+        context.dataStore.edit { it[PreferencesKeys.PUSH_TOKEN] = token }
+    }
+
+    override suspend fun getPushToken(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.PUSH_TOKEN]
+    }
+
     override suspend fun setIsLoggedIn(isLoggedIn: Boolean) {
         context.dataStore.edit { it[PreferencesKeys.IS_LOGGED_IN] = isLoggedIn }
     }
@@ -55,6 +63,28 @@ class LocalStorageImpl(
         return context.dataStore.data.first()[PreferencesKeys.USERNAME]
     }
 
+    override suspend fun setProfilePictureUrl(url: String?) {
+        context.dataStore.edit { preferences ->
+            if (url == null) {
+                preferences.remove(PreferencesKeys.PROFILE_PICTURE_URL)
+            } else {
+                preferences[PreferencesKeys.PROFILE_PICTURE_URL] = url
+            }
+        }
+    }
+
+    override suspend fun getProfilePictureUrl(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.PROFILE_PICTURE_URL]
+    }
+
+    override suspend fun setLevel(level: Int) {
+        context.dataStore.edit { it[PreferencesKeys.LEVEL] = level }
+    }
+
+    override suspend fun getLevel(): Int? {
+        return context.dataStore.data.first()[PreferencesKeys.LEVEL]
+    }
+
     override suspend fun setAppLanguage(languageCode: String) {
         context.dataStore.edit {
             it[PreferencesKeys.APP_LANGUAGE] = languageCode
@@ -64,6 +94,22 @@ class LocalStorageImpl(
     override suspend fun getAppLanguage(): String {
         val stored = context.dataStore.data.first()[PreferencesKeys.APP_LANGUAGE]
         return stored ?: Locale.getDefault().language
+    }
+
+    override suspend fun setIsDarkTheme(isDarkTheme: Boolean) {
+        context.dataStore.edit { it[PreferencesKeys.DARK_THEME_ENABLED] = isDarkTheme }
+    }
+
+    override suspend fun isDarkTheme(): Boolean {
+        return context.dataStore.data.first()[PreferencesKeys.DARK_THEME_ENABLED]?: false
+    }
+
+    override suspend fun setAreNotificationsEnabled(areEnabled: Boolean) {
+        context.dataStore.edit { it[PreferencesKeys.NOTIFICATIONS_ENABLED] = areEnabled }
+    }
+
+    override suspend fun areNotificationsEnabled(): Boolean {
+        return context.dataStore.data.first()[PreferencesKeys.NOTIFICATIONS_ENABLED]?: true
     }
 
     override suspend fun clear() {

@@ -4,13 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l0mtick.founditmobile.R
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarManager
+import com.l0mtick.founditmobile.common.data.snackbar.SnackbarType
+import com.l0mtick.founditmobile.common.domain.error.DataError
 import com.l0mtick.founditmobile.common.domain.error.Result
+import com.l0mtick.founditmobile.common.domain.repository.UserSessionManager
 import com.l0mtick.founditmobile.common.domain.repository.ValidationManager
 import com.l0mtick.founditmobile.common.presentation.util.UiText
-import com.l0mtick.founditmobile.common.presentation.util.asUiText
 import com.l0mtick.founditmobile.common.presentation.util.isValid
-import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateField
+import com.l0mtick.founditmobile.common.presentation.util.updateAndValidateLoginField
 import com.l0mtick.founditmobile.start.domain.repository.AuthRepository
+import com.l0mtick.founditmobile.start.presentation.StartEventManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +26,9 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val validator: ValidationManager,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userSessionManager: UserSessionManager,
+    private val snackbarManager: SnackbarManager
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -58,6 +64,14 @@ class LoginViewModel(
                 }
             }
 
+            LoginAction.OnMoveToInitial -> {
+                _state.update {
+                    LoginState.Initial
+                }
+            }
+
+            LoginAction.OnGuestLogin -> loginAsGuest()
+
             is LoginAction.LoginFormAction -> handleLoginFormAction(action)
             is LoginAction.SignupFormAction -> handleSignupFormAction(action)
         }
@@ -66,18 +80,18 @@ class LoginViewModel(
     private fun handleLoginFormAction(action: LoginAction.LoginFormAction) {
         when (action) {
             is LoginAction.LoginFormAction.OnLoginChanged -> {
-                updateAndValidateField<LoginState.LoginForm>(
+                updateAndValidateLoginField<LoginState.LoginForm>(
                     getField = { it.loginState },
                     setField = { state, field -> state.copy(loginState = field) },
                     newValue = action.value,
-                    validate = validator::validateUsername,
+                    validate = validator::validateUsernameOrEmail,
                     getState = { _state.value },
                     updateState = { newState -> _state.update { newState } }
                 )
             }
 
             is LoginAction.LoginFormAction.OnPasswordChanged -> {
-                updateAndValidateField<LoginState.LoginForm>(
+                updateAndValidateLoginField<LoginState.LoginForm>(
                     getField = { it.passwordState },
                     setField = { state, field -> state.copy(passwordState = field) },
                     newValue = action.value,
@@ -99,7 +113,7 @@ class LoginViewModel(
 
         when (action) {
             is LoginAction.SignupFormAction.OnConfirmPasswordChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.confirmPasswordState },
                     setField = { state, field -> state.copy(confirmPasswordState = field) },
                     newValue = action.value,
@@ -110,7 +124,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnEmailChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.emailState },
                     setField = { state, field -> state.copy(emailState = field) },
                     newValue = action.value,
@@ -121,7 +135,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnPasswordChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.passwordState },
                     setField = { state, field -> state.copy(passwordState = field) },
                     newValue = action.value,
@@ -132,7 +146,7 @@ class LoginViewModel(
             }
 
             is LoginAction.SignupFormAction.OnUsernameChanged -> {
-                updateAndValidateField<LoginState.SignupForm>(
+                updateAndValidateLoginField<LoginState.SignupForm>(
                     getField = { it.loginState },
                     setField = { state, field -> state.copy(loginState = field) },
                     newValue = action.value,
@@ -173,17 +187,32 @@ class LoginViewModel(
                 )
                 when (result) {
                     is Result.Success -> {
-                        eventChannel.send(LoginEvent.LoginSuccess)
-                        Log.i("auth_flow", "Logged In!!")
+                        StartEventManager.triggerEvent(StartEventManager.StartEvent.OnNavigateToMain)
                         return@launch
                     }
 
                     is Result.Error -> {
-                        eventChannel.send(
-                            LoginEvent.Error(
-                                result.error.asUiText()
+                        when (result.error) {
+                            is DataError.Network -> {
+                                when (result.error) {
+                                    DataError.Network.BAD_REQUEST -> {
+                                        snackbarManager.showSnackbar(
+                                            UiText.StringResource(R.string.login_error_wrong_credentials),
+                                            type = SnackbarType.ERROR
+                                        )
+                                    }
+
+                                    else -> snackbarManager.showError(
+                                        result.error
+                                    )
+
+                                }
+                            }
+
+                            else -> snackbarManager.showError(
+                                result.error
                             )
-                        )
+                        }
                         Log.e("auth_flow", "Error: ${result.error}")
                     }
                 }
@@ -195,13 +224,11 @@ class LoginViewModel(
             }
         } else {
             viewModelScope.launch {
-                eventChannel.send(
-                    LoginEvent.Error(
-                        UiText.StringResource(R.string.empty_field)
-                    )
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.login_error_textfileds_state),
+                    type = SnackbarType.ERROR
                 )
             }
-            Log.e("auth_flow", "Smth not valid")
         }
     }
 
@@ -221,10 +248,9 @@ class LoginViewModel(
         if (isValid) {
             viewModelScope.launch {
                 if (passwordState.value != confirmPasswordState.value) {
-                    eventChannel.send(
-                        LoginEvent.Error(
-                            UiText.StringResource(R.string.passwords_do_not_match)
-                        )
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.passwords_do_not_match),
+                        type = SnackbarType.ERROR
                     )
                     return@launch
                 }
@@ -237,7 +263,7 @@ class LoginViewModel(
                     authRepository.checkAvailability(loginState.value, emailState.value)
 
                 when (availabilityResult) {
-                    is Result.Success<*, *> -> {
+                    is Result.Success -> {
                         eventChannel.send(
                             LoginEvent.NavigateToPhoneVerification(
                                 login = loginState.value,
@@ -246,8 +272,22 @@ class LoginViewModel(
                             )
                         )
                     }
-                    is Result.Error<*, *> -> {
-                        eventChannel.send(LoginEvent.Error(availabilityResult.error.asUiText()))
+
+                    is Result.Error -> {
+                        when (availabilityResult.error) {
+                            is DataError.Network -> {
+                                when (availabilityResult.error) {
+                                    DataError.Network.CONFLICT -> snackbarManager.showSnackbar(
+                                        UiText.StringResource(R.string.login_error_conflict),
+                                        type = SnackbarType.ERROR
+                                    )
+
+                                    else -> snackbarManager.showError(availabilityResult.error)
+                                }
+                            }
+
+                            else -> snackbarManager.showError(availabilityResult.error)
+                        }
                     }
                 }
                 _state.update {
@@ -255,6 +295,31 @@ class LoginViewModel(
                 }
             }
 
+        } else {
+            viewModelScope.launch {
+                snackbarManager.showSnackbar(
+                    UiText.StringResource(R.string.login_error_textfileds_state),
+                    type = SnackbarType.ERROR
+                )
+            }
+        }
+    }
+
+    private fun loginAsGuest() {
+        viewModelScope.launch {
+            when (val result = authRepository.loginAsGuest()) {
+                is Result.Success -> {
+                    userSessionManager.setGuestMode(true)
+                    StartEventManager.triggerEvent(StartEventManager.StartEvent.OnNavigateToMainAsGuest)
+                }
+
+                is Result.Error -> {
+                    snackbarManager.showSnackbar(
+                        UiText.StringResource(R.string.login_error_as_guest),
+                        type = SnackbarType.ERROR
+                    )
+                }
+            }
         }
     }
 }

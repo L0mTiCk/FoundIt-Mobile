@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.l0mtick.founditmobile.ui.theme.FoundItMobileTheme
-import com.simon.xmaterialccp.component.MaterialCodePicker
+import com.l0mtick.founditmobile.ui.theme.Theme
 import com.simon.xmaterialccp.data.CCPColors
 import com.simon.xmaterialccp.data.CountryData
 import com.simon.xmaterialccp.data.ccpDefaultColors
@@ -77,28 +77,25 @@ fun PhoneTextFieldWithCountry(
             showCountryCodeInDIalog = true,
             showDropDownAfterFlag = true,
             textFieldShapeCornerRadiusInPercentage = 25,
-            searchFieldShapeCornerRadiusInPercentage = 25,
             appbartitleStyle = MaterialTheme.typography.titleLarge,
-            countryItemBgShape = RoundedCornerShape(5.dp),
             showCountryFlag = true,
             showCountryCode = true,
             isEnabled = true,
             colors = ccpDefaultColors(
-                primaryColor = MaterialTheme.colorScheme.primary,
+                primaryColor = Theme.colors.brand,
                 errorColor = MaterialTheme.colorScheme.error,
-                backgroundColor = MaterialTheme.colorScheme.background,
-                surfaceColor = MaterialTheme.colorScheme.surface,
-                outlineColor = MaterialTheme.colorScheme.outline,
-                disabledOutlineColor = MaterialTheme.colorScheme.outline.copy(0.1f),
-                unfocusedOutlineColor = MaterialTheme.colorScheme.onBackground.copy(0.3f),
-                textColor = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-                cursorColor = MaterialTheme.colorScheme.primary,
-                topAppBarColor = MaterialTheme.colorScheme.surface,
+                backgroundColor = Theme.colors.background,
+                surfaceColor = Theme.colors.surface,
+                outlineColor = Theme.colors.brand,
+                disabledOutlineColor = Theme.colors.onSurfaceVariant,
+                unfocusedOutlineColor = Theme.colors.onSurfaceVariant,
+                textColor = Theme.colors.onSurface,
+                cursorColor = Theme.colors.brand,
+                topAppBarColor = Theme.colors.surface,
                 countryItemBgColor = MaterialTheme.colorScheme.surface,
                 searchFieldBgColor = MaterialTheme.colorScheme.surface,
-                dialogNavIconColor = MaterialTheme.colorScheme.onBackground.copy(0.7f),
-                dropDownIconTint = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-
+                dialogNavIconColor = Theme.colors.onSurface,
+                dropDownIconTint = Theme.colors.onSurface,
             )
         )
     }
@@ -112,7 +109,7 @@ private fun PhoneTextFieldWithCountryPreview() {
             "+375",
             "",
             "by",
-            false,
+            true,
             { a, b -> },
             {}
         )
@@ -123,7 +120,7 @@ private fun PhoneTextFieldWithCountryPreview() {
  * Copied version of lib country picker to remove text transformation
  *
  * @param countrytextstyle the textstyle to be used for the country in the lazy column in dialog
- *@param dialogcountrycodetextstyle the textstyle to be used for the country code in the lazy column in dialog
+ * @param dialogcountrycodetextstyle the textstyle to be used for the country code in the lazy column in dialog
  * @param showCountryCodeInDIalog whether to show the country code in the lazy column dialog or not
  * @param countrycodetextstyle the textstyle to be used for the country code in the original textfield
  * @param showDropDownAfterFlag whether to show the drop down before or after the flag, if true then the dropdown will show after flag, if false before flag
@@ -174,12 +171,10 @@ fun ForkedMaterialCountryCodePicker(
     error: Boolean = false,
     showErrorText: Boolean = true,
     flagPadding: PaddingValues = PaddingValues(horizontal = 10.dp),
-    countryItemBgShape: RoundedCornerShape = RoundedCornerShape(0.dp),
     phonenumbertextstyle: TextStyle = MaterialTheme.typography.bodyMedium,
     phonehintnumbertextstyle: TextStyle = MaterialTheme.typography.bodyMedium,
     searchFieldPlaceHolderTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     searchFieldTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    searchFieldShapeCornerRadiusInPercentage: Int = 30,
     textFieldShapeCornerRadiusInPercentage: Int = 30,
     errorTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     appbartitleStyle: TextStyle = MaterialTheme.typography.titleLarge,
@@ -231,8 +226,11 @@ fun ForkedMaterialCountryCodePicker(
                     else colors.unfocusedOutlineColor,
                     unfocusedBorderColor = if (error) colors.errorColor else colors.unfocusedOutlineColor,
                     cursorColor =  colors.cursorColor,
-                    focusedContainerColor = colors.surfaceColor
-
+                    focusedContainerColor = colors.surfaceColor,
+                    focusedTextColor = Theme.colors.onSurface,
+                    errorTextColor = Theme.colors.onSurface,
+                    unfocusedTextColor = Theme.colors.onSurface,
+                    disabledTextColor = Theme.colors.onSurface
                 ),
                 onValueChange = {
                     textFieldValueState = it
@@ -249,7 +247,8 @@ fun ForkedMaterialCountryCodePicker(
                     } else{
                         Text(
                             style = phonehintnumbertextstyle,
-                            text = stringResource(id = getNumberHint(defaultCountry.countryCode))
+                            text = stringResource(id = getNumberHint(defaultCountry.countryCode)),
+                            color = Theme.colors.onSurfaceVariant,
                         )
                     }
                 },
@@ -272,9 +271,7 @@ fun ForkedMaterialCountryCodePicker(
                             searchFieldPlaceHolderTextStyle = searchFieldPlaceHolderTextStyle,
                             searchFieldTextStyle = searchFieldTextStyle,
                             showCountryFlag = showCountryFlag,
-                            searchFieldShapeCornerRadiusInPercentage = searchFieldShapeCornerRadiusInPercentage,
                             appbartitleStyle = appbartitleStyle,
-                            countryItemBgShape = countryItemBgShape,
                             countryItemVerticalPadding = countryItemVerticalPadding,
                             countryItemHorizontalPadding = countryItemHorizontalPadding,
                             countrytextstyle = countrytextstyle,

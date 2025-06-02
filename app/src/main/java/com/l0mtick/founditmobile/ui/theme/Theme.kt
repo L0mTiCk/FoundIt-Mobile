@@ -1,7 +1,10 @@
 package com.l0mtick.founditmobile.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationDrawerItemColors
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -13,6 +16,7 @@ import androidx.compose.ui.unit.sp
 
 val baseLightColors = FoundItColors(
     brand = Color(0xFF397a57),
+    brandMuted = Color(0xFFD7E4DD),
     onBrand = Color.White,
     secondary = Color(0xFFBDC5BE),
     onSecondary = Color(0xFF002200),
@@ -20,12 +24,23 @@ val baseLightColors = FoundItColors(
     onBackground = Color(0xFF171A1F),
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF171A1F),
-    onSurfaceVariant = Color(0xFF565E6C),
-    text = Color(0xFF0D141C)
+    onSurfaceVariant = Color(0xFF5F6877),
+    text = Color(0xFF0D141C),
+    statusPending = Color(0xFFD3A42B),
+    statusExpired = Color(0xFFB00020).copy(alpha = 0.7f),
+    statusFound = Color(0xFF2196F3).copy(alpha = 0.6f)
 )
 
-//TODO: replace with actual dark theme
-val baseDarkColors = baseLightColors
+val baseDarkColors = baseLightColors.copy(
+    background = Color(0xFF171A1F),
+    brandMuted = Color(0xFFD7E4DD),
+    surface = Color(0xFF1D2026),
+    onSurface = Color(0xFFFFFFFF),
+    onSurfaceVariant = Color(0xFF9A9FB2),
+    statusPending = Color(0xFFE6C25F),
+    statusExpired = Color(0xFFCF6679),
+    statusFound = Color(0xFF8AB4F8)
+)
 
 val baseTypography = FoundItTypography(
     headline = TextStyle(
@@ -49,8 +64,7 @@ val baseTypography = FoundItTypography(
 
 @Composable
 fun FoundItMobileTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
 
@@ -77,6 +91,41 @@ object Theme {
     val typography: FoundItTypography
         @ReadOnlyComposable @Composable
         get() = LocalTypography.current
+
+    val navRailItemColor: NavigationRailItemColors
+        @ReadOnlyComposable @Composable
+        get() = NavigationRailItemColors(
+        selectedIconColor = colors.brand,
+        selectedTextColor = colors.onSurface,
+        selectedIndicatorColor = colors.brand.copy(alpha = .2f),
+        unselectedIconColor = colors.onSurface,
+        unselectedTextColor = colors.onSurface,
+        disabledIconColor = colors.onSurface,
+        disabledTextColor = colors.onSurface,
+    )
+
+    val navBarItemColor: NavigationBarItemColors
+        @ReadOnlyComposable @Composable
+        get() = NavigationBarItemColors(
+            selectedIconColor = colors.brand,
+            selectedTextColor = colors.onSurface,
+            selectedIndicatorColor = colors.brand.copy(alpha = .2f),
+            unselectedIconColor = colors.onSurface,
+            unselectedTextColor = colors.onSurface,
+            disabledIconColor = colors.onSurface,
+            disabledTextColor = colors.onSurface,
+        )
+
+    val navDrawerItemColor: NavigationDrawerItemColors
+       @Composable
+        get() = NavigationDrawerItemDefaults.colors(
+            selectedIconColor = colors.brand,
+            selectedTextColor = colors.onSurface,
+            selectedContainerColor = colors.brand.copy(alpha = .2f),
+            unselectedIconColor = colors.onSurface,
+            unselectedTextColor = colors.onSurface,
+            unselectedContainerColor = colors.surface
+        )
 }
 
 val LocalColors = staticCompositionLocalOf<FoundItColors> {

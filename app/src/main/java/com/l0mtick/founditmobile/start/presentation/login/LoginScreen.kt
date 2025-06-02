@@ -1,6 +1,7 @@
 package com.l0mtick.founditmobile.start.presentation.login
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
@@ -30,7 +31,7 @@ fun LoginRoot(
     val context = LocalContext.current
 
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             is LoginEvent.Error -> {
                 Toast.makeText(
                     context,
@@ -38,12 +39,15 @@ fun LoginRoot(
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            LoginEvent.LoginSuccess -> {
-                //TODO: navigate to screen
-            }
 
             is LoginEvent.NavigateToPhoneVerification -> {
-                navController.navigate(NavigationRoute.Start.PhoneVerification(event.login, event.email, event.pass))
+                navController.navigate(
+                    NavigationRoute.Start.PhoneVerification(
+                        event.login,
+                        event.email,
+                        event.pass
+                    )
+                )
             }
         }
     }
@@ -61,7 +65,11 @@ fun LoginScreen(
 ) {
     AnimatedContent(
         targetState = state.screenType,
-        transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(800)) using SizeTransform(clip = false) }
+        transitionSpec = {
+            fadeIn(tween(400)) togetherWith fadeOut(tween(800)) using SizeTransform(
+                clip = false
+            )
+        }
     ) { screenType ->
         when (screenType) {
             LoginScreenType.Initial -> InitialLogin(
@@ -70,6 +78,9 @@ fun LoginScreen(
 
             LoginScreenType.Login -> {
                 val loginState = state as? LoginState.LoginForm ?: LoginState.LoginForm()
+                BackHandler {
+                    onAction(LoginAction.OnMoveToInitial)
+                }
                 LogInForm(
                     onAction = onAction,
                     loginState = loginState.loginState,
@@ -80,6 +91,9 @@ fun LoginScreen(
 
             LoginScreenType.Signup -> {
                 val loginState = state as? LoginState.SignupForm ?: LoginState.SignupForm()
+                BackHandler {
+                    onAction(LoginAction.OnMoveToInitial)
+                }
                 SignupForm(
                     onAction = onAction,
                     loginState = loginState.loginState,

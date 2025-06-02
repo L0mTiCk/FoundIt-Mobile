@@ -3,6 +3,7 @@ package com.l0mtick.founditmobile.common.domain.error
 sealed interface DataError : Error {
     enum class Network : DataError {
         BAD_REQUEST,
+        UNAUTHORIZED,
         CONFLICT,
         REQUEST_TIMEOUT,
         TOO_MANY_REQUESTS,

@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.l0mtick.founditmobile.R
-import com.l0mtick.founditmobile.main.domain.model.Category
-import com.l0mtick.founditmobile.main.domain.model.User
+import com.l0mtick.founditmobile.common.presentation.navigation.NavigationRoute
 import com.l0mtick.founditmobile.main.presentation.home.components.CategoryGrid
 import com.l0mtick.founditmobile.main.presentation.home.components.SectionHeader
 import com.l0mtick.founditmobile.main.presentation.home.components.TopLevelUsersRow
@@ -25,58 +25,29 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeRoot(
+    navController: NavController,
+    isGuest: Boolean,
+    onMoveToLogin: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
-        onAction = viewModel::onAction
+        isGuest = isGuest,
+        onMoveToLogin = onMoveToLogin,
+        onCategoryClick = { id ->
+            navController.navigate(NavigationRoute.Main.Search(listOf(id)))
+        }
     )
 }
-
-private val tempCategories = listOf(
-    Category(
-        1,
-        "First category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Second category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Third category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-    Category(
-        1,
-        "Fourth category",
-        "http://10.0.2.2:8081/uploads/user_logos/12.jpg"
-    ),
-)
-
-private val tempUsers = listOf(
-    User(
-        1
-    ),
-    User(
-        2
-    ),
-    User(
-        3
-    ),
-    User(
-        4
-    ),
-)
 
 @Composable
 fun HomeScreen(
     state: HomeState,
-    onAction: (HomeAction) -> Unit,
+    isGuest: Boolean,
+    onMoveToLogin: () -> Unit,
+    onCategoryClick: (Long) -> Unit
 ) {
     LazyColumn (
         modifier = Modifier
@@ -85,6 +56,10 @@ fun HomeScreen(
     ) {
         item {
             UserHeaderCard(
+                isGuest = isGuest,
+                onMoveToLogin = onMoveToLogin,
+                username = state.localUser.username,
+                profilePictureUrl = state.localUser.profilePictureUrl,
                 modifier = Modifier.padding(horizontal = 24.dp).systemBarsPadding()
             )
         }
@@ -99,7 +74,7 @@ fun HomeScreen(
             CategoryGrid(
                 categories = state.categories,
                 modifier = Modifier.padding(horizontal = 24.dp),
-                onCategoryClick = { /*TODO*/ }
+                onCategoryClick = onCategoryClick
             )
         }
         item {
@@ -112,7 +87,6 @@ fun HomeScreen(
         item {
             TopLevelUsersRow(
                 users = state.topLevelUsers,
-                onUserCardClick = { /*TODO*/ }
             )
         }
         item {
@@ -127,7 +101,9 @@ private fun Preview() {
     FoundItMobileTheme {
         HomeScreen(
             state = HomeState(),
-            onAction = {}
+            isGuest = false,
+            onMoveToLogin = {},
+            onCategoryClick = {}
         )
     }
 }

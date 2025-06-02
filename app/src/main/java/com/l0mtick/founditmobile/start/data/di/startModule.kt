@@ -10,15 +10,21 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val startModule = module {
-    single<AuthApi> { AuthApiImpl(httpClient = get(), localStorage = get()) }
+    single<AuthApi> {
+        AuthApiImpl(
+            httpClient = get(),
+            localStorage = get(),
+            connectivityObserver = get()
+        )
+    }
 
     single<AuthRepository> { AuthRepositoryImpl(localStorage = get(), authApi = get()) }
 
     viewModel {
-        LoginViewModel(validator = get(), authRepository = get())
+        LoginViewModel(validator = get(), authRepository = get(), userSessionManager = get(), snackbarManager = get())
     }
 
     viewModel {
-        PhoneVerificationViewModel(authRepository = get(), savedStateHandle = get())
+        PhoneVerificationViewModel(authRepository = get(), snackbarManager = get(), savedStateHandle = get())
     }
 }

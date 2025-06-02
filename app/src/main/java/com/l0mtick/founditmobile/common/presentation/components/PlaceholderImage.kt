@@ -10,10 +10,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
 import com.eygraber.compose.placeholder.PlaceholderHighlight
 import com.eygraber.compose.placeholder.placeholder
 import com.eygraber.compose.placeholder.shimmer
@@ -29,7 +32,8 @@ fun PlaceholderImage(
     shape: Shape = RoundedCornerShape(8.dp),
     placeholderColor: Color = Color.LightGray,
     shimmerColor: Color = Color.White,
-    isPlaceholderVisible: Boolean = false
+    isPlaceholderVisible: Boolean = false,
+    disableCache: Boolean = false
 ) {
     if (imageUrl.isNullOrBlank() && !isPlaceholderVisible) {
         Image(
@@ -40,7 +44,17 @@ fun PlaceholderImage(
         )
     } else {
         val fullUrl = BuildConfig.BASE_URL + imageUrl
-        val painter = rememberAsyncImagePainter(model = fullUrl)
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(fullUrl)
+                .apply {
+                    if (disableCache) {
+                        memoryCachePolicy(CachePolicy.DISABLED)
+                        diskCachePolicy(CachePolicy.DISABLED)
+                    }
+                }
+                .build()
+        )
         val state by painter.state.collectAsState()
         val isLoading = state is AsyncImagePainter.State.Loading || isPlaceholderVisible
 

@@ -2,7 +2,6 @@ package com.l0mtick.founditmobile.main.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +32,6 @@ import com.l0mtick.founditmobile.ui.theme.Theme
 fun TopLevelUsersRow(
     users: List<User>,
     modifier: Modifier = Modifier,
-    onUserCardClick: (Long) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -45,7 +43,6 @@ fun TopLevelUsersRow(
             repeat(3) {
                 UserLevelCard(
                     isPlaceholderVisible = true,
-                    onCardClick = {}
                 )
             }
         } else {
@@ -56,7 +53,6 @@ fun TopLevelUsersRow(
                     level = user.level,
                     numberOfItemsFound = user.levelItemsCount,
                     modifier = Modifier.sizeIn(maxWidth = 170.dp, maxHeight = 300.dp),
-                    onCardClick = { onUserCardClick(user.id) }
                 )
             }
         }
@@ -71,15 +67,13 @@ private fun UserLevelCard(
     username: String = "",
     level: Int = 0,
     numberOfItemsFound: Int = 0,
-    onCardClick: () -> Unit,
     isPlaceholderVisible: Boolean = false
 ) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .background(color = Theme.colors.surface)
-            .border(1.dp, color = Theme.colors.secondary, shape = RoundedCornerShape(16.dp))
-            .clickable { onCardClick() }
+            .border(1.dp, color = Theme.colors.brandMuted, shape = RoundedCornerShape(16.dp))
             .padding(16.dp)
             .then(modifier)
     ) {
@@ -89,7 +83,8 @@ private fun UserLevelCard(
             modifier = Modifier
                 .requiredSizeIn(minHeight = 100.dp, minWidth = 170.dp)
                 .aspectRatio(1f),
-            isPlaceholderVisible = isPlaceholderVisible
+            isPlaceholderVisible = isPlaceholderVisible,
+            disableCache = true
         )
         Spacer(Modifier.height(12.dp))
         Text(
