@@ -221,6 +221,7 @@
     <string name="delete_chat_success">Chat deleted</string>
     <string name="delete_chat_error">Error occurred while deleting chat</string>
     <string name="chat_send_error">Error occurred while sending message</string>
+    <string name="chat_deleted_by_other_user">This chat has been deleted by the other user</string>
 
 
 

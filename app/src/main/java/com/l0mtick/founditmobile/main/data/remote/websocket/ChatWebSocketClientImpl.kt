@@ -37,6 +37,9 @@ class ChatWebSocketClientImpl(
 
     private val _incomingMessages = MutableSharedFlow<MessageDTO>(replay = 0)
     override val incomingMessages: Flow<MessageDTO> = _incomingMessages.asSharedFlow()
+    
+    private val _chatDeletedEvents = MutableSharedFlow<Int>(replay = 0)
+    override val chatDeletedEvents: Flow<Int> = _chatDeletedEvents.asSharedFlow()
 
     override suspend fun connect() {
         if (_connectionState.value == ChatWebSocketClient.ConnectionState.CONNECTED) {
@@ -70,8 +73,15 @@ class ChatWebSocketClientImpl(
                                 Log.d(TAG, "Received message: $text")
                                 try {
                                     val message = json.decodeFromString<WebSocketMessage>(text)
-                                    if (message is WebSocketMessage.MessageReceived) {
-                                        _incomingMessages.emit(message.message)
+                                    when (message) {
+                                        is WebSocketMessage.MessageReceived -> {
+                                            _incomingMessages.emit(message.message)
+                                        }
+                                        is WebSocketMessage.ChatDeleted -> {
+                                            Log.d(TAG, "Received chat deleted event for chat ID: ${message.chatId}")
+                                            _chatDeletedEvents.emit(message.chatId)
+                                        }
+                                        else -> Log.d(TAG, "Received other WebSocket message type: $message")
                                     }
                                 } catch (e: Exception) {
                                     Log.e(TAG, "Error parsing WebSocket message", e)
@@ -119,6 +129,22 @@ class ChatWebSocketClientImpl(
             webSocketSession?.send(Frame.Text(jsonMessage))
         } catch (e: Exception) {
             Log.e(TAG, "Error sending message", e)
+        }
+    }
+    
+    override suspend fun sendDeleteChatMessage(chatId: Int) {
+        if (_connectionState.value != ChatWebSocketClient.ConnectionState.CONNECTED) {
+            Log.e(TAG, "Cannot send delete chat message: not connected to WebSocket")
+            return
+        }
+
+        try {
+            val message = WebSocketMessage.DeleteChat(chatId)
+            val jsonMessage = json.encodeToString<WebSocketMessage>(message)
+            Log.d(TAG, "Sending delete chat message: $jsonMessage")
+            webSocketSession?.send(Frame.Text(jsonMessage))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error sending delete chat message", e)
         }
     }
 }

@@ -49,6 +49,15 @@ class ChatRepositoryImpl(
         return mainApi.deleteChat(chatId)
     }
     
+    override suspend fun sendDeleteChatMessage(chatId: Int): Result<Unit, DataError.Network> {
+        try {
+            chatWebSocketClient.sendDeleteChatMessage(chatId)
+            return Result.Success(Unit)
+        } catch (e: Exception) {
+            return Result.Error(DataError.Network.NO_INTERNET)
+        }
+    }
+    
     override suspend fun connectToWebSocket() {
         chatWebSocketClient.connect()
     }
@@ -63,5 +72,9 @@ class ChatRepositoryImpl(
     
     override fun getIncomingMessages(): Flow<Message> {
         return chatWebSocketClient.incomingMessages.map { it.toModel() }
+    }
+    
+    override fun getChatDeletedEvents(): Flow<Int> {
+        return chatWebSocketClient.chatDeletedEvents
     }
 }

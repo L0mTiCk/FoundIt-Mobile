@@ -63,6 +63,20 @@ class ChatViewModel(
                         Log.d("chat_viewmodel", "New message from websocket: $message")
                     }
                     .launchIn(viewModelScope)
+                    
+                chatRepository.getChatDeletedEvents()
+                    .onEach { chatId ->
+                        Log.d("chat_viewmodel", "Received chat deleted event for chat ID: $chatId")
+                        if (chatId == _state.value.chatId) {
+                            snackbarManager.showSnackbar(
+                                UiText.StringResource(R.string.chat_deleted_by_other_user),
+                                SnackbarType.INFO
+                            )
+                            eventChannel.send(ChatEvent.NavigateToInbox)
+                        }
+                    }
+                    .launchIn(viewModelScope)
+                    
                 viewModelScope.launch {
                     chatRepository.connectToWebSocket()
                 }
@@ -152,14 +166,17 @@ class ChatViewModel(
     private fun deleteChat() {
         if (_state.value.chatId == -1) return
         viewModelScope.launch {
-            when(chatRepository.deleteChat(_state.value.chatId)) {
+            when(val result = chatRepository.deleteChat(_state.value.chatId)) {
                 is Result.Success -> {
+                    chatRepository.sendDeleteChatMessage(_state.value.chatId)
+                    
                     snackbarManager.showSuccess(
                         UiText.StringResource(R.string.delete_chat_success)
                     )
                     eventChannel.send(ChatEvent.NavigateToInbox)
                 }
                 is Result.Error<*, *> -> {
+                    Log.e("ChatViewModel", "Failed to delete chat: ${result.error}")
                     snackbarManager.showSnackbar(
                         UiText.StringResource(R.string.delete_chat_error),
                         SnackbarType.ERROR

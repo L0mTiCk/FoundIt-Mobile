@@ -22,9 +22,20 @@ interface ChatWebSocketClient {
     suspend fun sendMessage(chatId: Int, content: String)
     
     /**
+     * Отправка сообщения об удалении чата через WebSocket
+     * @param chatId ID чата для удаления
+     */
+    suspend fun sendDeleteChatMessage(chatId: Int)
+    
+    /**
      * Поток входящих сообщений
      */
     val incomingMessages: Flow<MessageDTO>
+    
+    /**
+     * Поток событий удаления чата
+     */
+    val chatDeletedEvents: Flow<Int>
     
     /**
      * Состояние подключения

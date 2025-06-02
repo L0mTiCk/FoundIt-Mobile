@@ -19,4 +19,12 @@ sealed class WebSocketMessage {
     @Serializable
     @SerialName("chat_update")
     data class ChatUpdate(val chat: ChatDTO) : WebSocketMessage()
+    
+    @Serializable
+    @SerialName("delete_chat")
+    data class DeleteChat(val chatId: Int) : WebSocketMessage()
+    
+    @Serializable
+    @SerialName("chat_deleted")
+    data class ChatDeleted(val chatId: Int) : WebSocketMessage()
 }

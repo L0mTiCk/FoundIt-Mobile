@@ -16,6 +16,12 @@ interface ChatRepository {
     suspend fun deleteChat(chatId: Int): Result<Unit, DataError.Network>
     
     /**
+     * Отправка сообщения об удалении чата через WebSocket
+     * @param chatId ID чата для удаления
+     */
+    suspend fun sendDeleteChatMessage(chatId: Int): Result<Unit, DataError.Network>
+    
+    /**
      * Подключение к WebSocket серверу
      */
     suspend fun connectToWebSocket()
@@ -34,5 +40,10 @@ interface ChatRepository {
      * Получение потока входящих сообщений
      */
     fun getIncomingMessages(): Flow<Message>
+    
+    /**
+     * Получение потока событий удаления чата
+     */
+    fun getChatDeletedEvents(): Flow<Int>
 
 }

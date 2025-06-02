@@ -221,6 +221,7 @@
     <string name="delete_chat_success">Чат удалён</string>
     <string name="delete_chat_error">Ошибка при удалении чата</string>
     <string name="chat_send_error">Ошибка при отправке сообщения, попробуйте позже</string>
+    <string name="chat_deleted_by_other_user">Чат был удален другим пользователем</string>
 
     <!--  Profile-->
     <string name="profile_your_account">Ваш аккаунт</string>
